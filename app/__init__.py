@@ -1,5 +1,7 @@
-from pydoc import render_doc
 from flask import Flask, render_template
+
+# import config
+from config import Config
 
 def page_not_found(e):
   return "Page not found", 404
@@ -9,6 +11,7 @@ def forbidden(e):
 
 def create_app():
   app = Flask(__name__)
+  app.config.from_object(Config)
 
   from .auth import auth as auth_blueprint
 
