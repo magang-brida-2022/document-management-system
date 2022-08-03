@@ -1,6 +1,7 @@
 from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
+from .models import db
 
 # import config
 from config import Config
@@ -10,6 +11,10 @@ migrate = Migrate()
 
 def page_not_found(e):
   return "Page not found", 404
+
+def internat_server_error(e):
+  db.session.rollback()
+  return 'Internal server error', 500
 
 def forbidden(e):
   return 'Forbidden', 403
@@ -30,5 +35,6 @@ def create_app():
   # error handler
   app.register_error_handler(404, page_not_found)
   app.register_error_handler(403, forbidden)
+  app.register_error_handler(500, internat_server_error)
 
   return app
