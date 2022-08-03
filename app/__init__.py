@@ -1,7 +1,12 @@
 from flask import Flask, render_template
+from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
 
 # import config
 from config import Config
+
+db = SQLAlchemy()
+migrate = Migrate()
 
 def page_not_found(e):
   return "Page not found", 404
@@ -12,6 +17,9 @@ def forbidden(e):
 def create_app():
   app = Flask(__name__)
   app.config.from_object(Config)
+
+  db.init_app(app)
+  migrate.init_app(app, db)
 
   from .auth import auth as auth_blueprint
   from .main import main as main_blueprint
