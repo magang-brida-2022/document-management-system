@@ -1,3 +1,4 @@
+from flask import render_template
 from flask_login import login_required
 
 from . import main
@@ -5,7 +6,7 @@ from . import main
 
 @main.get('/')
 def index():
-    return 'ini index'
+    return render_template('index.html')
 
 
 @main.get('/protected')
