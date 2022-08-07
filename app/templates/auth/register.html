@@ -8,7 +8,11 @@
 </head>
 <body>
 
-    <p>Hello, {% if current_user.is_authenticated %} {{ current_user.username }} {% else %} Stranger {% endif %}</p>
+    <h1>Register</h1>
+    
+    <div>
+        <div>{{ form.username.label }} {{form.username}}</div>
+    </div>
     
 </body>
 </html>
