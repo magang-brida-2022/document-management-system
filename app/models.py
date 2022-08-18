@@ -86,9 +86,9 @@ class Role(db.Model):
         """
 
         roles = {
-            'Pegawai': (Permission.LAPORAN_HARIAN | Permission.SURAT_PERMOHONAN, True),
-            'PegawaiTu': (Permission.LAPORAN_HARIAN | Permission.SURAT_KELUAR | Permission.SURAT_MASUK | Permission.REKAP_BULANAN, False),
-            'Pimpinan': (Permission.LAPORAN_HARIAN | Permission.REKAP_BULANAN | Permission.TTD,  False),
+            'Pegawai': (Permission.LAPORAN_HARIAN | Permission.PERMOHONAN_SURAT, True),
+            'Tu': (Permission.LAPORAN_HARIAN | Permission.ARSIP | Permission.REKAP_BULANAN, False),
+            'Kasubid': (Permission.LAPORAN_HARIAN | Permission.TANDA_TANGAN,  False),
             'Administrator': (0xff, False)
         }
 
@@ -104,9 +104,8 @@ class Role(db.Model):
 
 class Permission:
     LAPORAN_HARIAN = 0x01
-    SURAT_PERMOHONAN = 0x02
-    SURAT_MASUK = 0x04
-    SURAT_KELUAR = 0x08
-    REKAP_BULANAN = 0x16
-    TTD = 0x32
+    PERMOHONAN_SURAT = 0x02
+    ARSIP = 0x04
+    REKAP_BULANAN = 0x08
+    TANDA_TANGAN = 0x16
     ADMINISTER = 0x80

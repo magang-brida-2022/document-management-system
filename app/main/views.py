@@ -26,13 +26,13 @@ def for_admin_only():
 
 @main.get('/pegawaitu')
 @login_required
-@permission_required(Permission.SURAT_KELUAR)
+@permission_required(Permission.ARSIP)
 def for_admin_tu():
     return "for admin tu"
 
 
 @main.get('/pegawai')
 @login_required
-@permission_required(Permission.SURAT_PERMOHONAN)
+@permission_required(Permission.PERMOHONAN_SURAT)
 def for_pagawai():
     return "for staff"
