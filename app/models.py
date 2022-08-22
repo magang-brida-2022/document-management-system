@@ -87,7 +87,7 @@ class Role(db.Model):
 
         roles = {
             'Pegawai': (Permission.LAPORAN_HARIAN | Permission.PERMOHONAN_SURAT, True),
-            'Tu': (Permission.LAPORAN_HARIAN | Permission.ARSIP | Permission.REKAP_BULANAN, False),
+            'Tu': (Permission.LAPORAN_HARIAN | Permission.ARSIP | Permission.REKAP_BULANAN, Permission.PERMOHONAN_SURAT, False),
             'Kasubid': (Permission.LAPORAN_HARIAN | Permission.TANDA_TANGAN,  False),
             'Administrator': (0xff, False)
         }

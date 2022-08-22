@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h2>User info</h2>
+
+    <div>
+      <p>Email: {{user.email}}</p>
+      <p>Username: {{user.username}}</p>
+      <p>Nama Lengkap: {{user.nama_lengkap}}</p>
+      <p>Jabatan: {{user.jabatan}}</p>
+      <p><img src="{{user.foto_profile}}" alt=""></p>
+    </div>
+
+    
+  {% if user == current_user %}
+        <button>
+      <a href="{{ url_for("users.edit_profile") }}">Edit Profile</a>
+    </button>
+  {% endif %}
+
+  {% if current_user.is_administrator() %}
+      <button>
+      <a href="{{ url_for("users.edit_profile_admin", id=user.id) }}">Edit Profile [Admin]</a>
+    </button>
+  {% endif %}
+
+
+    <ul>
+      <li>
+        <a href="{{ url_for('main.index') }}">Back</a>
+      </li>
+    </ul>
+  </body>
+</html>

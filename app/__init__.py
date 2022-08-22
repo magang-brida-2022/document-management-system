@@ -37,8 +37,10 @@ def create_app():
 
     from .auth import auth as auth_blueprint
     from .main import main as main_blueprint
+    from .user import users as user_blueprint
 
     app.register_blueprint(auth_blueprint, url_prefix='/auth')
+    app.register_blueprint(user_blueprint, url_prefix='/user')
     app.register_blueprint(main_blueprint)
 
     # error handler
