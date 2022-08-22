@@ -1,13 +1,16 @@
+from datetime import date, datetime
 from email.policy import default
 from werkzeug.security import generate_password_hash, check_password_hash
-from typing import Union
-from flask_login import UserMixin
+from typing import Union, NoReturn
+from flask_login import UserMixin, AnonymousUserMixin
+from flask import current_app
 
 from . import login_manager, db
 
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(100), unique=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
     password_hash = db.Column(db.String(120))
     role_id = db.Column(db.Integer, db.ForeignKey('role.id'))
@@ -16,11 +19,26 @@ class User(UserMixin, db.Model):
     foto_profile = db.Column(db.String(
         250), default="http://www.gravatar.com/avatar/3b3be63a4c2a439b013787725dfce802?d=identicon")
 
+    def __init__(self, **kwargs) -> None:
+        super().__init__(**kwargs)
+
+        if self.role == None:
+            if self.email == current_app.config['IS_ADMIN']:
+                self.role = Role.query.filter_by(permissions=0xff).first()
+            if self.role is None:
+                self.role = Role.query.filter_by(default=True).first()
+
+    def can(self, permissions):
+        return self.role is not None and (self.role.permissions & permissions) == permissions
+
+    def is_administrator(self):
+        return self.can(Permission.ADMINISTER)
+
     def __repr__(self) -> str:
         return f'<User {self.username}>'
 
     @property
-    def password(self):
+    def password(self) -> NoReturn:
         raise AttributeError('password is not a readable attributes')
 
     @password.setter
@@ -29,6 +47,17 @@ class User(UserMixin, db.Model):
 
     def check_password(self, password: str) -> bool:
         return check_password_hash(self.password_hash, password)
+
+
+class AnonymousUser(AnonymousUserMixin):
+    def can(self, permissions) -> bool:
+        return False
+
+    def is_administrator(self) -> bool:
+        return False
+
+
+login_manager.anonymous_user = AnonymousUser
 
 
 @login_manager.user_loader
@@ -45,3 +74,38 @@ class Role(db.Model):
 
     def __repr__(self) -> str:
         return f'<Role {self.name}>'
+
+    @staticmethod
+    def insert_roles():
+        """
+        app role:
+            1. Super Admin
+            2. Pimpinan
+            3. Pegawai Tu
+            4. Pegawai
+        """
+
+        roles = {
+            'Pegawai': (Permission.LAPORAN_HARIAN | Permission.PERMOHONAN_SURAT, True),
+            'Tu': (Permission.LAPORAN_HARIAN | Permission.ARSIP | Permission.REKAP_BULANAN, Permission.PERMOHONAN_SURAT, False),
+            'Kasubid': (Permission.LAPORAN_HARIAN | Permission.TANDA_TANGAN,  False),
+            'Administrator': (0xff, False)
+        }
+
+        for r in roles:
+            role = Role.query.filter_by(name=r).first()
+            if role is None:
+                role = Role(name=r)
+            role.permissions = roles[r][0]
+            role.default = roles[r][1]
+            db.session.add(role)
+        db.session.commit()
+
+
+class Permission:
+    LAPORAN_HARIAN = 0x01
+    PERMOHONAN_SURAT = 0x02
+    ARSIP = 0x04
+    REKAP_BULANAN = 0x08
+    TANDA_TANGAN = 0x16
+    ADMINISTER = 0x80

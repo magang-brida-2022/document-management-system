@@ -2,7 +2,7 @@ from flask import flash, redirect, render_template, request, url_for
 from flask_login import login_required, login_user, logout_user
 
 from . import auth
-from .forms import LoginForm, RegistratnionForm
+from .forms import LoginForm, RegistrationForm
 from app.models import User
 from .. import db
 
@@ -27,14 +27,14 @@ def login():
 @auth.get('/signup')
 @auth.post('/signup')
 def register():
-    form = RegistratnionForm()
+    form = RegistrationForm()
 
     if form.validate_on_submit():
-        user = User(username=form.username.data, password=form.password.data)
+        user = User(email=form.email.data, username=form.username.data, password=form.password.data)
         db.session.add(user)
         db.session.commit()
         flash('User created successfully', 'success')
-        return redirect(url_for(''))
+        return redirect(url_for('auth.login'))
 
     return render_template('auth/register.html', form=form)
 

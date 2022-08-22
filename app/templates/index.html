@@ -1,14 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-</head>
-<body>
+  </head>
+  <body>
+    <p>
+      Hello, {% if current_user.is_authenticated %} {{ current_user.username }},
+      you are {{current_user.role.name}} {% else %} Stranger {% endif %}
+    </p>
 
-    <p>Hello, {% if current_user.is_authenticated %} {{ current_user.username }} {% else %} Stranger {% endif %}</p>
-    
-</body>
+    <ul>
+      {% if current_user.is_authenticated %}
+        <li><a href="{{ url_for("auth.logout") }}">Logout</a></li>
+        <li><a href="{{ url_for("users.profile", username=current_user.username)}}">Profile</a></li>
+        <li><a href="#arsip">Arsip</a></li>
+      {% else %}
+        <li><a href="{{ url_for("auth.login") }}">Login</a></li>
+      {% endif %}
+    </ul>
+
+
+  </body>
 </html>
