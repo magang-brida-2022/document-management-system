@@ -3,12 +3,40 @@ from flask_login import login_required
 from app.decorators import admin_required, permission_required
 from app.models import Permission
 
+from .forms import SuratMasukForm
+
 from . import main
 
 
 @main.get('/')
 def index():
     return render_template('index.html')
+
+
+@main.get('/surat_masuk')
+@login_required
+@permission_required(Permission.ARSIP)
+def surat_masuk():
+    form = SuratMasukForm()
+
+    if form.validate_on_submit():
+        pass
+
+    return render_template('arsip/surat_masuk.html', form=form)
+
+
+@main.get('/surat_keluar')
+@login_required
+@permission_required(Permission.ARSIP)
+def surat_keluar():
+    return render_template('arsip/surat_keluar.html')
+
+
+@main.get('/arsip')
+@login_required
+@permission_required(Permission.ARSIP)
+def arsip():
+    return render_template('arsip/arsip.html')
 
 
 @main.get('/protected')

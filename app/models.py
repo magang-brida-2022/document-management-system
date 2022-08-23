@@ -78,7 +78,7 @@ class Role(db.Model):
     @staticmethod
     def insert_roles():
         """
-        app role:
+        role:
             1. Super Admin
             2. Pimpinan
             3. Pegawai Tu
