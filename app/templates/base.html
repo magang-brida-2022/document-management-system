@@ -1,27 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-  </head>
-  <body>
-    
-    {# nav ==> include #}
-    
-    {# alert message #}
-    {% with messages = get_flashed_messages(categories=true) %}
-      {% if messages  %}
-        {% for category, message in messages %}
-          <ul>
-            <li class="category">{{ message }}</li>
-          </ul>
-        {% endfor %}
-      {% endif %}
-    {% endwith %}
-    {# content ==> block #}
-    {# footer ==> include #}
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
 
-  </body>
+  {% block style %}
+    {{bootstrap.load_css()}}
+  {% endblock style %}
+</head>
+<body>
+
+  {% include "partials/__nav.html" %}
+
+  {# alert #}
+  {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <ul class=flashes>
+    {% for category, message in messages %}
+      <li class="{{ category }}">{{ message }}</li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+
+  {% block content %}{% endblock content %}
+
+  {% block script %}
+    {{bootstrap.load_js()}}
+  {% endblock script %}
+  
+</body>
 </html>

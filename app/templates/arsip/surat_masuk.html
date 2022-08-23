@@ -1,28 +1,19 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-  </head>
-  <body>
-    <h2>Surat Masuk</h2>
+{% extends "base.html" %} {% block content %}
+<h2>Surat Masuk</h2>
 
-    <form method="post">
-      <div>
-        {{ form.hidden_tag() }}
-        <div>
-          <p>{{form.no_surat.label}}: {{form.no_surat}}</p>
-          <p>{{form.tanggal.label}}: {{form.tanggal}}</p>
-          <p>{{form.prihal.label}}: {{form.prihal}}</p>
-          <p>{{form.ditujukan.label}}: {{form.ditujukan}}</p>
-          <p>{{form.lampiran.label}}: {{form.lampiran}}</p>
-          <p>{{form.status.label}}: {{form.status}}</p>
-          <p>{{form.disposisi.label}}: {{form.disposisi}}</p>
-          {{form.submit}}
-        </div>
-      </div>
-    </form>
-  </body>
-</html>
+<form method="post">
+  <div>
+    {{ form.hidden_tag() }}
+    <div>
+      <p>{{form.no_surat.label}}: {{form.no_surat}}</p>
+      <p>{{form.tanggal.label}}: {{form.tanggal}}</p>
+      <p>{{form.prihal.label}}: {{form.prihal}}</p>
+      <p>{{form.ditujukan.label}}: {{form.ditujukan}}</p>
+      <p>{{form.lampiran.label}}: {{form.lampiran}}</p>
+      <p>{{form.status.label}}: {{form.status}}</p>
+      <p>{{form.disposisi.label}}: {{form.disposisi}}</p>
+      {{form.submit}}
+    </div>
+  </div>
+</form>
+{% endblock content %}
