@@ -1,6 +1,4 @@
-from datetime import date, datetime
-from email.policy import default
-from enum import unique
+from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 from typing import Union, NoReturn
 from flask_login import UserMixin, AnonymousUserMixin
