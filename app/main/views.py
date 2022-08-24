@@ -4,8 +4,8 @@ from io import BytesIO
 
 from app.decorators import admin_required, permission_required
 from app.models import Permission
-from .forms import SuratMasukForm
-from ..models import SuratMasuk
+from .forms import SuratMasukForm, SuratKeluarForm
+from ..models import SuratMasuk, SuratKeluar
 from . import main
 from .. import db
 
@@ -31,7 +31,7 @@ def surat_masuk():
         lampiran = form.lampiran.data
         tujuan = form.tujuan.data
 
-        surat_masuk = SuratMasuk(no_surat=no_surat, asal=asal, perihal=perihal,
+        surat_masuk = SuratMasuk(nomor=no_surat, asal=asal, perihal=perihal,
                                  tanggal_terima=tanggal_diterima, nama_file=lampiran.filename, lampiran=lampiran.read(), tujuan=tujuan, user=current_user)
         db.session.add(surat_masuk)
         db.session.commit()
@@ -43,10 +43,30 @@ def surat_masuk():
 
 
 @main.get('/surat_keluar')
+@main.post('/surat_keluar')
 @login_required
 @permission_required(Permission.ARSIP)
 def surat_keluar():
-    return render_template('arsip/surat_keluar.html')
+    form = SuratKeluarForm()
+    surat_keluar = SuratKeluar.query.all()
+
+    if form.validate_on_submit():
+        nomor_surat = form.no_surat.data
+        jenis_surat = form.jenis_surat.data
+        ringkasan = form.ringkasan.data
+        tanggal_dikeluarkan = form.tanggal_dikeluarkan.data
+        tujuan = form.tujuan.data
+        lampiran = form.lampiran.data
+
+        surat_keluar = SuratKeluar(nomor=nomor_surat, jenis=jenis_surat, ringkasan=ringkasan, tanggal_dikeluarkan=tanggal_dikeluarkan,
+                                   tujuan=tujuan, nama_file=lampiran.filename, lampiran=lampiran.read(), user=current_user)
+        db.session.add(surat_keluar)
+        db.session.commit()
+
+        flash("Surat keluar baru berhasil ditambahkan", "success")
+        return redirect(request.base_url)
+
+    return render_template('arsip/surat_keluar.html', form=form, surat_keluar=surat_keluar)
 
 
 @main.get('/arsip')

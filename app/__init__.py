@@ -1,8 +1,10 @@
+from cgitb import html
 from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager
 from flask_bootstrap import Bootstrap5
+from flask_minify import Minify
 
 # import config
 from config import Config
@@ -10,6 +12,7 @@ from config import Config
 db = SQLAlchemy()
 migrate = Migrate()
 bootstrap = Bootstrap5()
+minify = Minify(html=True, js=True, cssless=True)
 
 login_manager = LoginManager()
 login_manager.session_protection = 'strong'
@@ -17,16 +20,16 @@ login_manager.login_view = 'auth.login'
 
 
 def page_not_found(e):
-    return "Page not found", 404
+    return "Page not found | 404", 404
 
 
 def internat_server_error(e):
     db.session.rollback()
-    return 'Internal server error', 500
+    return 'Internal server error | 500', 500
 
 
 def forbidden(e):
-    return 'Forbidden', 403
+    return 'Forbidden | 403', 403
 
 
 def create_app():
@@ -37,6 +40,7 @@ def create_app():
     migrate.init_app(app, db)
     login_manager.init_app(app)
     bootstrap.init_app(app)
+    minify.init_app(app=app)
 
     from .auth import auth as auth_blueprint
     from .main import main as main_blueprint

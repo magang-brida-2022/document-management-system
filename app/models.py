@@ -17,11 +17,13 @@ class User(UserMixin, db.Model):
     password_hash = db.Column(db.String(120))
     nama_lengkap = db.Column(db.String(50))
     jabatan = db.Column(db.String(35))
+    no_telpon = db.Column(db.String(100))
     foto_profile = db.Column(db.String(
         250), default="http://www.gravatar.com/avatar/3b3be63a4c2a439b013787725dfce802?d=identicon")
 
     role_id = db.Column(db.Integer, db.ForeignKey('role.id'))
     surat_masuk = db.relationship('SuratMasuk', backref="user", lazy=True)
+    surat_keluar = db.relationship('SuratKeluar', backref="user", lazy=True)
 
     def __init__(self, **kwargs) -> None:
         super().__init__(**kwargs)
@@ -118,7 +120,7 @@ class Permission:
 
 class SuratMasuk(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    no_surat = db.Column(db.String(64), unique=True)
+    nomor = db.Column(db.String(64), unique=True)
     asal = db.Column(db.String(125), nullable=False)
     perihal = db.Column(db.String(255), nullable=False)
     tanggal_terima = db.Column(db.DateTime, default=datetime.utcnow)
@@ -129,4 +131,21 @@ class SuratMasuk(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
     def __repr__(self) -> str:
-        return "<No Surat {}>".format(self.no_surat)
+        return "<No Surat: {}>".format(self.nomor)
+
+
+class SuratKeluar(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    nomor = db.Column(db.String(64), unique=True)
+    jenis = db.Column(db.String(125), nullable=False)
+    ringkasan = db.Column(db.String(255), nullable=False)
+    tanggal_dikeluarkan = db.Column(db.DateTime, default=datetime.now)
+    tujuan = db.Column(db.String(64), nullable=False)
+    status = db.Column(db.Boolean, default=False)
+    nama_file = db.Column(db.String(255), nullable=False)
+    lampiran = db.Column(db.LargeBinary, nullable=False)
+
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+
+    def __repr__(self) -> str:
+        return '<Surat keluar dengan nomor: {}, tujuan {}, status {}>'.format(self.nomor, self.tujuan, self.status)
