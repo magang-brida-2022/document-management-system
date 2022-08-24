@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField
-from wtforms import StringField, DateField,  SubmitField
+from wtforms import StringField, DateField,  SubmitField, BooleanField
 from wtforms.validators import DataRequired
 
 
@@ -13,3 +13,14 @@ class SuratMasukForm(FlaskForm):
     lampiran = FileField("Lampiran", validators=[DataRequired()])
     tujuan = StringField('Tujuan', validators=[DataRequired()])
     submit = SubmitField('Simpan')
+
+
+class SuratKeluarForm(FlaskForm):
+    no_surat = StringField('No Surat', validators=[DataRequired()])
+    jenis_surat = StringField('Jenis Surat', validators=[DataRequired()])
+    ringkasan = StringField('Ringkasan', validators=[DataRequired()])
+    tanggal_dikeluarkan = DateField(
+        'Taggal Dikeluarkan', validators=[DataRequired()])
+    tujuan = StringField('Tujuan', validators=[DataRequired()])
+    lampiran = FileField("Lampiran", validators=[DataRequired()])
+    submit = SubmitField("Simpan")

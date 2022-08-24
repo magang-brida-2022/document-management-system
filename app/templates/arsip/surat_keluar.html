@@ -1,7 +1,50 @@
-{% extends "base.html" %}
+{% extends "base.html" %} {% block content %}
 
-{% block content %}
+<h2>surat keluar</h2>
 
-  <h2>surat keluar</h2>
+<form method="post" enctype="multipart/form-data">
+  <div>
+    {{ form.hidden_tag() }}
+    <p>{{form.no_surat.label}}: {{form.no_surat}}</p>
+    <p>{{form.jenis_surat.label}}: {{form.jenis_surat}}</p>
+    <p>{{form.ringkasan.label}}: {{form.ringkasan}}</p>
+    <p>{{form.tanggal_dikeluarkan.label}}: {{form.tanggal_dikeluarkan}}</p>
+    <p>{{form.tujuan.label}}: {{form.tujuan}}</p>
+    <p>{{form.lampiran.label}}: {{form.lampiran}}</p>
+    {{form.submit}}
+  </div>
+</form>
+
+<div>
+  <table border="1">
+    <tr>
+      <th>No Surat</th>
+      <th>Jenis Surat</th>
+      <th>Ringkasan</th>
+      <th>Tanggal Dikeluarkan</th>
+      <th>Status</th>
+      <th>Lampiran</th>
+      <th>Aksi</th>
+    </tr>
+
+    {% if surat_keluar | length < 1 %}
+    <tr>
+      <td>Surat kosong</td>
+    </tr>
+    {% else %}
+    <tr>
+      {% for surat in surat_keluar %}
+      <td>{{ surat.nomor }}</td>
+      <td>{{ surat.jenis }}</td>
+      <td>{{ surat.ringkasan }}</td>
+      <td>{{ surat.tanggal_dikeluarkan }}</td>
+      <td>{{ surat.tujuan }}</td>
+      <td>{{ surat.status }}</td>
+      <td>{{ surat.nama_file }}</td>
+      <td><a href="#edit">Edit</a> | <a href="#delete">Delete</a></td>
+    </tr>
+    {% endfor %} {% endif %}
+  </table>
+</div>
 
 {% endblock content %}

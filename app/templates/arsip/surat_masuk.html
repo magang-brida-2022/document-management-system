@@ -24,6 +24,12 @@
 </form>
 
 <br /><br />
+
+<button>Print</button>
+
+<br />
+<br />
+
 <div>
   <table border="1">
     <tr>
@@ -33,13 +39,15 @@
       <th>Tanggal Diterima</th>
       <th>Tujuan</th>
       <th>Lampiran</th>
+      <th>Aksi</th>
     </tr>
 
+    {% if surat_masuk | length < 1 %}
     <tr>
-      {% if surat_masuk | length < 1 %}
       <td>Surat kosong</td>
-      {% else %} 
-      
+    </tr>
+    {% else %}
+    <tr>
       {% for surat in surat_masuk %}
       <td>{{ surat.no_surat }}</td>
       <td>{{ surat.asal }}</td>
@@ -48,12 +56,12 @@
       <td>{{ surat.tujuan }}</td>
       <td>
         <a href="{{ url_for('main.download_surat_masuk', upload_id=surat.id)}}"
-          >Download</a
+          >{{ surat.nama_file }}</a
         >
       </td>
-      {% endfor %} 
-      {% endif %}
+      <td><a href="#edit">Edit</a> / <a href="#hapus">Hapus</a></td>
     </tr>
+    {% endfor %} {% endif %}
   </table>
 </div>
 {% endblock content %}
