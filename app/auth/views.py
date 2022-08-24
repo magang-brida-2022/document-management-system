@@ -1,6 +1,8 @@
 from flask import flash, redirect, render_template, request, url_for
 from flask_login import login_required, login_user, logout_user
 
+from app.decorators import admin_required
+
 from . import auth
 from .forms import LoginForm, RegistrationForm
 from app.models import User
@@ -26,6 +28,7 @@ def login():
 
 @auth.get('/signup')
 @auth.post('/signup')
+@admin_required
 def register():
     form = RegistrationForm()
 
