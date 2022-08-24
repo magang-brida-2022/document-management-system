@@ -1,13 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-  </head>
-  <body>
-    <p>
+{% extends "base.html" %}
+
+{% block content %}
+ <p>
       Hello, {% if current_user.is_authenticated %} {{ current_user.username }},
       you are {{current_user.role.name}} {% else %} Stranger {% endif %}
     </p>
@@ -16,12 +10,12 @@
       {% if current_user.is_authenticated %}
         <li><a href="{{ url_for("auth.logout") }}">Logout</a></li>
         <li><a href="{{ url_for("users.profile", username=current_user.username)}}">Profile</a></li>
-        <li><a href="#arsip">Arsip</a></li>
+        <li><a href="{{ url_for("main.arsip") }}">Arsip</a></li>
+        <li><a href="{{url_for("auth.register")}}">Register new user</a></li>
       {% else %}
         <li><a href="{{ url_for("auth.login") }}">Login</a></li>
       {% endif %}
     </ul>
+</p>
+{% endblock content %}
 
-
-  </body>
-</html>

@@ -1,0 +1,59 @@
+{% extends "base.html" %} {% block content %}
+<h2>Surat Masuk</h2>
+
+<form method="post" enctype="multipart/form-data">
+  <div>
+    {{ form.hidden_tag() }}
+    <div>
+      <div>
+        <p>{{form.no_surat.label}}: {{form.no_surat}}</p>
+        <ul>
+          {% for error in form.no_surat.errors %}
+          <li>{{error}}</li>
+          {% endfor %}
+        </ul>
+      </div>
+      <p>{{form.asal.label}}: {{form.asal}}</p>
+      <p>{{form.perihal.label}}: {{form.perihal}}</p>
+      <p>{{form.tanggal_diterima.label}}: {{form.tanggal_diterima}}</p>
+      <p>{{form.lampiran.label}}: {{form.lampiran}}</p>
+      <p>{{form.tujuan.label}}: {{form.tujuan}}</p>
+      {{form.submit}}
+    </div>
+  </div>
+</form>
+
+<br /><br />
+<div>
+  <table border="1">
+    <tr>
+      <th>No Surat</th>
+      <th>Asal</th>
+      <th>Perihal</th>
+      <th>Tanggal Diterima</th>
+      <th>Tujuan</th>
+      <th>Lampiran</th>
+    </tr>
+
+    <tr>
+      {% if surat_masuk | length < 1 %}
+      <td>Surat kosong</td>
+      {% else %} 
+      
+      {% for surat in surat_masuk %}
+      <td>{{ surat.no_surat }}</td>
+      <td>{{ surat.asal }}</td>
+      <td>{{ surat.perihal }}</td>
+      <td>{{ surat.tanggal_terima }}</td>
+      <td>{{ surat.tujuan }}</td>
+      <td>
+        <a href="{{ url_for('main.download_surat_masuk', upload_id=surat.id)}}"
+          >Download</a
+        >
+      </td>
+      {% endfor %} 
+      {% endif %}
+    </tr>
+  </table>
+</div>
+{% endblock content %}

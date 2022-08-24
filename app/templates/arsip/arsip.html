@@ -1,0 +1,9 @@
+{% extends "base.html" %} {% block content %}
+
+<h2>Arsip</h2>
+
+<ul>
+  <li><a href="{{ url_for('main.surat_masuk') }}">Surat Masuk</a></li>
+  <li><a href="{{ url_for('main.surat_keluar') }}">Surat Keluar</a></li>
+</ul>
+{% endblock content %}

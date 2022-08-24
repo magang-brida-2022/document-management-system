@@ -2,12 +2,14 @@ from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager
+from flask_bootstrap import Bootstrap5
 
 # import config
 from config import Config
 
 db = SQLAlchemy()
 migrate = Migrate()
+bootstrap = Bootstrap5()
 
 login_manager = LoginManager()
 login_manager.session_protection = 'strong'
@@ -34,6 +36,7 @@ def create_app():
     db.init_app(app)
     migrate.init_app(app, db)
     login_manager.init_app(app)
+    bootstrap.init_app(app)
 
     from .auth import auth as auth_blueprint
     from .main import main as main_blueprint
