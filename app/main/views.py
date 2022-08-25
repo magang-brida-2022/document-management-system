@@ -1,4 +1,4 @@
-from flask import render_template, flash, redirect, request, send_file
+from flask import render_template, flash, redirect, request, send_file, url_for
 from flask_login import login_required, current_user
 from io import BytesIO
 
@@ -11,7 +11,11 @@ from .. import db
 
 
 @main.get('/')
+# @login_required
 def index():
+    if not current_user.is_authenticated:
+        return redirect(url_for('auth.login'))
+
     return render_template('index.html')
 
 
