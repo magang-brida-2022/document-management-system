@@ -10,7 +10,7 @@
 - [ ] daily report
 - [✅] User Profile and Editing [user and admin level]
 - [ ] UI :: Dashboard
-- [ ] UI :: Login
+- [✅] UI :: Login
 - [ ] UI :: Surat Masuk
 - [ ] UI :: Surat Keluar
 - [ ] UI :: User Profile and Editing [user and admin level]
