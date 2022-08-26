@@ -6,6 +6,9 @@
     <title>AdminLTE 3 | Dashboard</title>
 
     {% block style %}
+
+    {% endblock style %}
+
       <!-- Google Font: Source Sans Pro -->
     <link
       rel="stylesheet"
@@ -42,7 +45,6 @@
     <link rel="stylesheet" href="{{ url_for('static', filename="plugins/summernote/summernote-bs4.min.css") }}" />
 
     {# {{ bootstrap.load_css() }} #}
-    {% endblock style %}
   </head>
   <body class="hold-transition sidebar-mini layout-fixed">
     <div class="wrapper">
@@ -258,7 +260,30 @@
               </p>
             </a>
           </li>
+
           {# end daily report #}
+
+          <li class="nav-header">User</li>
+
+           <li class="nav-item">
+            <a href="{{ url_for('auth.register') }}" class="nav-link ">
+              <i class="nav-icon far fa-user"></i>
+              <p>
+                User Registration
+                {# <span class="right badge badge-danger">New</span> #}
+              </p>
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a href="{{ url_for('auth.logout') }}" class="nav-link ">
+              <i class="nav-icon fa fa-door-open"></i>
+              <p>
+                Logout
+                {# <span class="right badge badge-danger">New</span> #}
+              </p>
+            </a>
+          </li>
           
         </ul>
       </nav>
@@ -288,7 +313,6 @@
     </div>
     <!-- ./wrapper -->
 
-    {% block scripts %}
      <!-- jQuery -->
     <script src="{{ url_for('static', filename="plugins/jquery/jquery.min.js") }}"></script>
     <!-- jQuery UI 1.11.4 -->
@@ -317,13 +341,16 @@
     <script src="{{ url_for('static', filename="plugins/summernote/summernote-bs4.min.js") }}"></script>
     <!-- overlayScrollbars -->
     <script src="{{ url_for('static', filename="plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js")}}"></script>
+    <script src="{{ url_for('static', filename="plugins/datatables/jquery.dataTables.min.js") }}"></script>
     <!-- AdminLTE App -->
     <script src="{{ url_for('static', filename="dist/js/adminlte.js") }}"></script>
     <!-- AdminLTE for demo purposes -->
     {# <script src="{{ url_for('static', filename="dist/js/demo.js") }}"></script> #}
     <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
     <script src="{{ url_for('static', filename="dist/js/pages/dashboard.js") }}"></script>
-    
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap5.js"></script>
+    {% block scripts %}
     {% endblock scripts %}
   </body>
 </html>

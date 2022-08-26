@@ -1,4 +1,10 @@
-{% extends "base.html" %} {% block content %}
+{% extends "base.html" %} {% block style%}
+<link
+  rel="stylesheet"
+  type="text/css"
+  href="https://cdn.datatables.net/1.10.25/css/dataTables.bootstrap5.css"
+/>
+{% endblock style%} {% block content %} {#
 <h2>Surat Masuk</h2>
 
 <form method="post" enctype="multipart/form-data">
@@ -64,4 +70,145 @@
     {% endfor %} {% endif %}
   </table>
 </div>
-{% endblock content %}
+#}
+
+<section class="content-header">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-6">
+        <h1 class="m-0">Surat Masuk</h1>
+      </div>
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item"><a href="#">Home</a></li>
+          <li class="breadcrumb-item active">Surat Masuk</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="content">
+  <div class="container-fluid">
+    <div class="card">
+      <div class="card-body">
+        <!-- Button trigger modal -->
+        <button
+          type="button"
+          class="btn btn-primary"
+          data-toggle="modal"
+          data-target="#tambahSurat"
+        >
+          Tambah Surat
+        </button>
+
+        <!-- Modal -->
+        <div
+          class="modal fade"
+          id="tambahSurat"
+          tabindex="-1"
+          aria-labelledby="tambahSuratModal"
+          aria-hidden="true"
+        >
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <form method="post" enctype="multipart/form-data">
+                {{form.hidden_tag()}}
+                <div class="modal-header">
+                  <h5 class="modal-title" id="tambahSuratModal">
+                    Tambah Surat Masuk
+                  </h5>
+                  <button
+                    type="button"
+                    class="close"
+                    data-dismiss="modal"
+                    aria-label="Close"
+                  >
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <div class="form-group">
+                    {{form.no_surat.label}}
+                    {{form.no_surat(class="form-control")}}
+                  </div>
+                  <div class="form-group">
+                    {{form.asal.label}} {{form.asal(class="form-control")}}
+                  </div>
+                  <div class="form-group">
+                    {{form.perihal.label}}
+                    {{form.perihal(class="form-control")}}
+                  </div>
+                  <div class="form-group">
+                    {{form.tanggal_diterima.label}}
+                    {{form.tanggal_diterima(class="form-control")}}
+                  </div>
+                  <div>
+                    {{form.lampiran.label}}
+                    {{form.lampiran(class="form-control-file")}}
+                  </div>
+
+                  <div>
+                    {{form.tujuan.label}} {{form.tujuan(class="form-control")}}
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-dismiss="modal"
+                  >
+                    Close
+                  </button>
+
+                  {{form.submit(class="btn btn-primary")}}
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+        <!-- End Modal -->
+        <div class="mt-4">
+          <table id="data" class="table table-striped mt-4">
+            <thead>
+              <tr>
+                <th>{{form.no_surat.label}}</th>
+                <th>{{form.asal.label}}</th>
+                <th>{{form.perihal.label}}</th>
+                <th>{{form.tanggal_diterima.label}}</th>
+                <th>{{form.lampiran.label}}</th>
+                <th>{{form.tujuan.label}}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for surat in surat_masuk %}
+              <tr>
+                <td>{{ surat.nomor }}</td>
+                <td>{{ surat.asal }}</td>
+                <td>{{ surat.perihal }}</td>
+                <td>{{ surat.tanggal_terima }}</td>
+                <td>
+                  {{ surat.nama_file }} |
+                  <a
+                    href="{{ url_for('main.download_surat_masuk', upload_id=surat.id)}}"
+                    >download</a
+                  >
+                </td>
+                <td>{{ surat.tujuan }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock content %} {% block scripts %}
+<script>
+  $(document).ready(function () {
+    $("#data").DataTable();
+  });
+</script>
+{% endblock scripts %}
