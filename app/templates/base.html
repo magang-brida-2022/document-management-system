@@ -180,8 +180,8 @@
           <img src="{{current_user.foto_profile}}" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
-          <a href="#user" class="d-block">
-            {{ current_user.username }}
+          <a href="{{ url_for('users.edit_profile') }}" class="d-block">
+            {{ current_user.nama_lengkap }}
           </a>
         </div>
       </div>
@@ -263,7 +263,7 @@
             <a href="{{ url_for('auth.register') }}" class="nav-link ">
               <i class="nav-icon far fa-user"></i>
               <p>
-                User Registration
+                User Management
                 {# <span class="right badge badge-danger">New</span> #}
               </p>
             </a>

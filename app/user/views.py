@@ -1,4 +1,4 @@
-from flask import render_template, abort, flash, url_for, redirect
+from flask import render_template, abort, flash, url_for, redirect, request
 from . import users
 
 from app.models import User, Role
@@ -45,21 +45,35 @@ def edit_profile():
 def edit_profile_admin(id):
     user = User.query.get_or_404(id)
     form = EditProfileAdminForm(user)
-    
+
     if form.validate_on_submit():
         user.email = form.email.data
         user.username = form.username.data
         user.role = Role.query.get(form.role.data)
         user.nama_lengkap = form.nama_lengkap.data
         user.jabatan = form.jabatan.data
+        user.no_telpon = form.no_telpon.data
 
         db.session.commit()
         flash("User Profile Updated Successfully.", 'success')
-        return redirect(url_for('users.profile', username=current_user.username))
+        return redirect(url_for('auth.register'))
 
     form.email.data = user.email
     form.username.data = user.username
     form.role.data = user.role_id
     form.nama_lengkap.data = user.nama_lengkap
     form.jabatan.data = user.jabatan
+    form.no_telpon.data = user.no_telpon
     return render_template('user/edit_user_admin.html', form=form, user=user)
+
+
+@users.get('/delete/<id>')
+@users.post('/delete/<id>')
+@login_required
+@admin_required
+def delete_user(id):
+    user = User.query.get_or_404(id)
+    db.session.delete(user)
+    db.session.commit()
+    flash("User deleted Successfully", "success")
+    return redirect(url_for('auth.register'))
