@@ -147,3 +147,14 @@ class SuratKeluar(db.Model):
 
     def __repr__(self) -> str:
         return '<Surat keluar dengan nomor: {}, tujuan {}, status {}>'.format(self.nomor, self.tujuan, self.status)
+
+
+class DailyActivity(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    kegiatan = db.Column(db.String(64), nullable=False)
+    tanggal = db.Column(db.DateTime, nullable=False)
+    deskripsi = db.Column(db.Text, nullable=False)
+    output = db.Column(db.String(120), nullable=False)
+
+    def __repr__(self) -> str:
+        return "<Kegiatan {}>".format(self.kegiatan)
