@@ -30,6 +30,7 @@ def login():
 @auth.post('/signup')
 @admin_required
 def register():
+    all_user = User.query.all()
     form = RegistrationForm()
 
     if form.validate_on_submit():
@@ -40,7 +41,7 @@ def register():
         flash('User created successfully', 'success')
         return redirect(request.url)
 
-    return render_template('auth/register.html', form=form)
+    return render_template('auth/register.html', form=form, all_user=all_user)
 
 
 @auth.get('/logout')

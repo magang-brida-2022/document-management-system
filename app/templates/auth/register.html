@@ -1,107 +1,145 @@
-{% extends "base.html" %} {% block content %}
-
-<!-- Content Header (Page header) -->
-<div class="content-header">
+{% extends "base.html" %} {% block style %}
+<link
+  rel="stylesheet"
+  type="text/css"
+  href="https://cdn.datatables.net/1.10.25/css/dataTables.bootstrap5.css"
+/>
+{% endblock style %} {% block content %}
+<section class="content-header">
   <div class="container-fluid">
-    <div class="row mb-2">
+    <div class="row">
       <div class="col-sm-6">
-        <h1 class="m-0">Registration</h1>
+        <h1 class="m-0">Manage User</h1>
       </div>
-      <!-- /.col -->
       <div class="col-sm-6">
         <ol class="breadcrumb float-sm-right">
           <li class="breadcrumb-item"><a href="#">Home</a></li>
-          <li class="breadcrumb-item active">User Registration</li>
+          <li class="breadcrumb-item active">Manage User</li>
         </ol>
       </div>
-      <!-- /.col -->
     </div>
-    <!-- /.row -->
-  </div>
-  <!-- /.container-fluid -->
-</div>
-<!-- /.content-header -->
-
-{#
-<section class="content">
-  <div class="container-fluid">
-    <form method="post">
-      {{form.hidden_tag()}}
-      <div>{{ form.email.label }} {{form.email}}</div>
-      <div>{{ form.username.label }} {{form.username}}</div>
-      <div>{{form.password.label}} {{form.password}}</div>
-      <div>{{form.confirm_password.label}} {{form.confirm_password}}</div>
-      {{form.submit}}
-    </form>
   </div>
 </section>
-#}
 
 <section class="content">
   <div class="container-fluid">
-    {# content begin #}
     <div class="card">
       <div class="card-body">
-        <form>
-          <div class="form-row">
-            <div class="form-group col-md-6">
-              <label for="inputEmail4">Email</label>
-              <input type="email" class="form-control" id="inputEmail4" />
-            </div>
-            <div class="form-group col-md-6">
-              <label for="inputPassword4">Password</label>
-              <input type="password" class="form-control" id="inputPassword4" />
+        <!-- Button trigger modal -->
+        <button
+          type="button"
+          class="btn btn-primary"
+          data-toggle="modal"
+          data-target="#tambahUser"
+        >
+          Tambah User
+        </button>
+
+        <!-- Modal -->
+        <div
+          class="modal fade"
+          id="tambahUser"
+          tabindex="-1"
+          aria-labelledby="tambahUserModal"
+          aria-hidden="true"
+        >
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <form method="post" enctype="multipart/form-data">
+                {{form.hidden_tag()}}
+                <div class="modal-header">
+                  <h5 class="modal-title" id="tambahUserModal">
+                    Tambah User Baru
+                  </h5>
+                  <button
+                    type="button"
+                    class="close"
+                    data-dismiss="modal"
+                    aria-label="Close"
+                  >
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <div class="form-group">
+                    {{form.username.label}}
+                    {{form.username(class="form-control")}}
+                  </div>
+                  <div class="form-group">
+                    {{form.email.label}} {{form.email(class="form-control")}}
+                  </div>
+                  <div class="form-group">
+                    {{form.password.label}}
+                    {{form.password(class="form-control")}}
+                  </div>
+                  <div class="form-group">
+                    {{form.confirm_password.label}}
+                    {{form.confirm_password(class="form-control")}}
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-dismiss="modal"
+                  >
+                    Close
+                  </button>
+
+                  {{form.submit(class="btn btn-primary")}}
+                </div>
+              </form>
             </div>
           </div>
-          <div class="form-group">
-            <label for="inputAddress">Address</label>
-            <input
-              type="text"
-              class="form-control"
-              id="inputAddress"
-              placeholder="1234 Main St"
-            />
-          </div>
-          <div class="form-group">
-            <label for="inputAddress2">Address 2</label>
-            <input
-              type="text"
-              class="form-control"
-              id="inputAddress2"
-              placeholder="Apartment, studio, or floor"
-            />
-          </div>
-          <div class="form-row">
-            <div class="form-group col-md-6">
-              <label for="inputCity">City</label>
-              <input type="text" class="form-control" id="inputCity" />
-            </div>
-            <div class="form-group col-md-4">
-              <label for="inputState">State</label>
-              <select id="inputState" class="form-control">
-                <option selected>Choose...</option>
-                <option>...</option>
-              </select>
-            </div>
-            <div class="form-group col-md-2">
-              <label for="inputZip">Zip</label>
-              <input type="text" class="form-control" id="inputZip" />
-            </div>
-          </div>
-          <div class="form-group">
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" id="gridCheck" />
-              <label class="form-check-label" for="gridCheck">
-                Check me out
-              </label>
-            </div>
-          </div>
-          <button type="submit" class="btn btn-primary">Sign in</button>
-        </form>
+        </div>
+        <!-- End Modal -->
+        <div class="mt-4">
+          <table id="data" class="table table-striped mt-4">
+            <thead>
+              <tr>
+                <th>{{form.username.label}}</th>
+                <th>{{form.email.label}}</th>
+                <th>Nama Lengkap</th>
+                <th>Jabatan</th>
+                <th>No Telpon</th>
+                <th>Aksi</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for user in all_user %}
+              <tr>
+                <td>{{ user.username }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.nama_lengkap }}</td>
+                <td>{{ user.jabatan }}</td>
+                <td>{{ user.no_telpon }}</td>
+                <td>
+                  <a
+                    href="{{ url_for('users.edit_profile_admin', id=user.id) }}"
+                    >Edit</a
+                  >
+                  {% if not user.is_administrator() %} |
+                  <a
+                    href="{{ url_for('users.delete_user', id=user.id) }}"
+                    data-toggle="modal"
+                    data-target="#editUser"
+                    >Delete</a
+                  >
+                  {% endif %}
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
-
-    {# endcontent #}
   </div>
 </section>
-{% endblock content %}
+{% endblock content %} {% block scripts %}
+<script>
+  $(document).ready(function () {
+    $("#data").DataTable();
+  });
+</script>
+{% endblock scripts %}
