@@ -1,56 +1,13 @@
-{% extends "base.html" %} {% block content %} {#
-<h2>surat keluar</h2>
-
-<form method="post" enctype="multipart/form-data">
-  <div>
-    {{ form.hidden_tag() }}
-    <p>{{form.no_surat.label}}: {{form.no_surat}}</p>
-    <p>{{form.jenis_surat.label}}: {{form.jenis_surat}}</p>
-    <p>{{form.ringkasan.label}}: {{form.ringkasan}}</p>
-    <p>{{form.tanggal_dikeluarkan.label}}: {{form.tanggal_dikeluarkan}}</p>
-    <p>{{form.tujuan.label}}: {{form.tujuan}}</p>
-    <p>{{form.lampiran.label}}: {{form.lampiran}}</p>
-    {{form.submit}}
-  </div>
-</form>
-
-<div>
-  <table border="1">
-    <tr>
-      <th>No Surat</th>
-      <th>Jenis Surat</th>
-      <th>Ringkasan</th>
-      <th>Tanggal Dikeluarkan</th>
-      <th>Tujuan</th>
-      <th>Status</th>
-      <th>Lampiran</th>
-      <th>Aksi</th>
-    </tr>
-
-    {% if surat_keluar | length < 1 %}
-    <tr>
-      <td>Surat kosong</td>
-    </tr>
-    {% else %}
-    <tr>
-      {% for surat in surat_keluar %}
-      <td>{{ surat.nomor }}</td>
-      <td>{{ surat.jenis }}</td>
-      <td>{{ surat.ringkasan }}</td>
-      <td>{{ surat.tanggal_dikeluarkan }}</td>
-      <td>{{ surat.tujuan }}</td>
-      <td>{{ surat.status }}</td>
-      <td>{{ surat.nama_file }}</td>
-      <td><a href="#edit">Edit</a> | <a href="#delete">Delete</a></td>
-    </tr>
-    {% endfor %} {% endif %}
-  </table>
-</div>
-#}
-
-<div class="content-header">
+{% extends "base.html" %} {% block style%}
+<link
+  rel="stylesheet"
+  type="text/css"
+  href="https://cdn.datatables.net/1.10.25/css/dataTables.bootstrap5.css"
+/>
+{% endblock style%} {% block content %}
+<section class="content-header">
   <div class="container-fluid">
-    <div class="row mb-2">
+    <div class="row">
       <div class="col-sm-6">
         <h1 class="m-0">Surat Keluar</h1>
       </div>
@@ -62,66 +19,124 @@
       </div>
     </div>
   </div>
+</section>
 
-  <div class="content">
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col-lg-6">
-          <div class="card">
-            <div class="card-body">
-              <h5 class="card-title">Card title</h5>
-              <p class="card-text">
-                Some quick example text to build on the card title and make up
-                the bulk of the card's content.
-              </p>
-              <a href="#" class="card-link">Card link</a>
-              <a href="#" class="card-link">Another link</a>
-            </div>
-          </div>
-          <div class="card card-primary card-outline">
-            <div class="card-body">
-              <h5 class="card-title">Card title</h5>
-              <p class="card-text">
-                Some quick example text to build on the card title and make up
-                the bulk of the card's content.
-              </p>
-              <a href="#" class="card-link">Card link</a>
-              <a href="#" class="card-link">Another link</a>
+<section class="content">
+  <div class="container-fluid">
+    <div class="card">
+      <div class="card-body">
+        <!-- Button trigger modal -->
+        <button
+          type="button"
+          class="btn btn-primary"
+          data-toggle="modal"
+          data-target="#tambahSurat"
+        >
+          Tambah Surat
+        </button>
+
+        <!-- Modal -->
+        <div
+          class="modal fade"
+          id="tambahSurat"
+          tabindex="-1"
+          aria-labelledby="tambahSuratModal"
+          aria-hidden="true"
+        >
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <form method="post" enctype="multipart/form-data">
+                {{form.hidden_tag()}}
+                <div class="modal-header">
+                  <h5 class="modal-title" id="tambahSuratModal">
+                    Tambah Surat Keluar
+                  </h5>
+                  <button
+                    type="button"
+                    class="close"
+                    data-dismiss="modal"
+                    aria-label="Close"
+                  >
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <div class="form-group">
+                    {{form.no_surat.label}}
+                    {{form.no_surat(class="form-control")}}
+                  </div>
+                  <div class="form-group">
+                    {{form.jenis_surat.label}}
+                    {{form.jenis_surat(class="form-control")}}
+                  </div>
+                  <div class="form-group">
+                    {{form.ringkasan.label}}
+                    {{form.ringkasan(class="form-control")}}
+                  </div>
+                  <div class="form-group">
+                    {{form.tanggal_dikeluarkan.label}}
+                    {{form.tanggal_dikeluarkan(class="form-control")}}
+                  </div>
+                  <div>
+                    {{form.tujuan.label}} {{form.tujuan(class="form-control")}}
+                  </div>
+
+                  <div>
+                    {{form.lampiran.label}}
+                    {{form.lampiran(class="form-control-file")}}
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-dismiss="modal"
+                  >
+                    Close
+                  </button>
+
+                  {{form.submit(class="btn btn-primary")}}
+                </div>
+              </form>
             </div>
           </div>
         </div>
-
-        <div class="col-lg-6">
-          <div class="card">
-            <div class="card-header">
-              <h5 class="m-0">Featured</h5>
-            </div>
-            <div class="card-body">
-              <h6 class="card-title">Special title treatment</h6>
-              <p class="card-text">
-                With supporting text below as a natural lead-in to additional
-                content.
-              </p>
-              <a href="#" class="btn btn-primary">Go somewhere</a>
-            </div>
-          </div>
-          <div class="card card-primary card-outline">
-            <div class="card-header">
-              <h5 class="m-0">Featured</h5>
-            </div>
-            <div class="card-body">
-              <h6 class="card-title">Special title treatment</h6>
-              <p class="card-text">
-                With supporting text below as a natural lead-in to additional
-                content.
-              </p>
-              <a href="#" class="btn btn-primary">Go somewhere</a>
-            </div>
-          </div>
+        <!-- End Modal -->
+        <div class="mt-4">
+          <table id="data" class="table table-striped mt-4">
+            <thead>
+              <tr>
+                <th>{{form.no_surat.label}}</th>
+                <th>{{form.jenis_surat.label}}</th>
+                <th>{{form.ringkasan.label}}</th>
+                <th>{{form.tanggal_dikeluarkan.label}}</th>
+                <th>{{form.tujuan.label}}</th>
+                <th>{{form.lampiran.label}}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for surat in surat_keluar %}
+              <tr>
+                <td>{{ surat.nomor }}</td>
+                <td>{{ surat.jenis }}</td>
+                <td>{{ surat.ringkasan }}</td>
+                <td>{{ surat.tanggal_dikeluarkan }}</td>
+                <td>{{ surat.tujuan }}</td>
+                <td>{{ surat.nama_file }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
   </div>
-</div>
+</section>
 
-{% endblock content %}
+{% endblock content %} {% block scripts %}
+<script>
+  $(document).ready(function () {
+    $("#data").DataTable();
+  });
+</script>
+{% endblock scripts %}
