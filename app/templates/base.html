@@ -180,15 +180,9 @@
           <img src="{{current_user.foto_profile}}" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
-        {% if current_user.is_authenticated %}
-          <a href="{{ url_for('auth.logout') }}" class="d-block">
-            {{ current_user.username }} - Logout
+          <a href="#user" class="d-block">
+            {{ current_user.username }}
           </a>
-        {% else %}
-        <a href="{{ url_for('auth.login') }}" class="d-block">
-            Anonyomus - Login
-          </a>
-        {% endif %}
         </div>
       </div>
 
