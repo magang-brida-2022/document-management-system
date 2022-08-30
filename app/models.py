@@ -92,8 +92,9 @@ class Role(db.Model):
 
         roles = {
             'Pegawai': (Permission.LAPORAN_HARIAN | Permission.PERMOHONAN_SURAT, True),
-            'Tu': (Permission.LAPORAN_HARIAN | Permission.ARSIP | Permission.REKAP_BULANAN, Permission.PERMOHONAN_SURAT, False),
-            'Kasubid': (Permission.LAPORAN_HARIAN | Permission.TANDA_TANGAN,  False),
+            'Tu': (Permission.LAPORAN_HARIAN | Permission.ARSIP | Permission.REKAP_BULANAN | Permission.PERMOHONAN_SURAT, False),
+            'Kasubid': (Permission.LAPORAN_HARIAN | Permission.REKAP_BULANAN | Permission.PERMOHONAN_SURAT, False),
+            "Sekban": (Permission.LAPORAN_HARIAN | Permission.PERMOHONAN_SURAT | Permission.DISPOSISI, False),
             'Administrator': (0xff, False)
         }
 
@@ -112,13 +113,13 @@ class Permission:
     PERMOHONAN_SURAT = 0x02
     ARSIP = 0x04
     REKAP_BULANAN = 0x08
-    TANDA_TANGAN = 0x16
+    DISPOSISI = 0x16
     ADMINISTER = 0x80
 
 
 class SuratMasuk(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    nomor = db.Column(db.String(64), unique=True)
+    nomor = db.Column(db.String(64), nullable=True)
     asal = db.Column(db.String(125), nullable=False)
     perihal = db.Column(db.String(255), nullable=False)
     tanggal_terima = db.Column(db.DateTime, default=datetime.utcnow)
@@ -134,7 +135,7 @@ class SuratMasuk(db.Model):
 
 class SuratKeluar(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    nomor = db.Column(db.String(64), unique=True)
+    nomor = db.Column(db.String(64), nullable=True)
     jenis = db.Column(db.String(125), nullable=False)
     ringkasan = db.Column(db.String(255), nullable=False)
     tanggal_dikeluarkan = db.Column(db.DateTime, default=datetime.now)
