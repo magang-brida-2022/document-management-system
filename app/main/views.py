@@ -87,6 +87,13 @@ def download_surat_masuk(upload_id):
     return send_file(BytesIO(surat_masuk.lampiran), download_name=surat_masuk.nama_file, as_attachment=True)
 
 
+@main.get('/daily_activity')
+@main.post('/daily_activity')
+@login_required
+def daily_activity():
+    return render_template('daily_activity/daily_activity.html')
+
+
 @main.get('/protected')
 @login_required
 def protected_routes():
