@@ -31,12 +31,12 @@ def surat_masuk():
         no_surat = form.no_surat.data
         asal = form.asal.data
         perihal = form.perihal.data
+        tanggal_surat = form.tanggal_surat.data
         tanggal_diterima = form.tanggal_diterima.data
         lampiran = form.lampiran.data
-        tujuan = form.tujuan.data
 
-        surat_masuk = SuratMasuk(nomor=no_surat, asal=asal, perihal=perihal,
-                                 tanggal_terima=tanggal_diterima, nama_file=lampiran.filename, lampiran=lampiran.read(), tujuan=tujuan, user=current_user)
+        surat_masuk = SuratMasuk(nomor=no_surat, asal=asal, perihal=perihal, tanggal_surat=tanggal_surat,
+                                 tanggal_diterima=tanggal_diterima, nama_file=lampiran.filename, lampiran=lampiran.read(), user=current_user)
         db.session.add(surat_masuk)
         db.session.commit()
 
