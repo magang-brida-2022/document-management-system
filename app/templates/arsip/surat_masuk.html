@@ -76,16 +76,16 @@
                     {{form.perihal(class="form-control")}}
                   </div>
                   <div class="form-group">
+                    {{form.tanggal_surat.label}}
+                    {{form.tanggal_surat(class="form-control")}}
+                  </div>
+                  <div class="form-group">
                     {{form.tanggal_diterima.label}}
                     {{form.tanggal_diterima(class="form-control")}}
                   </div>
                   <div>
                     {{form.lampiran.label}}
                     {{form.lampiran(class="form-control-file")}}
-                  </div>
-
-                  <div>
-                    {{form.tujuan.label}} {{form.tujuan(class="form-control")}}
                   </div>
                 </div>
                 <div class="modal-footer">
@@ -111,9 +111,9 @@
                 <th>{{form.no_surat.label}}</th>
                 <th>{{form.asal.label}}</th>
                 <th>{{form.perihal.label}}</th>
+                <th>{{form.tanggal_surat.label}}</th>
                 <th>{{form.tanggal_diterima.label}}</th>
                 <th>{{form.lampiran.label}}</th>
-                <th>{{form.tujuan.label}}</th>
                 <th>Aksi</th>
               </tr>
             </thead>
@@ -123,6 +123,7 @@
                 <td>{{ surat.nomor }}</td>
                 <td>{{ surat.asal }}</td>
                 <td>{{ surat.perihal }}</td>
+                <td>{{ surat.tangal_surat }}</td>
                 <td>{{ surat.tanggal_terima }}</td>
                 <td>
                   {{ surat.nama_file }} |
@@ -131,7 +132,6 @@
                     >download</a
                   >
                 </td>
-                <td>{{ surat.tujuan }}</td>
                 <td>
                   <a href="#edit">Edit</a> |
                   <a href="{{ url_for('main.delete_surat', id=surat.id) }}"

@@ -121,11 +121,11 @@ class SuratMasuk(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     nomor = db.Column(db.String(64), nullable=True)
     asal = db.Column(db.String(125), nullable=False)
-    perihal = db.Column(db.String(255), nullable=False)
-    tanggal_terima = db.Column(db.DateTime, default=datetime.utcnow)
+    perihal = db.Column(db.Text, nullable=False)
+    tanggal_surat = db.Column(db.DateTime, default=datetime.utcnow)
+    tanggal_diterima = db.Column(db.DateTime, default=datetime.utcnow)
     nama_file = db.Column(db.String(255), nullable=False)
     lampiran = db.Column(db.LargeBinary, nullable=False)
-    tujuan = db.Column(db.String(125), nullable=False)
 
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
