@@ -13,7 +13,7 @@ class User(UserMixin, db.Model):
     email = db.Column(db.String(100), unique=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
     password_hash = db.Column(db.String(120))
-    nama_lengkap = db.Column(db.String(50))
+    nama = db.Column(db.String(50))
     bidang = db.Column(db.String(35))
     jabatan = db.Column(db.String(35))
     no_telpon = db.Column(db.String(100))
