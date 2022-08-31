@@ -94,6 +94,34 @@ def daily_activity():
     return render_template('daily_activity/daily_activity.html')
 
 
+@main.get('/<id>/delete')
+@main.post('/<id>/delete')
+@admin_required
+def delete_surat(id):
+    if "surat_masuk" in request.path:
+        surat = SuratMasuk.query.get_or_404(id)
+        db.session.delete(surat)
+        db.session.commit()
+
+        flash('Surat Berhasi Dihapus', "Success")
+        return redirect(url_for('main.surat_masuk'))
+
+    if "surat_keluar" in request.path:
+        surat = SuratKeluar.query.get_or_404(id)
+        db.session.delete(surat)
+        db.session.commit()
+
+        flash('Surat Berhasi Dihapus', "Success")
+        return redirect(url_for('main.surat_masuk'))
+
+
+'''
+    =========================
+    Eksperiment route 
+    ========================
+'''
+
+
 @main.get('/protected')
 @login_required
 def protected_routes():

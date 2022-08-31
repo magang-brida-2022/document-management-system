@@ -115,6 +115,7 @@
                 <th>{{form.tanggal_dikeluarkan.label}}</th>
                 <th>{{form.tujuan.label}}</th>
                 <th>{{form.lampiran.label}}</th>
+                <th>Aksi</th>
               </tr>
             </thead>
             <tbody>
@@ -126,6 +127,12 @@
                 <td>{{ surat.tanggal_dikeluarkan }}</td>
                 <td>{{ surat.tujuan }}</td>
                 <td>{{ surat.nama_file }}</td>
+                <td>
+                  <a href="#edit">Edit</a> |
+                  <a href="{{ url_for('main.delete_surat', id=surat.id) }}"
+                    >Delete</a
+                  >
+                </td>
               </tr>
               {% endfor %}
             </tbody>
