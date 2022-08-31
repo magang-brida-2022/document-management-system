@@ -28,6 +28,7 @@
   <div class="container-fluid">
     <div class="card">
       <div class="card-body">
+        {% if current_user.can(Permission.ARSIP) %}
         <!-- Button trigger modal -->
         <button
           type="button"
@@ -37,6 +38,7 @@
         >
           Tambah Surat
         </button>
+        {% endif %}
 
         <!-- Modal -->
         <div
@@ -123,8 +125,8 @@
                 <td>{{ surat.nomor }}</td>
                 <td>{{ surat.asal }}</td>
                 <td>{{ surat.perihal }}</td>
-                <td>{{ surat.tangal_surat }}</td>
-                <td>{{ surat.tanggal_terima }}</td>
+                <td>{{ surat.tanggal_surat }}</td>
+                <td>{{ surat.tanggal_diterima }}</td>
                 <td>
                   {{ surat.nama_file }} |
                   <a

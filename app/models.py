@@ -14,6 +14,7 @@ class User(UserMixin, db.Model):
     username = db.Column(db.String(80), unique=True, nullable=False)
     password_hash = db.Column(db.String(120))
     nama_lengkap = db.Column(db.String(50))
+    bidang = db.Column(db.String(35))
     jabatan = db.Column(db.String(35))
     no_telpon = db.Column(db.String(100))
     foto_profile = db.Column(db.String(
@@ -94,7 +95,7 @@ class Role(db.Model):
             'Pegawai': (Permission.LAPORAN_HARIAN | Permission.PERMOHONAN_SURAT, True),
             'Tu': (Permission.LAPORAN_HARIAN | Permission.ARSIP | Permission.REKAP_BULANAN | Permission.PERMOHONAN_SURAT, False),
             'Kasubid': (Permission.LAPORAN_HARIAN | Permission.REKAP_BULANAN | Permission.PERMOHONAN_SURAT, False),
-            "Sekban": (Permission.LAPORAN_HARIAN | Permission.PERMOHONAN_SURAT | Permission.DISPOSISI, False),
+            "Sekban": (Permission.LAPORAN_HARIAN | Permission.PERMOHONAN_SURAT | Permission.DISPOSISI | Permission.ARSIP, False),
             'Administrator': (0xff, False)
         }
 
@@ -111,9 +112,9 @@ class Role(db.Model):
 class Permission:
     LAPORAN_HARIAN = 0x01
     PERMOHONAN_SURAT = 0x02
-    ARSIP = 0x04
-    REKAP_BULANAN = 0x08
-    DISPOSISI = 0x16
+    REKAP_BULANAN = 0x04
+    ARSIP = 0x16
+    DISPOSISI = 0x64
     ADMINISTER = 0x80
 
 
