@@ -13,7 +13,8 @@ class User(UserMixin, db.Model):
     email = db.Column(db.String(100), unique=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
     password_hash = db.Column(db.String(120))
-    nama_lengkap = db.Column(db.String(50))
+    nama = db.Column(db.String(50))
+    bidang = db.Column(db.String(35))
     jabatan = db.Column(db.String(35))
     no_telpon = db.Column(db.String(100))
     foto_profile = db.Column(db.String(
@@ -94,7 +95,7 @@ class Role(db.Model):
             'Pegawai': (Permission.LAPORAN_HARIAN | Permission.PERMOHONAN_SURAT, True),
             'Tu': (Permission.LAPORAN_HARIAN | Permission.ARSIP | Permission.REKAP_BULANAN | Permission.PERMOHONAN_SURAT, False),
             'Kasubid': (Permission.LAPORAN_HARIAN | Permission.REKAP_BULANAN | Permission.PERMOHONAN_SURAT, False),
-            "Sekban": (Permission.LAPORAN_HARIAN | Permission.PERMOHONAN_SURAT | Permission.DISPOSISI, False),
+            "Sekban": (Permission.LAPORAN_HARIAN | Permission.PERMOHONAN_SURAT | Permission.DISPOSISI | Permission.ARSIP, False),
             'Administrator': (0xff, False)
         }
 
@@ -111,9 +112,9 @@ class Role(db.Model):
 class Permission:
     LAPORAN_HARIAN = 0x01
     PERMOHONAN_SURAT = 0x02
-    ARSIP = 0x04
-    REKAP_BULANAN = 0x08
-    DISPOSISI = 0x16
+    REKAP_BULANAN = 0x04
+    ARSIP = 0x16
+    DISPOSISI = 0x64
     ADMINISTER = 0x80
 
 
@@ -121,11 +122,11 @@ class SuratMasuk(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     nomor = db.Column(db.String(64), nullable=True)
     asal = db.Column(db.String(125), nullable=False)
-    perihal = db.Column(db.String(255), nullable=False)
-    tanggal_terima = db.Column(db.DateTime, default=datetime.utcnow)
+    perihal = db.Column(db.Text, nullable=False)
+    tanggal_surat = db.Column(db.DateTime, default=datetime.utcnow)
+    tanggal_diterima = db.Column(db.DateTime, default=datetime.utcnow)
     nama_file = db.Column(db.String(255), nullable=False)
     lampiran = db.Column(db.LargeBinary, nullable=False)
-    tujuan = db.Column(db.String(125), nullable=False)
 
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 

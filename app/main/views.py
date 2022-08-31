@@ -31,12 +31,12 @@ def surat_masuk():
         no_surat = form.no_surat.data
         asal = form.asal.data
         perihal = form.perihal.data
+        tanggal_surat = form.tanggal_surat.data
         tanggal_diterima = form.tanggal_diterima.data
         lampiran = form.lampiran.data
-        tujuan = form.tujuan.data
 
-        surat_masuk = SuratMasuk(nomor=no_surat, asal=asal, perihal=perihal,
-                                 tanggal_terima=tanggal_diterima, nama_file=lampiran.filename, lampiran=lampiran.read(), tujuan=tujuan, user=current_user)
+        surat_masuk = SuratMasuk(nomor=no_surat, asal=asal, perihal=perihal, tanggal_surat=tanggal_surat,
+                                 tanggal_diterima=tanggal_diterima, nama_file=lampiran.filename, lampiran=lampiran.read(), user=current_user)
         db.session.add(surat_masuk)
         db.session.commit()
 
@@ -92,6 +92,34 @@ def download_surat_masuk(upload_id):
 @login_required
 def daily_activity():
     return render_template('daily_activity/daily_activity.html')
+
+
+@main.get('/<id>/delete')
+@main.post('/<id>/delete')
+@admin_required
+def delete_surat(id):
+    if "surat_masuk" in request.path:
+        surat = SuratMasuk.query.get_or_404(id)
+        db.session.delete(surat)
+        db.session.commit()
+
+        flash('Surat Berhasi Dihapus', "Success")
+        return redirect(url_for('main.surat_masuk'))
+
+    if "surat_keluar" in request.path:
+        surat = SuratKeluar.query.get_or_404(id)
+        db.session.delete(surat)
+        db.session.commit()
+
+        flash('Surat Berhasi Dihapus', "Success")
+        return redirect(url_for('main.surat_masuk'))
+
+
+'''
+    =========================
+    Eksperiment route 
+    ========================
+'''
 
 
 @main.get('/protected')

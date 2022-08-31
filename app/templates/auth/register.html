@@ -102,7 +102,9 @@
                 <th>Nama Lengkap</th>
                 <th>Jabatan</th>
                 <th>No Telpon</th>
+                {% if current_user.can(Permission.ARSIP) %}
                 <th>Aksi</th>
+                {% endif %}
               </tr>
             </thead>
             <tbody>
@@ -113,20 +115,19 @@
                 <td>{{ user.nama_lengkap }}</td>
                 <td>{{ user.jabatan }}</td>
                 <td>{{ user.no_telpon }}</td>
+                {% if current_user.can(Permission.ARSIP) %}
                 <td>
                   <a
                     href="{{ url_for('users.edit_profile_admin', id=user.id) }}"
                     >Edit</a
                   >
                   {% if not user.is_administrator() %} |
-                  <a
-                    href="{{ url_for('users.delete_user', id=user.id) }}"
-                    data-toggle="modal"
-                    data-target="#editUser"
+                  <a href="{{ url_for('users.delete_user', id=user.id) }}"
                     >Delete</a
                   >
                   {% endif %}
                 </td>
+                {% endif %}
               </tr>
               {% endfor %}
             </tbody>

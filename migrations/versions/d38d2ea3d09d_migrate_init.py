@@ -1,8 +1,8 @@
-"""init table
+"""migrate init
 
-Revision ID: a597d923e6b7
+Revision ID: d38d2ea3d09d
 Revises: 
-Create Date: 2022-08-30 14:19:31.539624
+Create Date: 2022-08-31 20:43:42.181745
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'a597d923e6b7'
+revision = 'd38d2ea3d09d'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -68,11 +68,11 @@ def upgrade():
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('nomor', sa.String(length=64), nullable=True),
     sa.Column('asal', sa.String(length=125), nullable=False),
-    sa.Column('perihal', sa.String(length=255), nullable=False),
-    sa.Column('tanggal_terima', sa.DateTime(), nullable=True),
+    sa.Column('perihal', sa.Text(), nullable=False),
+    sa.Column('tanggal_surat', sa.DateTime(), nullable=True),
+    sa.Column('tanggal_diterima', sa.DateTime(), nullable=True),
     sa.Column('nama_file', sa.String(length=255), nullable=False),
     sa.Column('lampiran', sa.LargeBinary(), nullable=False),
-    sa.Column('tujuan', sa.String(length=125), nullable=False),
     sa.Column('user_id', sa.Integer(), nullable=False),
     sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
     sa.PrimaryKeyConstraint('id')

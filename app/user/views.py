@@ -50,7 +50,7 @@ def edit_profile_admin(id):
         user.email = form.email.data
         user.username = form.username.data
         user.role = Role.query.get(form.role.data)
-        user.nama_lengkap = form.nama_lengkap.data
+        user.nama = form.nama_lengkap.data
         user.jabatan = form.jabatan.data
         user.no_telpon = form.no_telpon.data
 
@@ -61,7 +61,7 @@ def edit_profile_admin(id):
     form.email.data = user.email
     form.username.data = user.username
     form.role.data = user.role_id
-    form.nama_lengkap.data = user.nama_lengkap
+    form.nama_lengkap.data = user.nama
     form.jabatan.data = user.jabatan
     form.no_telpon.data = user.no_telpon
     return render_template('user/edit_user_admin.html', form=form, user=user)

@@ -181,7 +181,7 @@
         </div>
         <div class="info">
           <a href="{{ url_for('users.edit_profile') }}" class="d-block">
-            {{ current_user.nama_lengkap }}
+            {{ current_user.username | capitalize}} as {{ current_user.role.name }}
           </a>
         </div>
       </div>
