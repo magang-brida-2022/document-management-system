@@ -34,8 +34,8 @@ def register():
     form = RegistrationForm()
 
     if form.validate_on_submit():
-        user = User(email=form.email.data,
-                    username=form.username.data, password=form.password.data)
+        user = User(email=form.email.data, username=form.username.data, password=form.password.data,
+                    nama=form.nama_lengkap.data, jabatan=form.jabatan.data, no_telpon=form.no_telpon.data)
         db.session.add(user)
         db.session.commit()
         flash('User created successfully', 'success')

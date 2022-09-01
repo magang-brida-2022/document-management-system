@@ -23,6 +23,9 @@ class RegistrationForm(FlaskForm):
                              DataRequired(), EqualTo('confirm_password', 'Password must match')])
     confirm_password = PasswordField(
         "Confirm Password", validators=[DataRequired()])
+    nama_lengkap = StringField('Nama Lengkap', validators=[Length(0, 64)])
+    jabatan = StringField('Jabatan', validators=[Length(0, 64)])
+    no_telpon = StringField('No Telpon')
     submit = SubmitField('Register')
 
     def validate_username(self, username):

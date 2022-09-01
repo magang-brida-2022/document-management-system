@@ -14,7 +14,6 @@ class User(UserMixin, db.Model):
     username = db.Column(db.String(80), unique=True, nullable=False)
     password_hash = db.Column(db.String(120))
     nama = db.Column(db.String(50))
-    bidang = db.Column(db.String(35))
     jabatan = db.Column(db.String(35))
     no_telpon = db.Column(db.String(100))
     foto_profile = db.Column(db.String(
