@@ -241,6 +241,16 @@
                   <p>Surat Keluar</p>
                 </a>
               </li>
+              {% if current_user.can(Permission.DISPOSISI) %}
+              <li class="nav-item">
+                <a href="#disposisi" class="nav-link ">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Disposisi
+                    <span class="right badge badge-danger">0</span>
+                  </p>
+                </a>
+              </li>
+              {% endif %}
             </ul>
           </li>
 
