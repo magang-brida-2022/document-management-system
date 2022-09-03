@@ -29,6 +29,8 @@
     <div class="card">
       <div class="card-body">
         <!-- Button trigger modal -->
+        {% if current_user.can(Permission.ARSIP) %}
+
         <button
           type="button"
           class="btn btn-primary"
@@ -37,6 +39,7 @@
         >
           Tambah Surat
         </button>
+        {% endif %}
 
         <!-- Modal -->
         <div
@@ -80,11 +83,11 @@
                     {{form.tanggal_dikeluarkan.label}}
                     {{form.tanggal_dikeluarkan(class="form-control")}}
                   </div>
-                  <div>
+                  <div class="form-group">
                     {{form.tujuan.label}} {{form.tujuan(class="form-control")}}
                   </div>
 
-                  <div>
+                  <div class="form-group">
                     {{form.lampiran.label}}
                     {{form.lampiran(class="form-control-file")}}
                   </div>

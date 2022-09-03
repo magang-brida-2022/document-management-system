@@ -14,15 +14,13 @@ class User(UserMixin, db.Model):
     username = db.Column(db.String(80), unique=True, nullable=False)
     password_hash = db.Column(db.String(120))
     nama = db.Column(db.String(50))
-    bidang = db.Column(db.String(35))
     jabatan = db.Column(db.String(35))
     no_telpon = db.Column(db.String(100))
     foto_profile = db.Column(db.String(
         250), default="http://www.gravatar.com/avatar/3b3be63a4c2a439b013787725dfce802?d=identicon")
 
     role_id = db.Column(db.Integer, db.ForeignKey('role.id'))
-    surat_masuk = db.relationship('SuratMasuk', backref="user", lazy=True)
-    surat_keluar = db.relationship('SuratKeluar', backref="user", lazy=True)
+    bidang_id = db.Column(db.Integer, db.ForeignKey('bidang.id'))
 
     def __init__(self, **kwargs) -> None:
         super().__init__(**kwargs)
@@ -95,7 +93,7 @@ class Role(db.Model):
             'Pegawai': (Permission.LAPORAN_HARIAN | Permission.PERMOHONAN_SURAT, True),
             'Tu': (Permission.LAPORAN_HARIAN | Permission.ARSIP | Permission.REKAP_BULANAN | Permission.PERMOHONAN_SURAT, False),
             'Kasubid': (Permission.LAPORAN_HARIAN | Permission.REKAP_BULANAN | Permission.PERMOHONAN_SURAT, False),
-            "Sekban": (Permission.LAPORAN_HARIAN | Permission.PERMOHONAN_SURAT | Permission.DISPOSISI | Permission.ARSIP, False),
+            "Sekban": (Permission.LAPORAN_HARIAN | Permission.PERMOHONAN_SURAT | Permission.DISPOSISI, False),
             'Administrator': (0xff, False)
         }
 
@@ -118,6 +116,17 @@ class Permission:
     ADMINISTER = 0x80
 
 
+class Bidang(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    alias = db.Column(db.String(50))
+    nama_bidang = db.Column(db.String(100))
+
+    users = db.relationship('User', backref="bidang", lazy='dynamic')
+
+    def __repr__(self) -> str:
+        return '<Bidang {}>'.format(self.nama_bidang)
+
+
 class SuratMasuk(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     nomor = db.Column(db.String(64), nullable=True)
@@ -127,8 +136,8 @@ class SuratMasuk(db.Model):
     tanggal_diterima = db.Column(db.DateTime, default=datetime.utcnow)
     nama_file = db.Column(db.String(255), nullable=False)
     lampiran = db.Column(db.LargeBinary, nullable=False)
-
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    disposisi_ke = db.Column(db.String(50))
+    dilihat = db.Column(db.Boolean, default=False)
 
     def __repr__(self) -> str:
         return "<No Surat: {}>".format(self.nomor)
@@ -144,8 +153,6 @@ class SuratKeluar(db.Model):
     status = db.Column(db.Boolean, default=False)
     nama_file = db.Column(db.String(255), nullable=False)
     lampiran = db.Column(db.LargeBinary, nullable=False)
-
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
     def __repr__(self) -> str:
         return '<Surat keluar dengan nomor: {}, tujuan {}, status {}>'.format(self.nomor, self.tujuan, self.status)

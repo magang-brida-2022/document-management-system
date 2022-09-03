@@ -22,7 +22,7 @@ def index():
 @main.get('/surat_masuk')
 @main.post('/surat_masuk')
 @login_required
-@permission_required(Permission.ARSIP)
+# @permission_required(Permission.ARSIP)
 def surat_masuk():
     form = SuratMasukForm()
     surat_masuk = SuratMasuk.query.all()
@@ -49,7 +49,7 @@ def surat_masuk():
 @main.get('/surat_keluar')
 @main.post('/surat_keluar')
 @login_required
-@permission_required(Permission.ARSIP)
+# @permission_required(Permission.ARSIP)
 def surat_keluar():
     form = SuratKeluarForm()
     surat_keluar = SuratKeluar.query.all()
