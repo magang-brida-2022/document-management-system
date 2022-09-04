@@ -27,7 +27,7 @@ class EditProfileAdminForm(FlaskForm):
         self.user = user
         self.role.choices = [(role.id, role.name)
                              for role in Role.query.order_by(Role.name).all()]
-        self.bidang.choices = [(bidang.id, bidang.nama_bidang)
+        self.bidang.choices = [(bidang.id, bidang.nama)
                                for bidang in Bidang.query.order_by(Bidang.alias).all()]
 
     def validate_email(self, email):

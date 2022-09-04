@@ -15,9 +15,13 @@ class SuratMasukForm(FlaskForm):
     tanggal_diterima = DateField(
         "Tanggal Diterima", validators=[DataRequired()])
     lampiran = FileField("Lampiran", validators=[DataRequired()])
-    disposisi = SelectField('Disposisi', coerce=int)
-    dilihat = BooleanField('Sudah Dilihat')
 
+    submit = SubmitField('Simpan')
+
+
+class DisposisiKeForm(FlaskForm):
+    disposisi = SelectField('Disposisi Ke', coerce=int)
+    dilihat = BooleanField('Sudah Dilihat')
     submit = SubmitField('Simpan')
 
     def __init__(self, *args, **kwargs):

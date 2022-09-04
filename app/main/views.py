@@ -4,7 +4,7 @@ from io import BytesIO
 
 from app.decorators import admin_required, permission_required
 from app.models import Permission
-from .forms import SuratMasukForm, SuratKeluarForm, DisposisiForm, BidangForm
+from .forms import SuratMasukForm, SuratKeluarForm, DisposisiForm, BidangForm, DisposisiKeForm
 from ..models import SuratMasuk, SuratKeluar, Bidang, Disposisi
 from . import main
 from .. import db
@@ -116,18 +116,27 @@ def delete_surat(id):
 
 
 @main.get('/disposisi_ke')
-@main.post('/disposisi_ke')
 def disposisi_ke():
-    form = SuratMasukForm()
-    surat_masuk = SuratMasuk.query.all()
-    if form.validate_on_submit():
-        disposisi = SuratMasuk(
-            disposisi_ke=form.disposisi.data, dilihat=form.dilihat.data)
-        db.session.add(disposisi)
-        db.session.commit()
-        flash("Surat Berhasil Di Disposisi Ke Bidang", 'Success')
+    surat_masuk = SuratMasuk.query.filter_by(dilihat=False)
+    return render_template('arsip/disposisi.html', surat_masuk=surat_masuk)
 
-    return render_template('arsip/disposisi.html', form=form, surat_masuk=surat_masuk)
+
+@main.get('/edit/disposisi/<id>')
+@main.post('/edit/disposisi/<id>')
+def edit_disposisi(id):
+    form = DisposisiKeForm()
+    disposisi = SuratMasuk.query.filter_by(id=id).first()
+    if form.validate_on_submit():
+        disposisi.disposisi_ke = form.disposisi.data
+        disposisi.dilihat = form.dilihat.data
+        db.session.commit()
+
+        flash('Disposisi Successfully', 'success')
+        return redirect(url_for('main.disposisi_ke'))
+
+    form.disposisi.data = disposisi.disposisi_ke
+    form.dilihat.data = disposisi.dilihat
+    return render_template('arsip/edit_disposisi.html', form=form, disposisi=disposisi)
 
 
 @main.get('/disposisi')
