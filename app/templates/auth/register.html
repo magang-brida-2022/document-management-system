@@ -142,10 +142,18 @@
                   #}
                   <div class="btn-toolbar" role="toolbar">
                     <div class="btn-group mr-2" role="group">
-                      <a href="#EditUser" class="btn-sm btn-primary">Edit</a>
+                      <a
+                        href="{{ url_for('users.edit_profile_admin', id=user.id) }}"
+                        class="btn-sm btn-primary"
+                        >Edit</a
+                      >
                     </div>
                     <div class="btn-group" role="group">
-                      <a href="#DeleteUser" class="btn-sm btn-danger">Delete</a>
+                      <a
+                        href="{{ url_for('users.delete_user', id=user.id) }}"
+                        class="btn-sm btn-danger"
+                        >Delete</a
+                      >
                     </div>
                   </div>
                 </td>
