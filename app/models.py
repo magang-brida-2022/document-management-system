@@ -51,6 +51,9 @@ class User(UserMixin, db.Model):
     def check_password(self, password: str) -> bool:
         return check_password_hash(self.password_hash, password)
 
+    def surat_undisposisi(self):
+        return SuratMasuk.query.filter_by(dilihat=False).count()
+
 
 class AnonymousUser(AnonymousUserMixin):
     def can(self, permissions) -> bool:
