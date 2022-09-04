@@ -90,6 +90,7 @@
                     {{form.lampiran.label}}
                     {{form.lampiran(class="form-control-file")}}
                   </div>
+                  {#
                   <div class="form-group">
                     {{form.disposisi.label}}
                     {{form.disposisi(class="form-control")}}
@@ -98,7 +99,7 @@
                     {{form.dilihat(class="form-check-input")}}
                     {{form.dilihat.label(class="form-check-label")}}
                   </div>
-
+                  #}
                 </div>
                 <div class="modal-footer">
                   <button
@@ -145,10 +146,13 @@
                   >
                 </td>
                 <td>
+                  <a href="#edit">Lihat Dokumen</a>
+                  {% if current_user.is_administrator() %}
                   <a href="#edit">Edit</a> |
                   <a href="{{ url_for('main.delete_surat', id=surat.id) }}"
                     >Delete</a
                   >
+                  {% endif %}
                 </td>
               </tr>
               {% endfor %}

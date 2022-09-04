@@ -4,8 +4,8 @@ from io import BytesIO
 
 from app.decorators import admin_required, permission_required
 from app.models import Permission
-from .forms import SuratMasukForm, SuratKeluarForm
-from ..models import SuratMasuk, SuratKeluar
+from .forms import SuratMasukForm, SuratKeluarForm, DisposisiForm, BidangForm
+from ..models import SuratMasuk, SuratKeluar, Bidang, Disposisi
 from . import main
 from .. import db
 
@@ -36,12 +36,12 @@ def surat_masuk():
         lampiran = form.lampiran.data
 
         surat_masuk = SuratMasuk(nomor=no_surat, asal=asal, perihal=perihal, tanggal_surat=tanggal_surat,
-                                 tanggal_diterima=tanggal_diterima, nama_file=lampiran.filename, lampiran=lampiran.read(), user=current_user)
+                                 tanggal_diterima=tanggal_diterima, nama_file=lampiran.filename, lampiran=lampiran.read())
         db.session.add(surat_masuk)
         db.session.commit()
 
         flash("Surat masuk baru berhasil di tambahkan", "success")
-        return redirect(request.base_url)
+        return redirect(url_for('main.surat_masuk'))
 
     return render_template('arsip/surat_masuk.html', form=form, surat_masuk=surat_masuk)
 
@@ -63,7 +63,7 @@ def surat_keluar():
         lampiran = form.lampiran.data
 
         surat_keluar = SuratKeluar(nomor=nomor_surat, jenis=jenis_surat, ringkasan=ringkasan, tanggal_dikeluarkan=tanggal_dikeluarkan,
-                                   tujuan=tujuan, nama_file=lampiran.filename, lampiran=lampiran.read(), user=current_user)
+                                   tujuan=tujuan, nama_file=lampiran.filename, lampiran=lampiran.read())
         db.session.add(surat_keluar)
         db.session.commit()
 
@@ -113,6 +113,53 @@ def delete_surat(id):
 
         flash('Surat Berhasi Dihapus', "Success")
         return redirect(url_for('main.surat_masuk'))
+
+
+@main.get('/disposisi_ke')
+@main.post('/disposisi_ke')
+def disposisi_ke():
+    form = SuratMasukForm()
+    surat_masuk = SuratMasuk.query.all()
+    if form.validate_on_submit():
+        disposisi = SuratMasuk(
+            disposisi_ke=form.disposisi.data, dilihat=form.dilihat.data)
+        db.session.add(disposisi)
+        db.session.commit()
+        flash("Surat Berhasil Di Disposisi Ke Bidang", 'Success')
+
+    return render_template('arsip/disposisi.html', form=form, surat_masuk=surat_masuk)
+
+
+@main.get('/disposisi')
+@main.post('/disposisi')
+@admin_required
+def disposisi():
+    form = DisposisiForm()
+    disposisi = Disposisi.query.all()
+    if form.validate_on_submit():
+        disposisi_baru = Disposisi(alias=form.alias.data, nama=form.nama.data)
+        db.session.add(disposisi_baru)
+        db.session.commit()
+        flash('Data Berhasil di Tambahkan', 'success')
+        return redirect(url_for('main.disposisi'))
+
+    return render_template('arsip/tambah_disposisi.html', form=form, disposisi=disposisi)
+
+
+@main.get('/bidang')
+@main.post('/bidang')
+@admin_required
+def bidang():
+    form = BidangForm()
+    bidang = Bidang.query.all()
+    if form.validate_on_submit():
+        bidang_baru = Bidang(alias=form.alias.data, nama=form.nama.data)
+        db.session.add(bidang_baru)
+        db.session.commit()
+        flash('Data berhasil di Tambahkan', 'success')
+        return redirect(url_for('main.bidang'))
+
+    return render_template('arsip/tambah_bidang.html', form=form, bidang=bidang)
 
 
 '''

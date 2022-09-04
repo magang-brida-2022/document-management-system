@@ -1,10 +1,10 @@
-from xmlrpc.client import Boolean
+from tokenize import String
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField
 from wtforms import StringField, DateField,  SubmitField, TextAreaField, SelectField, BooleanField
 from wtforms.validators import DataRequired
 
-from ..models import Bidang
+from ..models import Disposisi
 
 
 class SuratMasukForm(FlaskForm):
@@ -22,8 +22,8 @@ class SuratMasukForm(FlaskForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.disposisi.choices = [(bidang.id, bidang.nama_bidang)
-                                  for bidang in Bidang.query.order_by(Bidang.alias).all()]
+        self.disposisi.choices = [(disposisi.id, disposisi.nama)
+                                  for disposisi in Disposisi.query.order_by(Disposisi.alias).all()]
 
 
 class SuratKeluarForm(FlaskForm):
@@ -35,3 +35,15 @@ class SuratKeluarForm(FlaskForm):
     tujuan = StringField('Tujuan', validators=[DataRequired()])
     lampiran = FileField("Lampiran", validators=[DataRequired()])
     submit = SubmitField("Simpan")
+
+
+class BidangForm(FlaskForm):
+    alias = StringField("Alias", validators=[DataRequired()])
+    nama = StringField("Nama Bidang", validators=[DataRequired()])
+    submit = SubmitField("Tambah")
+
+
+class DisposisiForm(FlaskForm):
+    alias = StringField('Alias', validators=[DataRequired()])
+    nama = StringField('Nama Disposisi', validators=[DataRequired()])
+    submit = SubmitField("Tambah")
