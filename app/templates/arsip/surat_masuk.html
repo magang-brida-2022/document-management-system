@@ -146,13 +146,25 @@
                   >
                 </td>
                 <td>
-                  <a href="#edit">Lihat Dokumen</a>
-                  {% if current_user.is_administrator() %}
-                  <a href="#edit">Edit</a> |
-                  <a href="{{ url_for('main.delete_surat', id=surat.id) }}"
-                    >Delete</a
-                  >
-                  {% endif %}
+                  <div class="btn-toolbar" role="toolbar">
+                    <div class="btn-group" role="group">
+                      <button type="button" class="btn-sm btn-success">
+                        Lihat Dokumen
+                      </button>
+                      {% if current_user.can(Permission.ARSIP) %}
+                      <div class="btn-group" role="group">
+                        <button type="button" class="btn-sm btn-primary">
+                          Edit
+                        </button>
+                      </div>
+                      <div class="btn-group" role="group">
+                        <button type="button" class="btn-sm btn-danger">
+                          Hapus
+                        </button>
+                      </div>
+                      {% endif %}
+                    </div>
+                  </div>
                 </td>
               </tr>
               {% endfor %}

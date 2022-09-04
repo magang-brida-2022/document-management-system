@@ -219,6 +219,16 @@
               </p>
             </a>
           </li>
+           {% if current_user.can(Permission.DISPOSISI) %}
+              <li class="nav-item">
+                <a href="{{ url_for('main.disposisi_ke') }}" class="nav-link ">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Disposisi
+                    <span class="right badge badge-danger">{{ current_user.surat_undisposisi() }}</span>
+                  </p>
+                </a>
+              </li>
+              {% endif %}
           <li class="nav-item has-treeview">
             <a href="#" class="nav-link ">
               <i class="nav-icon fas fa-copy"></i>
@@ -241,16 +251,6 @@
                   <p>Surat Keluar</p>
                 </a>
               </li>
-              {% if current_user.can(Permission.DISPOSISI) %}
-              <li class="nav-item">
-                <a href="{{ url_for('main.disposisi_ke') }}" class="nav-link ">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Disposisi
-                    <span class="right badge badge-danger">0</span>
-                  </p>
-                </a>
-              </li>
-              {% endif %}
             </ul>
           </li>
 

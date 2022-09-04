@@ -131,10 +131,32 @@
                 <td>{{ surat.tujuan }}</td>
                 <td>{{ surat.nama_file }}</td>
                 <td>
+                  {# <a href="#lihatDokumen">Lihat Dokumen</a>
                   <a href="#edit">Edit</a> |
                   <a href="{{ url_for('main.delete_surat', id=surat.id) }}"
                     >Delete</a
                   >
+                  #}
+
+                  <div class="btn-toolbar" role="toolbar">
+                    <div class="btn-group" role="group">
+                      <button type="button" class="btn-sm btn-success">
+                        Lihat Dokumen
+                      </button>
+                      {% if current_user.can(Permission.ARSIP) %}
+                      <div class="btn-group" role="group">
+                        <button type="button" class="btn-sm btn-primary">
+                          Edit
+                        </button>
+                      </div>
+                      <div class="btn-group" role="group">
+                        <button type="button" class="btn-sm btn-danger">
+                          Hapus
+                        </button>
+                      </div>
+                      {% endif %}
+                    </div>
+                  </div>
                 </td>
               </tr>
               {% endfor %}
