@@ -148,19 +148,19 @@
                 <td>
                   <div class="btn-toolbar" role="toolbar">
                     <div class="btn-group" role="group">
-                      <button type="button" class="btn-sm btn-success">
-                        Lihat Dokumen
-                      </button>
+                      <a href="#lihatDokument" class="btn-sm btn-success"
+                        >Lihat Dokumen</a
+                      >
                       {% if current_user.can(Permission.ARSIP) %}
                       <div class="btn-group" role="group">
-                        <button type="button" class="btn-sm btn-primary">
-                          Edit
-                        </button>
+                        <a href="#editDokumen" class="btn-sm btn-primary"
+                          >Edit</a
+                        >
                       </div>
                       <div class="btn-group" role="group">
-                        <button type="button" class="btn-sm btn-danger">
-                          Hapus
-                        </button>
+                        <a href="#deleteDokumen" class="btn-sm btn-danger"
+                          >Delete</a
+                        >
                       </div>
                       {% endif %}
                     </div>
