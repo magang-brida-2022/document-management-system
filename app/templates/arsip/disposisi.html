@@ -32,17 +32,25 @@
           <table id="data" class="table table-striped mt-4">
             <thead>
               <tr>
-                <th>Disposisi Ke</th>
-                <th>Sudah Dilihat</th>
+                <th>Nomor Surat</th>
+                <th>Dari Instansi</th>
+                <th>Perihal</th>
+                <th>Dokumen</th>
                 <th>Aksi</th>
               </tr>
             </thead>
             <tbody>
               {% for surat in surat_masuk %}
               <tr>
-                <td>{{ surat.disposisi_ke }}</td>
-                <td>{{ surat.dilihat }}</td>
-                <td><a href="#lihatDokumen">LihatDokumen</a> |</td>
+                <td>{{ surat.nomor }}</td>
+                <td>{{ surat.asal }}</td>
+                <td>{{ surat.perihal }}</td>
+                <td><a href="#lihatDokumen">LihatDokumen</a></td>
+                <td>
+                  <a href="{{ url_for('main.edit_disposisi', id=surat.id) }}"
+                    >Teruskan Ke</a
+                  >
+                </td>
               </tr>
               {% endfor %}
             </tbody>
