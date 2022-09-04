@@ -243,7 +243,7 @@
               </li>
               {% if current_user.can(Permission.DISPOSISI) %}
               <li class="nav-item">
-                <a href="#disposisi" class="nav-link ">
+                <a href="{{ url_for('main.disposisi_ke') }}" class="nav-link ">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Disposisi
                     <span class="right badge badge-danger">0</span>
@@ -265,11 +265,30 @@
             </a>
           </li>
 
-          {# end daily report #}
-
-          <li class="nav-header">User</li>
+          {% if current_user.is_administrator() %}
+          
+           <li class="nav-header">App Custom</li> 
+            <li class="nav-item">
+            <a href="{{ url_for('main.bidang') }}" class="nav-link ">
+              <i class="nav-icon far fa-user"></i>
+              <p>
+                Bidang
+                {# <span class="right badge badge-danger">New</span> #}
+              </p>
+            </a>
+          </li>
 
            <li class="nav-item">
+            <a href="{{ url_for('main.disposisi') }}" class="nav-link ">
+              <i class="nav-icon far fa-user"></i>
+              <p>
+                Disposisi
+                {# <span class="right badge badge-danger">New</span> #}
+              </p>
+            </a>
+          </li>
+
+          <li class="nav-item">
             <a href="{{ url_for('auth.register') }}" class="nav-link ">
               <i class="nav-icon far fa-user"></i>
               <p>
@@ -278,6 +297,12 @@
               </p>
             </a>
           </li>
+          
+          {% endif %}
+
+          
+
+          <li class="nav-header">Aksi</li>
 
           <li class="nav-item">
             <a href="{{ url_for('auth.logout') }}" class="nav-link ">

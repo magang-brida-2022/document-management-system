@@ -1,0 +1,123 @@
+{% extends "base.html" %} {% block style%}
+<link
+  rel="stylesheet"
+  type="text/css"
+  href="https://cdn.datatables.net/1.10.25/css/dataTables.bootstrap5.css"
+/>
+{% endblock style%} {% block content %}
+<section class="content-header">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-6">
+        <h1 class="m-0">Disposisi</h1>
+      </div>
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item">
+            <a href="{{ url_for('main.index') }}">Home</a>
+          </li>
+          <li class="breadcrumb-item active">Tambah Disposisi</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="content">
+  <div class="container-fluid">
+    <div class="card">
+      <div class="card-body">
+        <!-- Button trigger modal -->
+        <button
+          type="button"
+          class="btn btn-primary"
+          data-toggle="modal"
+          data-target="#tambahDisposisi"
+        >
+          Tambah Disposisi
+        </button>
+        <!-- Modal -->
+        <div
+          class="modal fade"
+          id="tambahDisposisi"
+          tabindex="-1"
+          aria-labelledby="tambahDisposisiModal"
+          aria-hidden="true"
+        >
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <form method="post">
+                {{form.hidden_tag()}}
+                <div class="modal-header">
+                  <h5 class="modal-title" id="tambahDisposisiModal">
+                    Tambah Disposisi
+                  </h5>
+                  <button
+                    type="button"
+                    class="close"
+                    data-dismiss="modal"
+                    aria-label="Close"
+                  >
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <div class="form-group">
+                    {{form.alias.label}} {{form.alias(class="form-control")}}
+                  </div>
+                  <div class="form-group">
+                    {{form.nama.label}} {{form.nama(class="form-control")}}
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-dismiss="modal"
+                  >
+                    Close
+                  </button>
+
+                  {{form.submit(class="btn btn-primary")}}
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+        <!-- End Modal -->
+
+        <div class="mt-4">
+          <table id="data" class="table table-striped mt-4">
+            <thead>
+              <tr>
+                <th>{{form.alias.label}}</th>
+                <th>{{form.nama.label}}</th>
+                <th>Aksi</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for d in disposisi %}
+              <tr>
+                <td>{{ d.alias }}</td>
+                <td>{{ d.nama }}</td>
+                <td>
+                  <a href="#edit">Edit</a> |
+                  <a href="#deleete">Delete</a>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock content %} {% block scripts %}
+<script>
+  $(document).ready(function () {
+    $("#data").DataTable();
+  });
+</script>
+{% endblock scripts %}

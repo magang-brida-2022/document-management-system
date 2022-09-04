@@ -117,6 +117,7 @@
                 <th>Nama Lengkap</th>
                 <th>Jabatan</th>
                 <th>No Telpon</th>
+                <th>Jabatan</th>
                 <th>Aksi</th>
               </tr>
             </thead>
@@ -128,6 +129,7 @@
                 <td>{{ user.nama }}</td>
                 <td>{{ user.jabatan }}</td>
                 <td>{{ user.no_telpon }}</td>
+                <td>{{ user.jabatan }}</td>
                 <td>
                   <a
                     href="{{ url_for('users.edit_profile_admin', id=user.id) }}"

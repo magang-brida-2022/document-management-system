@@ -31,7 +31,7 @@ class RegistrationForm(FlaskForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.bidang.choices = [(bidang.id, bidang.nama_bidang)
+        self.bidang.choices = [(bidang.id, bidang.nama)
                                for bidang in Bidang.query.order_by(Bidang.alias).all()]
 
     def validate_username(self, username):

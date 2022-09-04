@@ -1,0 +1,62 @@
+{% extends "base.html" %} {% block style%}
+<link
+  rel="stylesheet"
+  type="text/css"
+  href="https://cdn.datatables.net/1.10.25/css/dataTables.bootstrap5.css"
+/>
+{% endblock style%} {% block content %}
+<section class="content-header">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-6">
+        <h1 class="m-0">Disposisi</h1>
+      </div>
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item">
+            <a href="{{ url_for('main.index') }}">Home</a>
+          </li>
+          <li class="breadcrumb-item">Arsip</li>
+          <li class="breadcrumb-item active">Disposisi</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="content">
+  <div class="container-fluid">
+    <div class="card">
+      <div class="card-body">
+        <div class="mt-4">
+          <table id="data" class="table table-striped mt-4">
+            <thead>
+              <tr>
+                <th>Disposisi Ke</th>
+                <th>Sudah Dilihat</th>
+                <th>Aksi</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for surat in surat_masuk %}
+              <tr>
+                <td>{{ surat.disposisi_ke }}</td>
+                <td>{{ surat.dilihat }}</td>
+                <td><a href="#lihatDokumen">LihatDokumen</a> |</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock content %} {% block scripts %}
+<script>
+  $(document).ready(function () {
+    $("#data").DataTable();
+  });
+</script>
+{% endblock scripts %}
