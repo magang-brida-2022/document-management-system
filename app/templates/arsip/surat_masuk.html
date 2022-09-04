@@ -146,24 +146,19 @@
                   >
                 </td>
                 <td>
-                  <div class="btn-toolbar" role="toolbar">
-                    <div class="btn-group" role="group">
-                      <a href="#lihatDokument" class="btn-sm btn-success"
-                        >Lihat Dokumen</a
-                      >
-                      {% if current_user.can(Permission.ARSIP) %}
-                      <div class="btn-group" role="group">
-                        <a href="#editDokumen" class="btn-sm btn-primary"
-                          >Edit</a
-                        >
-                      </div>
-                      <div class="btn-group" role="group">
-                        <a href="#deleteDokumen" class="btn-sm btn-danger"
-                          >Delete</a
-                        >
-                      </div>
-                      {% endif %}
+                   <div class="btn-toolbar" role="toolbar">
+                   <div class="btn-group mr-2" role="group">
+                      <a href="#lihatDokument" class="btn-sm btn-success">Lihat Dokumen</a>
                     </div>
+                    {% if current_user.can(Permission.ARSIP) %}
+                    <div class="btn-group mr-2" role="group">
+                      <a href="{{ url_for('main.edit_surat_masuk', id=surat.id) }}" class="btn-sm btn-primary">Edit</a>
+                    </div>
+                    <div class="btn-group" role="group">
+                      <a href="{{ url_for('main.delete_surat_masuk', id=surat.id) }}" class="btn-sm btn-danger">Delete</a>
+                    </div>
+                    {% endif %}
+                  </div>
                   </div>
                 </td>
               </tr>

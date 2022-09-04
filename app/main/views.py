@@ -4,7 +4,7 @@ from io import BytesIO
 
 from app.decorators import admin_required, permission_required
 from app.models import Permission
-from .forms import SuratMasukForm, SuratKeluarForm, DisposisiForm, BidangForm, DisposisiKeForm
+from .forms import SuratMasukForm, SuratKeluarForm, DisposisiForm, BidangForm, DisposisiKeForm, EditSuratMasukForm, EditSuratKeluarForm
 from ..models import SuratMasuk, SuratKeluar, Bidang, Disposisi
 from . import main
 from .. import db
@@ -94,27 +94,6 @@ def daily_activity():
     return render_template('daily_activity/daily_activity.html')
 
 
-@main.get('/<id>/delete')
-@main.post('/<id>/delete')
-@admin_required
-def delete_surat(id):
-    if "surat_masuk" in request.path:
-        surat = SuratMasuk.query.get_or_404(id)
-        db.session.delete(surat)
-        db.session.commit()
-
-        flash('Surat Berhasi Dihapus', "Success")
-        return redirect(url_for('main.surat_masuk'))
-
-    if "surat_keluar" in request.path:
-        surat = SuratKeluar.query.get_or_404(id)
-        db.session.delete(surat)
-        db.session.commit()
-
-        flash('Surat Berhasi Dihapus', "Success")
-        return redirect(url_for('main.surat_masuk'))
-
-
 @main.get('/disposisi_ke')
 def disposisi_ke():
     surat_masuk = SuratMasuk.query.filter_by(dilihat=False)
@@ -169,6 +148,60 @@ def bidang():
         return redirect(url_for('main.bidang'))
 
     return render_template('arsip/tambah_bidang.html', form=form, bidang=bidang)
+
+
+'''
+    =========================
+    Edit Surat
+    ========================
+'''
+
+
+@main.get('/surat_masuk/edit/<id>')
+@main.post('/surat_masuk/edit/<id>')
+def edit_surat_masuk(id):
+    form = EditSuratMasukForm()
+    if form.validate_on_submit():
+        pass
+
+    return render_template('arsip/edit_surat_masuk.html', form=form)
+
+
+@main.get('/surat_keluar/<id>/edit')
+@main.post('/surat_keluar/<id>/edit')
+def edit_surat_keluar(id):
+    form = EditSuratKeluarForm()
+    if form.validate_on_submit():
+        pass
+
+    return render_template('arsip/edit_surat_keluar.html', form=form)
+
+
+'''
+    =========================
+    Delete Surat
+    ========================
+'''
+
+
+@main.get('/surat_masuk/<id>/delete')
+@main.post('/surat_masuk/<id>/delete')
+def delete_surat_masuk(id):
+    delete_surat = SuratMasuk.query.filter_by(id=id).first()
+    db.session.delete(delete_surat)
+    db.session.commit()
+    flash('Delete Surat Successfully', "success")
+    return redirect(url_for('main.surat_masuk'))
+
+
+@main.get('/surat_keluar/<id>/delete')
+@main.post('/surat_keluar/<id>/delete')
+def delete_surat_keluar(id):
+    delete_surat = SuratKeluar.query.filter_by(id=id).first()
+    db.session.delete(delete_surat)
+    db.session.commit()
+    flash('Delete Surat Successfully', "success")
+    return redirect(url_for('main.surat_keluar'))
 
 
 '''
