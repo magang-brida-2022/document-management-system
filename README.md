@@ -16,4 +16,5 @@
 - [ ] UI :: User Profile and Editing [user and admin level]
 - [✅] UI :: Register New User
 - [ ] UI :: Error Page {404, 403, 500}
+- [ ] UI :: Flask Message / Toast
 - ...
