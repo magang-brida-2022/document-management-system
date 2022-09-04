@@ -119,12 +119,21 @@ class Permission:
 class Bidang(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     alias = db.Column(db.String(50))
-    nama_bidang = db.Column(db.String(100))
+    nama = db.Column(db.String(100))
 
     users = db.relationship('User', backref="bidang", lazy='dynamic')
 
     def __repr__(self) -> str:
         return '<Bidang {}>'.format(self.nama_bidang)
+
+
+class Disposisi(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    alias = db.Column(db.String(50))
+    nama = db.Column(db.String(100))
+
+    def __repr__(self) -> str:
+        return '<Disposisi ke {}>'.format(self.nama)
 
 
 class SuratMasuk(db.Model):
