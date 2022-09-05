@@ -8,6 +8,7 @@
 - [✅] surat masuk
 - [✅] surat keluar
 - [ ] daily report
+- [ ] Edit surat masuk & surat keluar
 - [✅] User Profile and Editing [user and admin level]
 - [ ] UI :: Dashboard
 - [✅] UI :: Login
