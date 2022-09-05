@@ -4,10 +4,10 @@ from io import BytesIO
 
 from app.decorators import admin_required, permission_required
 from app.models import Permission
-from .forms import SuratMasukForm, SuratKeluarForm, DisposisiForm, BidangForm, DisposisiKeForm
+from .forms import SuratMasukForm, SuratKeluarForm, DisposisiForm, BidangForm, DisposisiKeForm, EditSuratMasukForm, EditSuratKeluarForm
 from ..models import SuratMasuk, SuratKeluar, Bidang, Disposisi
 from . import main
-from .. import db
+from .. import db, allowed_extension
 
 
 @main.get('/')
@@ -35,13 +35,17 @@ def surat_masuk():
         tanggal_diterima = form.tanggal_diterima.data
         lampiran = form.lampiran.data
 
-        surat_masuk = SuratMasuk(nomor=no_surat, asal=asal, perihal=perihal, tanggal_surat=tanggal_surat,
-                                 tanggal_diterima=tanggal_diterima, nama_file=lampiran.filename, lampiran=lampiran.read())
-        db.session.add(surat_masuk)
-        db.session.commit()
+        if lampiran and allowed_extension(lampiran.filename):
+            surat_masuk = SuratMasuk(nomor=no_surat, asal=asal, perihal=perihal, tanggal_surat=tanggal_surat,
+                                     tanggal_diterima=tanggal_diterima, nama_file=lampiran.filename, lampiran=lampiran.read())
+            db.session.add(surat_masuk)
+            db.session.commit()
 
-        flash("Surat masuk baru berhasil di tambahkan", "success")
-        return redirect(url_for('main.surat_masuk'))
+            flash("Surat masuk baru berhasil di tambahkan", "success")
+            return redirect(url_for('main.surat_masuk'))
+        else:
+            flash('allowed file types are .pdf only', 'danger')
+            return redirect(request.url)
 
     return render_template('arsip/surat_masuk.html', form=form, surat_masuk=surat_masuk)
 
@@ -80,39 +84,11 @@ def arsip():
     return render_template('arsip/arsip.html')
 
 
-@main.get('/surat_masuk_download/<upload_id>')
-@login_required
-def download_surat_masuk(upload_id):
-    surat_masuk = SuratMasuk.query.filter_by(id=upload_id).first()
-    return send_file(BytesIO(surat_masuk.lampiran), download_name=surat_masuk.nama_file, as_attachment=True)
-
-
 @main.get('/daily_activity')
 @main.post('/daily_activity')
 @login_required
 def daily_activity():
     return render_template('daily_activity/daily_activity.html')
-
-
-@main.get('/<id>/delete')
-@main.post('/<id>/delete')
-@admin_required
-def delete_surat(id):
-    if "surat_masuk" in request.path:
-        surat = SuratMasuk.query.get_or_404(id)
-        db.session.delete(surat)
-        db.session.commit()
-
-        flash('Surat Berhasi Dihapus', "Success")
-        return redirect(url_for('main.surat_masuk'))
-
-    if "surat_keluar" in request.path:
-        surat = SuratKeluar.query.get_or_404(id)
-        db.session.delete(surat)
-        db.session.commit()
-
-        flash('Surat Berhasi Dihapus', "Success")
-        return redirect(url_for('main.surat_masuk'))
 
 
 @main.get('/disposisi_ke')
@@ -169,6 +145,100 @@ def bidang():
         return redirect(url_for('main.bidang'))
 
     return render_template('arsip/tambah_bidang.html', form=form, bidang=bidang)
+
+
+'''
+    =========================
+    Edit Surat
+    ========================
+'''
+
+
+@main.get('/surat_masuk/edit/<id>')
+@main.post('/surat_masuk/edit/<id>')
+def edit_surat_masuk(id):
+    form = EditSuratMasukForm()
+    if form.validate_on_submit():
+        pass
+
+    return render_template('arsip/edit_surat_masuk.html', form=form)
+
+
+@main.get('/surat_keluar/<id>/edit')
+@main.post('/surat_keluar/<id>/edit')
+def edit_surat_keluar(id):
+    form = EditSuratKeluarForm()
+    if form.validate_on_submit():
+        pass
+
+    return render_template('arsip/edit_surat_keluar.html', form=form)
+
+
+'''
+    =========================
+    Delete Surat
+    ========================
+'''
+
+
+@main.get('/surat_masuk/<id>/delete')
+@main.post('/surat_masuk/<id>/delete')
+def delete_surat_masuk(id):
+    delete_surat = SuratMasuk.query.filter_by(id=id).first()
+    db.session.delete(delete_surat)
+    db.session.commit()
+    flash('Delete Surat Successfully', "success")
+    return redirect(url_for('main.surat_masuk'))
+
+
+@main.get('/surat_keluar/<id>/delete')
+@main.post('/surat_keluar/<id>/delete')
+def delete_surat_keluar(id):
+    delete_surat = SuratKeluar.query.filter_by(id=id).first()
+    db.session.delete(delete_surat)
+    db.session.commit()
+    flash('Delete Surat Successfully', "success")
+    return redirect(url_for('main.surat_keluar'))
+
+
+'''
+    =========================
+    Lihat dokumen
+    ========================
+'''
+
+
+@main.get('/surat_masuk/lampiran/<id>/open')
+def open_surat_masuk_dokumen(id):
+    surat_masuk = SuratMasuk.query.filter_by(id=id).first()
+    return send_file(BytesIO(surat_masuk.lampiran), mimetype='application/pdf')
+
+
+@main.get('/surat_keluar/lampiran/<id>/open')
+def open_surat_keluar_dokumen(id):
+    surat_keluar = SuratKeluar.query.filter_by(id=id).first()
+    return send_file(BytesIO(surat_keluar.lampiran), mimetype='application/pdf')
+
+
+'''
+    =========================
+    download dokumen 
+    ========================
+'''
+
+
+@main.get('/surat_masuk_download/<upload_id>')
+@login_required
+def download_surat_masuk(upload_id):
+    surat_masuk = SuratMasuk.query.filter_by(id=upload_id).first()
+    return send_file(BytesIO(surat_masuk.lampiran), download_name=surat_masuk.nama_file, as_attachment=True)
+
+
+@main.get('/surat_keluar_download/<upload_id>')
+@login_required
+def download_surat_keluar(upload_id):
+    surat_keluar = SuratKeluar.query.filter_by(id=upload_id).first()
+    return send_file(BytesIO(surat_keluar.lampiran), download_name=surat_keluar.nama_file, as_attachment=True)
 
 
 '''

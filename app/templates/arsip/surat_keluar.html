@@ -129,33 +129,27 @@
                 <td>{{ surat.ringkasan }}</td>
                 <td>{{ surat.tanggal_dikeluarkan }}</td>
                 <td>{{ surat.tujuan }}</td>
-                <td>{{ surat.nama_file }}</td>
                 <td>
-                  {# <a href="#lihatDokumen">Lihat Dokumen</a>
-                  <a href="#edit">Edit</a> |
-                  <a href="{{ url_for('main.delete_surat', id=surat.id) }}"
-                    >Delete</a
-                  >
-                  #}
-
-                  <div class="btn-toolbar" role="toolbar">
-                    <div class="btn-group" role="group">
-                      <button type="button" class="btn-sm btn-success">
-                        Lihat Dokumen
-                      </button>
-                      {% if current_user.can(Permission.ARSIP) %}
-                      <div class="btn-group" role="group">
-                        <button type="button" class="btn-sm btn-primary">
-                          Edit
-                        </button>
-                      </div>
-                      <div class="btn-group" role="group">
-                        <button type="button" class="btn-sm btn-danger">
-                          Hapus
-                        </button>
-                      </div>
-                      {% endif %}
+                 <div class="btn-toolbar" role="toolbar">
+                    <div class="btn-group mr-2" role="group">
+                      <a href="{{ url_for('main.download_surat_keluar', upload_id=surat.id) }}" class="btn-sm btn-secondary">Download</a>
                     </div>
+                  </div>
+                </td>
+                <td>
+                  <div class="btn-toolbar" role="toolbar">
+                   <div class="btn-group mr-2" role="group">
+                      <a href="{{ url_for('main.open_surat_keluar_dokumen', id=surat.id) }}" class="btn-sm btn-success">Lihat Dokumen</a>
+                    </div>
+                    {% if current_user.can(Permission.ARSIP) %}
+                    <div class="btn-group mr-2" role="group">
+                      <a href="{{ url_for('main.edit_surat_keluar', id=surat.id) }}" class="btn-sm btn-primary">Edit</a>
+                    </div>
+                    <div class="btn-group" role="group">
+                      <a href="{{ url_for('main.delete_surat_keluar', id=surat.id) }}" class="btn-sm btn-danger">Delete</a>
+                    </div>
+                    {% endif %}
+                  </div>
                   </div>
                 </td>
               </tr>

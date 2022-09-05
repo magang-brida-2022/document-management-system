@@ -13,7 +13,9 @@
       </div>
       <div class="col-sm-6">
         <ol class="breadcrumb float-sm-right">
-          <li class="breadcrumb-item"><a href="#">Home</a></li>
+          <li class="breadcrumb-item">
+            <a href="{{ url_for('main.index') }}">Home</a>
+          </li>
           <li class="breadcrumb-item active">Manage User</li>
         </ol>
       </div>
@@ -131,13 +133,22 @@
                 <td>{{ user.no_telpon }}</td>
                 <td>{{ user.jabatan }}</td>
                 <td>
-                  <a
-                    href="{{ url_for('users.edit_profile_admin', id=user.id) }}"
-                    >Edit</a
-                  >
-                  <a href="{{ url_for('users.delete_user', id=user.id) }}"
-                    >Delete</a
-                  >
+                  <div class="btn-toolbar" role="toolbar">
+                    <div class="btn-group mr-2" role="group">
+                      <a
+                        href="{{ url_for('users.edit_profile_admin', id=user.id) }}"
+                        class="btn-sm btn-primary"
+                        >Edit</a
+                      >
+                    </div>
+                    <div class="btn-group" role="group">
+                      <a
+                        href="{{ url_for('users.delete_user', id=user.id) }}"
+                        class="btn-sm btn-danger"
+                        >Delete</a
+                      >
+                    </div>
+                  </div>
                 </td>
               </tr>
               {% endfor %}

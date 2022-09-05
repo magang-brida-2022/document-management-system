@@ -18,6 +18,13 @@ login_manager.session_protection = 'strong'
 login_manager.login_view = 'auth.login'
 
 
+ALLOWED_EXTENSIONS = set(['pdf'])
+
+
+def allowed_extension(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
 def page_not_found(e):
     return "Page not found | 404", 404
 

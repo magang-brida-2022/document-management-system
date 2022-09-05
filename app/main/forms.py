@@ -51,3 +51,18 @@ class DisposisiForm(FlaskForm):
     alias = StringField('Alias', validators=[DataRequired()])
     nama = StringField('Nama Disposisi', validators=[DataRequired()])
     submit = SubmitField("Tambah")
+
+
+'''
+    =========================
+    Edit Surat
+    ========================
+'''
+
+
+class EditSuratMasukForm(SuratMasukForm, DisposisiKeForm):
+    pass
+
+
+class EditSuratKeluarForm(SuratKeluarForm):
+    pass
