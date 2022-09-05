@@ -7,7 +7,7 @@ from app.models import Permission
 from .forms import SuratMasukForm, SuratKeluarForm, DisposisiForm, BidangForm, DisposisiKeForm, EditSuratMasukForm, EditSuratKeluarForm
 from ..models import SuratMasuk, SuratKeluar, Bidang, Disposisi
 from . import main
-from .. import db
+from .. import db, allowed_extension
 
 
 @main.get('/')
@@ -35,13 +35,17 @@ def surat_masuk():
         tanggal_diterima = form.tanggal_diterima.data
         lampiran = form.lampiran.data
 
-        surat_masuk = SuratMasuk(nomor=no_surat, asal=asal, perihal=perihal, tanggal_surat=tanggal_surat,
-                                 tanggal_diterima=tanggal_diterima, nama_file=lampiran.filename, lampiran=lampiran.read())
-        db.session.add(surat_masuk)
-        db.session.commit()
+        if lampiran and allowed_extension(lampiran.filename):
+            surat_masuk = SuratMasuk(nomor=no_surat, asal=asal, perihal=perihal, tanggal_surat=tanggal_surat,
+                                     tanggal_diterima=tanggal_diterima, nama_file=lampiran.filename, lampiran=lampiran.read())
+            db.session.add(surat_masuk)
+            db.session.commit()
 
-        flash("Surat masuk baru berhasil di tambahkan", "success")
-        return redirect(url_for('main.surat_masuk'))
+            flash("Surat masuk baru berhasil di tambahkan", "success")
+            return redirect(url_for('main.surat_masuk'))
+        else:
+            flash('allowed file types are .pdf only', 'danger')
+            return redirect(request.url)
 
     return render_template('arsip/surat_masuk.html', form=form, surat_masuk=surat_masuk)
 
@@ -78,13 +82,6 @@ def surat_keluar():
 @permission_required(Permission.ARSIP)
 def arsip():
     return render_template('arsip/arsip.html')
-
-
-@main.get('/surat_masuk_download/<upload_id>')
-@login_required
-def download_surat_masuk(upload_id):
-    surat_masuk = SuratMasuk.query.filter_by(id=upload_id).first()
-    return send_file(BytesIO(surat_masuk.lampiran), download_name=surat_masuk.nama_file, as_attachment=True)
 
 
 @main.get('/daily_activity')
@@ -221,6 +218,27 @@ def open_surat_masuk_dokumen(id):
 def open_surat_keluar_dokumen(id):
     surat_keluar = SuratKeluar.query.filter_by(id=id).first()
     return send_file(BytesIO(surat_keluar.lampiran), mimetype='application/pdf')
+
+
+'''
+    =========================
+    download dokumen 
+    ========================
+'''
+
+
+@main.get('/surat_masuk_download/<upload_id>')
+@login_required
+def download_surat_masuk(upload_id):
+    surat_masuk = SuratMasuk.query.filter_by(id=upload_id).first()
+    return send_file(BytesIO(surat_masuk.lampiran), download_name=surat_masuk.nama_file, as_attachment=True)
+
+
+@main.get('/surat_keluar_download/<upload_id>')
+@login_required
+def download_surat_keluar(upload_id):
+    surat_keluar = SuratKeluar.query.filter_by(id=upload_id).first()
+    return send_file(BytesIO(surat_keluar.lampiran), download_name=surat_keluar.nama_file, as_attachment=True)
 
 
 '''
