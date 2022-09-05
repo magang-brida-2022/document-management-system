@@ -133,7 +133,7 @@
                 <td>
                   <div class="btn-toolbar" role="toolbar">
                    <div class="btn-group mr-2" role="group">
-                      <a href="#lihatDokument" class="btn-sm btn-success">Lihat Dokumen</a>
+                      <a href="{{ url_for('main.open_surat_keluar_dokumen', id=surat.id) }}" class="btn-sm btn-success">Lihat Dokumen</a>
                     </div>
                     {% if current_user.can(Permission.ARSIP) %}
                     <div class="btn-group mr-2" role="group">

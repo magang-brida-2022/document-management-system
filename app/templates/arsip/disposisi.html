@@ -45,7 +45,12 @@
                 <td>{{ surat.nomor }}</td>
                 <td>{{ surat.asal }}</td>
                 <td>{{ surat.perihal }}</td>
-                <td><a href="#lihatDokumen">LihatDokumen</a></td>
+                <td>
+                  <a
+                    href="{{ url_for('main.open_surat_masuk_dokumen', id=surat.id) }}"
+                    >LihatDokumen</a
+                  >
+                </td>
                 <td>
                   <a href="{{ url_for('main.edit_disposisi', id=surat.id) }}"
                     >Teruskan Ke</a

@@ -206,6 +206,25 @@ def delete_surat_keluar(id):
 
 '''
     =========================
+    Lihat dokumen
+    ========================
+'''
+
+
+@main.get('/surat_masuk/lampiran/<id>/open')
+def open_surat_masuk_dokumen(id):
+    surat_masuk = SuratMasuk.query.filter_by(id=id).first()
+    return send_file(BytesIO(surat_masuk.lampiran), mimetype='application/pdf')
+
+
+@main.get('/surat_keluar/lampiran/<id>/open')
+def open_surat_keluar_dokumen(id):
+    surat_keluar = SuratKeluar.query.filter_by(id=id).first()
+    return send_file(BytesIO(surat_keluar.lampiran), mimetype='application/pdf')
+
+
+'''
+    =========================
     Eksperiment route 
     ========================
 '''
