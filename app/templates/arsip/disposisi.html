@@ -46,15 +46,26 @@
                 <td>{{ surat.asal }}</td>
                 <td>{{ surat.perihal }}</td>
                 <td>
-                  <a
-                    href="{{ url_for('main.open_surat_masuk_dokumen', id=surat.id) }}"
-                    >LihatDokumen</a
-                  >
+                  <div class="btn-toolbar" role="toolbar">
+                    <div class="btn-group mr-2" role="group">
+                      <a
+                        href="{{ url_for('main.open_surat_masuk_dokumen', id=surat.id) }}"
+                        class="btn-sm btn-success"
+                        >Lihat Dokumen</a
+                      >
+                    </div>
+                  </div>
                 </td>
                 <td>
-                  <a href="{{ url_for('main.edit_disposisi', id=surat.id) }}"
-                    >Teruskan Ke</a
-                  >
+                  <div class="btn-toolbar" role="toolbar">
+                    <div class="btn-group mr-2" role="group">
+                      <a
+                        href="{{ url_for('main.edit_disposisi', id=surat.id) }}"
+                        class="btn-sm btn-info"
+                        >Teruskan Ke</a
+                      >
+                    </div>
+                  </div>
                 </td>
               </tr>
               {% endfor %}

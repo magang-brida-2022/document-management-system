@@ -129,7 +129,13 @@
                 <td>{{ surat.ringkasan }}</td>
                 <td>{{ surat.tanggal_dikeluarkan }}</td>
                 <td>{{ surat.tujuan }}</td>
-                <td>{{ surat.nama_file }}</td>
+                <td>
+                 <div class="btn-toolbar" role="toolbar">
+                    <div class="btn-group mr-2" role="group">
+                      <a href="{{ url_for('main.download_surat_keluar', upload_id=surat.id) }}" class="btn-sm btn-secondary">Download</a>
+                    </div>
+                  </div>
+                </td>
                 <td>
                   <div class="btn-toolbar" role="toolbar">
                    <div class="btn-group mr-2" role="group">
