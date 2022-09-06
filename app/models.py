@@ -147,6 +147,9 @@ class SuratMasuk(db.Model):
     lampiran = db.Column(db.LargeBinary, nullable=False)
     disposisi_ke = db.Column(db.String(50))
     dilihat = db.Column(db.Boolean, default=False)
+    # pesan
+    # sifat
+    # sudah_dikerjain?
 
     def __repr__(self) -> str:
         return "<No Surat: {}>".format(self.nomor)

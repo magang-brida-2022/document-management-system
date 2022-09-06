@@ -1,10 +1,11 @@
+from multiprocessing.heap import reduce_arena
 from flask import render_template, flash, redirect, request, send_file, url_for
 from flask_login import login_required, current_user
 from io import BytesIO
 
 from app.decorators import admin_required, permission_required
-from app.models import Permission
-from .forms import SuratMasukForm, SuratKeluarForm, DisposisiForm, BidangForm, DisposisiKeForm, EditSuratMasukForm, EditSuratKeluarForm
+from app.models import Permission, Bidang, Disposisi
+from .forms import SuratMasukForm, SuratKeluarForm, DisposisiForm, BidangForm, DisposisiKeForm, EditSuratMasukForm, EditSuratKeluarForm, EditBidangForm, EditDisposisiForm
 from ..models import SuratMasuk, SuratKeluar, Bidang, Disposisi
 from . import main
 from .. import db, allowed_extension
@@ -97,9 +98,9 @@ def disposisi_ke():
     return render_template('arsip/disposisi.html', surat_masuk=surat_masuk)
 
 
-@main.get('/edit/disposisi/<id>')
-@main.post('/edit/disposisi/<id>')
-def edit_disposisi(id):
+@main.get('/diteruskan/<id>')
+@main.post('/diteruskan/<id>')
+def diteruskan(id):
     form = DisposisiKeForm()
     disposisi = SuratMasuk.query.filter_by(id=id).first()
     if form.validate_on_submit():
@@ -112,7 +113,7 @@ def edit_disposisi(id):
 
     form.disposisi.data = disposisi.disposisi_ke
     form.dilihat.data = disposisi.dilihat
-    return render_template('arsip/edit_disposisi.html', form=form, disposisi=disposisi)
+    return render_template('arsip/disposisi_ke.html', form=form, disposisi=disposisi)
 
 
 @main.get('/disposisi')
@@ -158,8 +159,30 @@ def bidang():
 @main.post('/surat_masuk/edit/<id>')
 def edit_surat_masuk(id):
     form = EditSuratMasukForm()
+    surat_masuk = SuratMasuk.query.filter_by(id=id).first()
     if form.validate_on_submit():
-        pass
+        if form.lampiran.data is not None:
+            surat_masuk.lampiran = form.lampiran.data.read()
+            surat_masuk.nama_file = form.lampiran.data.filename
+
+        surat_masuk.nomor = form.no_surat.data
+        surat_masuk.asal = form.asal.data
+        surat_masuk.perihal = form.perihal.data
+        surat_masuk.tanggal_surat = form.tanggal_surat.data
+        surat_masuk.tanggal_diterima = form.tanggal_diterima.data
+        surat_masuk.disposisi_ke = form.disposisi.data
+
+        db.session.commit()
+        flash("surat masuk update successfully", 'success')
+        return redirect(url_for('main.surat_masuk'))
+
+    form.no_surat.data = surat_masuk.nomor
+    form.asal.data = surat_masuk.asal
+    form.perihal.data = surat_masuk.perihal
+    form.tanggal_surat.data = surat_masuk.tanggal_surat
+    form.tanggal_diterima.data = surat_masuk.tanggal_diterima
+    form.lampiran.data = surat_masuk.lampiran
+    form.disposisi.data = surat_masuk.disposisi_ke
 
     return render_template('arsip/edit_surat_masuk.html', form=form)
 
@@ -168,15 +191,70 @@ def edit_surat_masuk(id):
 @main.post('/surat_keluar/<id>/edit')
 def edit_surat_keluar(id):
     form = EditSuratKeluarForm()
+    surat_keluar = SuratKeluar.query.filter_by(id=id).first()
     if form.validate_on_submit():
-        pass
+        if form.lampiran.data is not None:
+            surat_keluar.lampiran = form.lampiran.data.read()
+            surat_keluar.nama_file = form.lampura.data.filename
 
+        surat_keluar.nomor = form.no_surat.data
+        surat_keluar.jenis = form.jenis_surat.data
+        surat_keluar.ringkasan = form.ringkasan.data
+        surat_keluar.tanggal_dikeluarkan = form.tanggal_dikeluarkan.data
+        surat_keluar.tujuan = form.tujuan.data
+
+        db.session.commit()
+        flash('Surat Keluar Update Successfully', "Success")
+        return redirect(url_for('main.surat_keluar'))
+
+    form.no_surat.data = surat_keluar.nomor
+    form.jenis_surat.data = surat_keluar.jenis
+    form.ringkasan.data = surat_keluar.ringkasan
+    form.tanggal_dikeluarkan.data = surat_keluar.tanggal_dikeluarkan
+    form.tujuan.data = surat_keluar.tujuan
+    form.lampiran.data = surat_keluar.lampiran
     return render_template('arsip/edit_surat_keluar.html', form=form)
+
+
+@main.get('/bidang/<id>/edit')
+@main.post('/bidang/<id>/edit')
+def edit_bidang(id):
+    form = EditBidangForm()
+    bidang = Bidang.query.filter_by(id=id).first()
+    if form.validate_on_submit():
+        bidang.alias = form.alias.data
+        bidang.nama = form.nama.data
+
+        db.session.commit()
+        flash('Update Bidang Successfully', 'success')
+        return redirect(url_for('main.bidang'))
+
+    form.alias.data = bidang.alias
+    form.nama.data = bidang.nama
+    return render_template('arsip/edit_bidang.html', form=form, bidang=bidang)
+
+
+@main.get('/disposisi/<id>/edit')
+@main.post('/disposisi/<id>/edit')
+def edit_disposisi(id):
+    form = EditDisposisiForm()
+    disposisi = Disposisi.query.filter_by(id=id).first()
+    if form.validate_on_submit():
+        disposisi.alias = form.alias.data
+        disposisi.nama = form.nama.data
+
+        db.session.commit()
+        flash("Update Disposisi Successfully", 'success')
+        return redirect(url_for('main.disposisi'))
+
+    form.alias.data = disposisi.alias
+    form.nama.data = disposisi.nama
+    return render_template('arsip/edit_disposisi.html', form=form, disposisi=disposisi)
 
 
 '''
     =========================
-    Delete Surat
+    Delete
     ========================
 '''
 
@@ -193,12 +271,35 @@ def delete_surat_masuk(id):
 
 @main.get('/surat_keluar/<id>/delete')
 @main.post('/surat_keluar/<id>/delete')
+@admin_required
 def delete_surat_keluar(id):
     delete_surat = SuratKeluar.query.filter_by(id=id).first()
     db.session.delete(delete_surat)
     db.session.commit()
     flash('Delete Surat Successfully', "success")
     return redirect(url_for('main.surat_keluar'))
+
+
+@main.get('/bidang/<id>/delete')
+@main.post('/bidang/<id>/delete')
+@admin_required
+def delete_bidang(id):
+    delete_bidang = Bidang.query.filter_by(id=id).first()
+    db.session.delete(delete_bidang)
+    db.session.commit()
+    flash("Delete Bidang Successfully", 'success')
+    return redirect(url_for('main.bidang'))
+
+
+@main.get('/disposisi/<id>/delete')
+@main.post('/disposisi/<id>/delete')
+@admin_required
+def delete_disposisi(id):
+    delete_disposisi = Disposisi.query.filter_by(id=id).first()
+    db.session.delete(delete_disposisi)
+    db.session.commit()
+    flash('Delete Bidang Successfully', 'success')
+    return redirect(url_for('main.disposisi'))
 
 
 '''

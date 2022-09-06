@@ -224,7 +224,9 @@
                 <a href="{{ url_for('main.disposisi_ke') }}" class="nav-link ">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Disposisi
-                    <span class="right badge badge-danger">{{ current_user.surat_undisposisi() }}</span>
+                    {% if TotalDisposisi %}
+                      <span class="right badge badge-danger">{{ TotalDisposisi }}</span>
+                    {% endif %}
                   </p>
                 </a>
               </li>
