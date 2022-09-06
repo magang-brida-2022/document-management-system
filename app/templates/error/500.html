@@ -1,0 +1,14 @@
+{% extends "error_base.html" %} {% block content %}
+<div id="notfound">
+  <div class="notfound">
+    <div class="notfound-404"></div>
+    <h1>500</h1>
+    <h2>Internal server Error</h2>
+    <p>
+      The server has been deserted for a while.Please be patient or try again
+      later
+    </p>
+    <button><a href="{{ url_for('main.index') }}">Back to Home</a></button>
+  </div>
+</div>
+{% endblock content %}

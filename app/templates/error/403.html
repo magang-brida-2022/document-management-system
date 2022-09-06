@@ -1,0 +1,13 @@
+{% extends "error_base.html" %} {% block content %}
+
+<div id="notfound">
+  <div class="notfound">
+    <div class="notfound-404"></div>
+    <h1>403</h1>
+    <h2>Forbidden</h2>
+    <p>You don't have permission to access this resource</p>
+    <button><a href="{{ url_for('main.index') }}">Back to Home</a></button>
+  </div>
+</div>
+
+{% endblock content %}
