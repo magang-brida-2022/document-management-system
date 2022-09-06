@@ -23,7 +23,7 @@ def login():
 
         flash('Invalid Username or password', 'danger')
 
-    return render_template('auth/login.html', form=form)
+    return render_template('auth/login.html', form=form, title="Login")
 
 
 @auth.get('/signup')
@@ -41,7 +41,7 @@ def register():
         flash('User created successfully', 'success')
         return redirect(request.url)
 
-    return render_template('auth/register.html', form=form, all_user=all_user)
+    return render_template('auth/register.html', form=form, all_user=all_user, title="User Management")
 
 
 @auth.get('/logout')

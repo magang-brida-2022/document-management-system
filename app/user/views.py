@@ -35,7 +35,7 @@ def edit_profile():
     form.nama_lengkap.data = current_user.nama_lengkap
     form.jabatan.data = current_user.jabatan
 
-    return render_template('user/edit_user.html', form=form)
+    return render_template('user/edit_user.html', form=form, title="Edit Profile")
 
 
 @users.get('/edit-profile/<int:id>')
@@ -64,7 +64,7 @@ def edit_profile_admin(id):
     form.nama_lengkap.data = user.nama
     form.jabatan.data = user.jabatan
     form.no_telpon.data = user.no_telpon
-    return render_template('user/edit_user_admin.html', form=form, user=user)
+    return render_template('user/edit_user_admin.html', form=form, user=user, title="Edit Profile [ADMIN]")
 
 
 @users.get('/delete/<id>')

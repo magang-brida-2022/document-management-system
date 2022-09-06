@@ -48,7 +48,7 @@ def surat_masuk():
             flash('allowed file types are .pdf only', 'danger')
             return redirect(request.url)
 
-    return render_template('arsip/surat_masuk.html', form=form, surat_masuk=surat_masuk)
+    return render_template('arsip/surat_masuk.html', form=form, surat_masuk=surat_masuk, title="Surat Masuk")
 
 
 @main.get('/surat_keluar')
@@ -75,7 +75,7 @@ def surat_keluar():
         flash("Surat keluar baru berhasil ditambahkan", "success")
         return redirect(request.base_url)
 
-    return render_template('arsip/surat_keluar.html', form=form, surat_keluar=surat_keluar)
+    return render_template('arsip/surat_keluar.html', form=form, surat_keluar=surat_keluar, title="Surat Keluar")
 
 
 @main.get('/arsip')
@@ -95,7 +95,7 @@ def daily_activity():
 @main.get('/disposisi_ke')
 def disposisi_ke():
     surat_masuk = SuratMasuk.query.filter_by(dilihat=False)
-    return render_template('arsip/disposisi.html', surat_masuk=surat_masuk)
+    return render_template('arsip/disposisi.html', surat_masuk=surat_masuk, title="Atur Disposisi")
 
 
 @main.get('/diteruskan/<id>')
@@ -113,7 +113,7 @@ def diteruskan(id):
 
     form.disposisi.data = disposisi.disposisi_ke
     form.dilihat.data = disposisi.dilihat
-    return render_template('arsip/disposisi_ke.html', form=form, disposisi=disposisi)
+    return render_template('arsip/disposisi_ke.html', form=form, disposisi=disposisi, title="Pilih Disposisi")
 
 
 @main.get('/disposisi')
@@ -129,7 +129,7 @@ def disposisi():
         flash('Data Berhasil di Tambahkan', 'success')
         return redirect(url_for('main.disposisi'))
 
-    return render_template('arsip/tambah_disposisi.html', form=form, disposisi=disposisi)
+    return render_template('arsip/tambah_disposisi.html', form=form, disposisi=disposisi, title="Disposisi Management")
 
 
 @main.get('/bidang')
@@ -145,7 +145,7 @@ def bidang():
         flash('Data berhasil di Tambahkan', 'success')
         return redirect(url_for('main.bidang'))
 
-    return render_template('arsip/tambah_bidang.html', form=form, bidang=bidang)
+    return render_template('arsip/tambah_bidang.html', form=form, bidang=bidang, title="Bidang Management")
 
 
 '''
@@ -184,7 +184,7 @@ def edit_surat_masuk(id):
     form.lampiran.data = surat_masuk.lampiran
     form.disposisi.data = surat_masuk.disposisi_ke
 
-    return render_template('arsip/edit_surat_masuk.html', form=form)
+    return render_template('arsip/edit_surat_masuk.html', form=form, title="Edit Surat Masuk")
 
 
 @main.get('/surat_keluar/<id>/edit')
@@ -213,7 +213,7 @@ def edit_surat_keluar(id):
     form.tanggal_dikeluarkan.data = surat_keluar.tanggal_dikeluarkan
     form.tujuan.data = surat_keluar.tujuan
     form.lampiran.data = surat_keluar.lampiran
-    return render_template('arsip/edit_surat_keluar.html', form=form)
+    return render_template('arsip/edit_surat_keluar.html', form=form, title="Edit Surat Keluar")
 
 
 @main.get('/bidang/<id>/edit')
@@ -231,7 +231,7 @@ def edit_bidang(id):
 
     form.alias.data = bidang.alias
     form.nama.data = bidang.nama
-    return render_template('arsip/edit_bidang.html', form=form, bidang=bidang)
+    return render_template('arsip/edit_bidang.html', form=form, bidang=bidang, title="Edit Bidang")
 
 
 @main.get('/disposisi/<id>/edit')
@@ -249,7 +249,7 @@ def edit_disposisi(id):
 
     form.alias.data = disposisi.alias
     form.nama.data = disposisi.nama
-    return render_template('arsip/edit_disposisi.html', form=form, disposisi=disposisi)
+    return render_template('arsip/edit_disposisi.html', form=form, disposisi=disposisi, title="Edit Disposisi")
 
 
 '''

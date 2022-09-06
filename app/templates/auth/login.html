@@ -125,8 +125,11 @@
       name="google-site-verification"
       content="kCT200-J0rfczENRkJQdYCqsDKkUo3Hvr3KZic_otwU"
     />
-
-    <title>AdminLTE Flask - Login | AppSeed</title>
+{% if title %}
+    <title>{{title}} | AppName</title>
+  {%else%}
+    <title>AppName</title>
+    {%endif%}
 
     <!-- Specific Page CSS goes HERE  -->
 
