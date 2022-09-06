@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager
@@ -26,16 +26,16 @@ def allowed_extension(filename):
 
 
 def page_not_found(e):
-    return "Page not found | 404", 404
+    return render_template('error/404.html'), 404
 
 
 def internat_server_error(e):
     db.session.rollback()
-    return 'Internal server error | 500', 500
+    return render_template('error/500.html'), 500
 
 
 def forbidden(e):
-    return 'Forbidden | 403', 403
+    return render_template('error/403.html'), 403
 
 
 def create_app():
