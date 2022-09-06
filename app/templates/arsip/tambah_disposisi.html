@@ -103,10 +103,18 @@
                 <td>
                   <div class="btn-toolbar" role="toolbar">
                     <div class="btn-group mr-2" role="group">
-                      <a href="#edit" class="btn-sm btn-primary">Edit</a>
+                      <a
+                        href="{{ url_for('main.edit_disposisi', id=d.id) }}"
+                        class="btn-sm btn-primary"
+                        >Edit</a
+                      >
                     </div>
                     <div class="btn-group mr-2" role="group">
-                      <a href="#delete" class="btn-sm btn-danger">Delete</a>
+                      <a
+                        href="{{url_for('main.delete_disposisi', id=d.id)}}"
+                        class="btn-sm btn-danger"
+                        >Delete</a
+                      >
                     </div>
                   </div>
                 </td>

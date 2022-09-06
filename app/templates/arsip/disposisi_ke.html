@@ -21,13 +21,16 @@
       <div class="card-body">
         <form method="post">
           {{form.hidden_tag()}}
-          <div class="form-row">
-            <div class="form-group col-md-6">
-              {{form.alias.label}} {{form.alias(class="form-control")}}
-            </div>
-            <div class="form-group col-md-6">
-              {{form.nama.label}} {{form.nama(class="form-control")}}
-            </div>
+          <div class="form-group">
+            {{form.disposisi.label}} {{form.disposisi(class="form-control")}} {#
+            <small id="emailHelp" class="form-text text-muted"
+              >We'll never share your email with anyone else.</small
+            >
+            #}
+          </div>
+          <div class="form-group form-check">
+            {{form.dilihat(class="form-check-input")}}
+            {{form.dilihat.label(class="form-check-label")}}
           </div>
           {{form.submit(class="btn btn-primary")}}
         </form>
