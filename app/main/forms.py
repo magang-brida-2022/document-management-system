@@ -1,4 +1,3 @@
-from tokenize import String
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField
 from wtforms import StringField, DateField,  SubmitField, TextAreaField, SelectField, BooleanField
@@ -61,8 +60,16 @@ class DisposisiForm(FlaskForm):
 
 
 class EditSuratMasukForm(SuratMasukForm, DisposisiKeForm):
-    pass
+    lampiran = FileField('Lampiran')
 
 
 class EditSuratKeluarForm(SuratKeluarForm):
+    lampiran = FileField('Lampiran')
+
+
+class EditBidangForm(BidangForm):
+    pass
+
+
+class EditDisposisiForm(DisposisiForm):
     pass
