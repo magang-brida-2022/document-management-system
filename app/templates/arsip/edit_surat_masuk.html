@@ -1,12 +1,62 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-  </head>
-  <body>
-    <h1>Edit Surat Masuk</h1>
-  </body>
-</html>
+{% extends "base.html" %} {% block content %}
+<section class="content-header">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-6">
+        <h1 class="m-0">Edit Surat Masuk</h1>
+      </div>
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item"><a href="#">Home</a></li>
+          <li class="breadcrumb-item active">Edit Surat Masuk</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="content">
+  <div class="container-fluid">
+    <div class="card">
+      <div class="card-body">
+        <form method="post" enctype="multipart/form-data">
+          {{form.hidden_tag()}}
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              {{form.no_surat.label}} {{form.no_surat(class="form-control")}}
+            </div>
+            <div class="form-group col-md-6">
+              {{form.asal.label}} {{form.asal(class="form-control")}}
+            </div>
+          </div>
+          <div class="form-group">
+            {{form.perihal.label}} {{form.perihal(class="form-control")}}
+          </div>
+          {# tanggal #}
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              {{form.tanggal_surat.label}}
+              {{form.tanggal_surat(class="form-control")}}
+            </div>
+            <div class="form-group col-md-6">
+              {{form.tanggal_diterima.label}}
+              {{form.tanggal_diterima(class="form-control")}}
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              {{form.disposisi.label}} {{form.disposisi(class="form-control")}}
+            </div>
+            <div class="form-group col-md-6">
+              {{ form.lampiran.label }}
+              {{form.lampiran(class="form-control-file")}}
+            </div>
+          </div>
+          {{form.submit(class="btn btn-primary")}}
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock content %}

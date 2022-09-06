@@ -51,9 +51,6 @@ class User(UserMixin, db.Model):
     def check_password(self, password: str) -> bool:
         return check_password_hash(self.password_hash, password)
 
-    def surat_undisposisi(self):
-        return SuratMasuk.query.filter_by(dilihat=False).count()
-
 
 class AnonymousUser(AnonymousUserMixin):
     def can(self, permissions) -> bool:
@@ -150,6 +147,9 @@ class SuratMasuk(db.Model):
     lampiran = db.Column(db.LargeBinary, nullable=False)
     disposisi_ke = db.Column(db.String(50))
     dilihat = db.Column(db.Boolean, default=False)
+    # pesan
+    # sifat
+    # sudah_dikerjain?
 
     def __repr__(self) -> str:
         return "<No Surat: {}>".format(self.nomor)

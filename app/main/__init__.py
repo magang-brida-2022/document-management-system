@@ -1,12 +1,11 @@
 from flask import Blueprint
 
-from ..models import Permission
+from ..models import Permission, SuratMasuk
 
 main = Blueprint('main', __name__)
 
 from . import views
 
-
 @main.app_context_processor
-def inject_permissions():
-    return dict(Permission=Permission)
+def app_context():
+    return dict(Permission=Permission, TotalDisposisi=SuratMasuk.query.filter_by(dilihat=False).count())
