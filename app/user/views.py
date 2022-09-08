@@ -1,40 +1,37 @@
 from flask import render_template, abort, flash, url_for, redirect, request
 from . import users
 
-from app.models import User, Role
+from app.models import User, Role, Bidang
 from flask_login import login_required, current_user
 from app.decorators import admin_required, permission_required
 from .forms import EditProfileForm, EditProfileAdminForm
 from .. import db
 
 
-@users.get('/<username>')
+@users.get('/profile')
+@users.post('/profile')
 @login_required
-def profile(username):
-    user = User.query.filter_by(username=username).first()
-    if user is None:
-        abort(404)
-
-    return render_template('user/profile.html', user=user)
+def profile():
+    user = User.query.filter_by(id=current_user.id).first()
+    return render_template('user/profile.html', user=user, title="Profile")
 
 
 @users.get('/edit-profile')
 @users.post('/edit-profile')
-@login_required
 def edit_profile():
     form = EditProfileForm()
-
     if form.validate_on_submit():
-        current_user.nama_lengkap = form.nama_lengkap.data
+        current_user.nama = form.nama_lengkap.data
         current_user.jabatan = form.jabatan.data
+        current_user.no_telpon = form.no_telpon.data
+
         db.session.commit()
+        flash("User Profile update successfully", "success")
+        return redirect(url_for("users.profile"))
 
-        flash("User Profile Updated Successfully.", "success")
-        return redirect(url_for('users.profile', username=current_user.username))
-
-    form.nama_lengkap.data = current_user.nama_lengkap
+    form.nama_lengkap.data = current_user.nama
     form.jabatan.data = current_user.jabatan
-
+    form.no_telpon.data = current_user.no_telpon
     return render_template('user/edit_user.html', form=form, title="Edit Profile")
 
 
@@ -51,6 +48,7 @@ def edit_profile_admin(id):
         user.username = form.username.data
         user.role = Role.query.get(form.role.data)
         user.nama = form.nama_lengkap.data
+        user.bidang = Bidang.query.get(form.bidang.data)
         user.jabatan = form.jabatan.data
         user.no_telpon = form.no_telpon.data
 
@@ -63,6 +61,7 @@ def edit_profile_admin(id):
     form.role.data = user.role_id
     form.nama_lengkap.data = user.nama
     form.jabatan.data = user.jabatan
+    form.bidang.data = user.bidang_id
     form.no_telpon.data = user.no_telpon
     return render_template('user/edit_user_admin.html', form=form, user=user, title="Edit Profile [ADMIN]")
 

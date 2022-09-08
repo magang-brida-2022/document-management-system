@@ -1,0 +1,61 @@
+{% extends "base.html" %} {% block style%}
+<link
+  rel="stylesheet"
+  type="text/css"
+  href="https://cdn.datatables.net/1.10.25/css/dataTables.bootstrap5.css"
+/>
+{% endblock style%} {% block content %}
+<section class="content">
+  <div class="container-fluid">
+    <div class="card">
+      <div class="card-body">
+        <div class="mt-4">
+          <table id="data" class="table table-striped mt-4">
+            <thead>
+              <tr>
+                <th>No Surat</th>
+                <th>Perihal</th>
+                <th>Asal</th>
+                <th>Dokumen</th>
+                <th>Aksi</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for surat in surat_masuk %}
+              <tr>
+                <td>{{ surat.nomor }}</td>
+                <td>{{ surat.perihal }}</td>
+                <td>{{ surat.asal }}</td>
+                <td>
+                  <div class="btn-group mr-2" role="group">
+                    <a
+                      href="{{ url_for('main.open_surat_masuk_dokumen', id=surat.id) }}"
+                      class="btn-sm btn-success"
+                      >Lihat Dokumen</a
+                    >
+                  </div>
+                </td>
+                <td>
+                  <a
+                    href="{{ url_for('main.edit_feedback', id=surat.id) }}"
+                    class="btn-sm btn-primary"
+                    >Sudah Ditindak?</a
+                  >
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock content %} {% block scripts %}
+<script>
+  $(document).ready(function () {
+    $("#data").DataTable();
+  });
+</script>
+{% endblock scripts %}

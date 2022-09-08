@@ -184,7 +184,7 @@
           <img src="{{current_user.foto_profile}}" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
-          <a href="{{ url_for('users.edit_profile') }}" class="d-block">
+          <a href="{{ url_for('users.profile') }}" class="d-block">
             {{ current_user.username | capitalize}} as {{ current_user.role.name }}
           </a>
         </div>
@@ -235,6 +235,17 @@
                 </a>
               </li>
               {% endif %}
+
+                {% if current_user.can(Permission.FEEDBACK) %}
+              <li class="nav-item">
+                <a href="{{ url_for('main.feedback') }}" class="nav-link ">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Feedback
+                  </p>
+                </a>
+              </li>
+              {% endif %}
+
           <li class="nav-item has-treeview">
             <a href="#" class="nav-link ">
               <i class="nav-icon fas fa-copy"></i>

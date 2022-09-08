@@ -5,7 +5,7 @@ from io import BytesIO
 
 from app.decorators import admin_required, permission_required
 from app.models import Permission, Bidang, Disposisi
-from .forms import SuratMasukForm, SuratKeluarForm, DisposisiForm, BidangForm, DisposisiKeForm, EditSuratMasukForm, EditSuratKeluarForm, EditBidangForm, EditDisposisiForm
+from .forms import SuratMasukForm, SuratKeluarForm, DisposisiForm, BidangForm, DisposisiKeForm, EditSuratMasukForm, EditSuratKeluarForm, EditBidangForm, EditDisposisiForm, SudahDitindakLanjutForm
 from ..models import SuratMasuk, SuratKeluar, Bidang, Disposisi
 from . import main
 from .. import db, allowed_extension
@@ -17,7 +17,7 @@ def index():
     if not current_user.is_authenticated:
         return redirect(url_for('auth.login'))
 
-    return render_template('index.html')
+    return render_template('index.html', title="Index")
 
 
 @main.get('/surat_masuk')
@@ -78,6 +78,13 @@ def surat_keluar():
     return render_template('arsip/surat_keluar.html', form=form, surat_keluar=surat_keluar, title="Surat Keluar")
 
 
+@main.get('/ditindak/')
+@main.post('/ditindak/')
+def feedback():
+    surat_masuk = SuratMasuk.query.filter_by(tindak_lanjut=False).all()
+    return render_template('arsip/feedback.html', surat_masuk=surat_masuk)
+
+
 @main.get('/arsip')
 @login_required
 @permission_required(Permission.ARSIP)
@@ -105,6 +112,7 @@ def diteruskan(id):
     disposisi = SuratMasuk.query.filter_by(id=id).first()
     if form.validate_on_submit():
         disposisi.disposisi_ke = form.disposisi.data
+        disposisi.pesan = form.pesan.data
         disposisi.dilihat = form.dilihat.data
         db.session.commit()
 
@@ -112,6 +120,7 @@ def diteruskan(id):
         return redirect(url_for('main.disposisi_ke'))
 
     form.disposisi.data = disposisi.disposisi_ke
+    form.pesan.data = disposisi.pesan
     form.dilihat.data = disposisi.dilihat
     return render_template('arsip/disposisi_ke.html', form=form, disposisi=disposisi, title="Pilih Disposisi")
 
@@ -250,6 +259,21 @@ def edit_disposisi(id):
     form.alias.data = disposisi.alias
     form.nama.data = disposisi.nama
     return render_template('arsip/edit_disposisi.html', form=form, disposisi=disposisi, title="Edit Disposisi")
+
+
+@main.get('/ditindak/<id>')
+@main.post('/ditindak/<id>')
+def edit_feedback(id):
+    form = SudahDitindakLanjutForm()
+    surat_masuk = SuratMasuk.query.get_or_404(id)
+    if form.validate_on_submit():
+        surat_masuk.tindak_lanjut = form.ditindak_lanjut.data
+
+        db.session.commit()
+        flash("Task Complete", "success")
+        return redirect(url_for('main.feedback'))
+
+    return render_template('arsip/edit_feedback.html', form=form, surat_masuk=surat_masuk)
 
 
 '''
