@@ -20,6 +20,7 @@ class SuratMasukForm(FlaskForm):
 
 class DisposisiKeForm(FlaskForm):
     disposisi = SelectField('Disposisi Ke', coerce=int)
+    pesan = TextAreaField('Pesan')
     dilihat = BooleanField('Sudah Dilihat')
     submit = SubmitField('Simpan')
 
@@ -50,6 +51,11 @@ class DisposisiForm(FlaskForm):
     alias = StringField('Alias', validators=[DataRequired()])
     nama = StringField('Nama Disposisi', validators=[DataRequired()])
     submit = SubmitField("Tambah")
+
+
+class SudahDitindakLanjutForm(FlaskForm):
+    ditindak_lanjut = BooleanField('Sudah Ditindak Lanjut?')
+    submit = SubmitField('Simpan')
 
 
 '''

@@ -91,8 +91,8 @@ class Role(db.Model):
 
         roles = {
             'Pegawai': (Permission.LAPORAN_HARIAN | Permission.PERMOHONAN_SURAT, True),
-            'Tu': (Permission.LAPORAN_HARIAN | Permission.ARSIP | Permission.REKAP_BULANAN | Permission.PERMOHONAN_SURAT, False),
-            'Kasubid': (Permission.LAPORAN_HARIAN | Permission.REKAP_BULANAN | Permission.PERMOHONAN_SURAT, False),
+            'Tu': (Permission.LAPORAN_HARIAN | Permission.PERMOHONAN_SURAT | Permission.REKAP_BULANAN | Permission.ARSIP, False),
+            'Kasubid': (Permission.LAPORAN_HARIAN | Permission.PERMOHONAN_SURAT | Permission.REKAP_BULANAN | Permission.FEEDBACK, False),
             "Sekban": (Permission.LAPORAN_HARIAN | Permission.PERMOHONAN_SURAT | Permission.DISPOSISI, False),
             'Administrator': (0xff, False)
         }
@@ -111,8 +111,9 @@ class Permission:
     LAPORAN_HARIAN = 0x01
     PERMOHONAN_SURAT = 0x02
     REKAP_BULANAN = 0x04
-    ARSIP = 0x16
-    DISPOSISI = 0x64
+    ARSIP = 0x08
+    FEEDBACK = 0x16
+    DISPOSISI = 0x32
     ADMINISTER = 0x80
 
 
@@ -124,7 +125,7 @@ class Bidang(db.Model):
     users = db.relationship('User', backref="bidang", lazy='dynamic')
 
     def __repr__(self) -> str:
-        return '<Bidang {}>'.format(self.nama_bidang)
+        return '<Bidang {}>'.format(self.nama)
 
 
 class Disposisi(db.Model):
@@ -146,10 +147,10 @@ class SuratMasuk(db.Model):
     nama_file = db.Column(db.String(255), nullable=False)
     lampiran = db.Column(db.LargeBinary, nullable=False)
     disposisi_ke = db.Column(db.String(50))
+    pesan = db.Column(db.Text)
     dilihat = db.Column(db.Boolean, default=False)
-    # pesan
+    tindak_lanjut = db.Column(db.Boolean, default=False)
     # sifat
-    # sudah_dikerjain?
 
     def __repr__(self) -> str:
         return "<No Surat: {}>".format(self.nomor)

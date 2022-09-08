@@ -1,17 +1,20 @@
 from flask import flash, redirect, render_template, request, url_for
-from flask_login import login_required, login_user, logout_user
+from flask_login import login_required, login_user, logout_user, current_user
 
 from app.decorators import admin_required
 
 from . import auth
 from .forms import LoginForm, RegistrationForm
-from app.models import User
+from app.models import User, Bidang
 from .. import db
 
 
 @auth.get('/signin')
 @auth.post('/signin')
 def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('main.index'))
+
     form = LoginForm()
 
     if form.validate_on_submit():
@@ -23,7 +26,7 @@ def login():
 
         flash('Invalid Username or password', 'danger')
 
-    return render_template('auth/login.html', form=form)
+    return render_template('auth/login.html', form=form, title="Login")
 
 
 @auth.get('/signup')
@@ -35,13 +38,13 @@ def register():
 
     if form.validate_on_submit():
         user = User(email=form.email.data, username=form.username.data, password=form.password.data,
-                    nama=form.nama_lengkap.data, jabatan=form.jabatan.data, no_telpon=form.no_telpon.data)
+                    nama=form.nama_lengkap.data, bidang=Bidang.query.get(form.bidang.data), jabatan=form.jabatan.data, no_telpon=form.no_telpon.data)
         db.session.add(user)
         db.session.commit()
         flash('User created successfully', 'success')
         return redirect(request.url)
 
-    return render_template('auth/register.html', form=form, all_user=all_user)
+    return render_template('auth/register.html', form=form, all_user=all_user, title="User Management")
 
 
 @auth.get('/logout')
