@@ -92,13 +92,6 @@ def arsip():
     return render_template('arsip/arsip.html')
 
 
-@main.get('/daily_activity')
-@main.post('/daily_activity')
-@login_required
-def daily_activity():
-    return render_template('daily_activity/daily_activity.html')
-
-
 @main.get('/disposisi_ke')
 def disposisi_ke():
     surat_masuk = SuratMasuk.query.filter_by(dilihat=False)
