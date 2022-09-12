@@ -132,8 +132,8 @@
                 <td>{{ surat.nomor }}</td>
                 <td>{{ surat.asal }}</td>
                 <td>{{ surat.perihal }}</td>
-                <td>{{ surat.tanggal_surat }}</td>
-                <td>{{ surat.tanggal_diterima }}</td>
+                <td>{{ moment(surat.tanggal_surat).format('MM/DD/YYYY') }}</td>
+                <td>{{ moment(surat.tanggal_diterima).format('MM/DD/YYYY') }}</td>
                 <td>
                   <div class="btn-toolbar" role="toolbar">
                     <div class="btn-group mr-2" role="group">

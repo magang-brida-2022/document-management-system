@@ -123,7 +123,7 @@
                 <td>{{ surat.nomor }}</td>
                 <td>{{ surat.jenis }}</td>
                 <td>{{ surat.ringkasan }}</td>
-                <td>{{ surat.tanggal_dikeluarkan }}</td>
+                <td>{{ moment(surat.tanggal_dikeluarkan).format('MM/DD/YYYY') }}</td>
                 <td>{{ surat.tujuan }}</td>
                 <td>
                  <div class="btn-toolbar" role="toolbar">
