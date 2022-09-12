@@ -134,7 +134,7 @@ url_for('static', filename="plugins/dataTables/datatables.min.css") }}">
 
 {% endblock content %} {% block scripts %}
 <script src="{{ url_for('static', filename="plugins/dataTables/datatables.min.js") }}"></script>
-<script src="//cdn.datatables.net/plug-ins/1.12.1/sorting/datetime-moment.js"></script>
+<script src="//cdn.datatables.net/plug-ins/1.10.11/sorting/date-eu.js"></script>
 <script>
 $(document).ready(function () {
       var currentDate = new Date();
@@ -152,9 +152,7 @@ $(document).ready(function () {
         }
       });
 
-      $("#data").DataTable({
-
-      })
-  });
+      $("#data").DataTable();
+  })
 </script>
 {% endblock scripts %}

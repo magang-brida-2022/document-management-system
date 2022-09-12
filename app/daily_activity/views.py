@@ -1,5 +1,6 @@
 from flask import render_template, flash, redirect, url_for, request
 from flask_login import login_required
+from datetime import datetime
 
 from . import daily_activity
 from .forms import DailyActivityForm
@@ -15,8 +16,11 @@ def daily():
     daily_activity = DailyActivity.query.all()
 
     if form.validate_on_submit():
-        print(type(form.tanggal.data))
-        new_activity = DailyActivity(tanggal=form.tanggal.data, kegiatan=form.kegiatan.data,
+        date_parse = datetime.strptime(form.tanggal.data, "%m/%d/%Y")
+
+        print(type(date_parse))
+
+        new_activity = DailyActivity(tanggal=date_parse, kegiatan=form.kegiatan.data,
                                      deskripsi=form.deskripsi.data, output=form.output.data)
         db.session.add(new_activity)
         db.session.commit()

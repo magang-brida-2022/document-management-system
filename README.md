@@ -22,4 +22,5 @@
 - [ ] UI :: Datetime Sorting daily activity
 - [ ] Realtime Notification
 - [ ] No refresh while posted the data
+- [ ] Rekap
 - ...
