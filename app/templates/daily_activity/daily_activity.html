@@ -35,6 +35,7 @@ url_for('static', filename="plugins/dataTables/datatables.min.css") }}">
           Tambah Surat
         </button>
 
+
         <!-- Modal -->
         <div
           class="modal fade"
@@ -114,7 +115,7 @@ url_for('static', filename="plugins/dataTables/datatables.min.css") }}">
                 <td>
                   <div class="btn-toolbar" role="toolbar">
                     <div class="btn-group mr-2" role="group">
-                      <a href="#edit" class="btn-sm btn-primary">Edit</a>
+                      <a href="{{ url_for('daily_activity.edit_activity', id=activity.id) }}" class="btn-sm btn-primary">Edit</a>
                     </div>
                     <div class="btn-group" role="group">
                       <a href="{{ url_for('daily_activity.delete_aktivity', id=activity.id) }}" class="btn-sm btn-danger">Delete</a>

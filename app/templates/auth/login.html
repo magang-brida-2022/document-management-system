@@ -1,5 +1,9 @@
 <html lang="en" data-darkreader-mode="dynamic" data-darkreader-scheme="dimmed">
   <head>
+    {{ toastr.include_jquery() }}
+    {{ toastr.include_toastr_css() }}
+    {{ toastr.message() }}
+
     <style class="darkreader darkreader--fallback" media="screen"></style>
     <style class="darkreader darkreader--text" media="screen"></style>
     <style class="darkreader darkreader--invert" media="screen">
@@ -37790,5 +37794,7 @@
     <script src="https://appsrv1-147a1.kxcdn.com/adminlte/plugins/jquery/jquery.min.js"></script>
     <!-- Bootstrap 4 -->
     <script src="https://appsrv1-147a1.kxcdn.com/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    {{ toastr.include_toastr_js() }}
+
   </body>
 </html>
