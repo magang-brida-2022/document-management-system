@@ -17,7 +17,7 @@ def index():
     if not current_user.is_authenticated:
         return redirect(url_for('auth.login'))
 
-    return render_template('index.html', title="Index")
+    return render_template('index.html', title="Dashboard")
 
 
 @main.get('/surat_masuk')
