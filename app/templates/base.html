@@ -15,6 +15,10 @@
     {% endblock style %}
 
     {{moment.include_moment()}}
+    {{ toastr.include_jquery() }}
+    {{ toastr.include_toastr_css() }}
+    {{ toastr.message() }}
+
 
       <!-- Google Font: Source Sans Pro -->
     <link
@@ -412,6 +416,9 @@
     <script src="{{ url_for('static', filename="dist/js/pages/dashboard.js") }}"></script>
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap5.js"></script>
+
+    {{ toastr.include_toastr_js() }}
+    
     {% block scripts %}
     {% endblock scripts %}
   </body>
