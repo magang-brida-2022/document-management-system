@@ -1,21 +1,20 @@
-{% extends "base.html" %} 
-
-{% block style %}
-  <link rel="stylesheet" href="{{ url_for('static', filename="fullcalendar/main.css") }}">
-{% endblock style %}
-
-{% block content %}
-
+{% extends "base.html" %} {% block style%} <link rel="stylesheet" href="{{
+url_for('static', filename="plugins/dataTables/datatables.min.css") }}">
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+ {% endblock style%} {% block content %}
 <section class="content-header">
   <div class="container-fluid">
     <div class="row">
       <div class="col-sm-6">
-        <h1 class="m-0">Laporan Harian</h1>
+        <h1 class="m-0">Aktifitas Harian</h1>
       </div>
       <div class="col-sm-6">
         <ol class="breadcrumb float-sm-right">
-          <li class="breadcrumb-item"><a href="#">Home</a></li>
-          <li class="breadcrumb-item active">Laporan Harian</li>
+          <li class="breadcrumb-item">
+            <a href="{{ url_for('main.index') }}">Home</a>
+          </li>
+          <li class="breadcrumb-item">Aktifitas</li>
+          <li class="breadcrumb-item active">Aktifitas Harian</li>
         </ol>
       </div>
     </div>
@@ -26,29 +25,31 @@
   <div class="container-fluid">
     <div class="card">
       <div class="card-body">
-       <button
+        <!-- Button trigger modal -->
+        <button
           type="button"
           class="btn btn-primary"
           data-toggle="modal"
-          data-target="#tambahSurat"
+          data-target="#tambahAktifitas"
         >
-          Tambah Aktifitas
+          Tambah Surat
         </button>
 
         <!-- Modal -->
         <div
           class="modal fade"
-          id="tambahSurat"
+          id="tambahAktifitas"
           tabindex="-1"
-          aria-labelledby="tambahSuratModal"
+          aria-labelledby="tambahAktifitasModal"
           aria-hidden="true"
         >
           <div class="modal-dialog">
             <div class="modal-content">
-              <form method="post" enctype="multipart/form-data">
+              <form method="post">
+                {{form.hidden_tag()}}
                 <div class="modal-header">
-                  <h5 class="modal-title" id="tambahSuratModal">
-                    Tambah Surat Keluar
+                  <h5 class="modal-title" id="tambahAktifitasModal">
+                    Tambah Surat Masuk
                   </h5>
                   <button
                     type="button"
@@ -60,9 +61,21 @@
                   </button>
                 </div>
                 <div class="modal-body">
-                  
-                  ...
-
+                  <div class="form-group">
+                    {{form.tanggal.label}} {{form.tanggal(autocomplete="off", class="form-control
+                    disableFuturedate")}}
+                  </div>
+                  <div class="form-group">
+                    {{form.kegiatan.label}}
+                    {{form.kegiatan(class="form-control")}}
+                  </div>
+                  <div class="form-group">
+                    {{form.deskripsi.label}}
+                    {{form.deskripsi(class="form-control")}}
+                  </div>
+                  <div class="form-group">
+                    {{form.output.label}} {{form.output(class="form-control")}}
+                  </div>
                 </div>
                 <div class="modal-footer">
                   <button
@@ -73,6 +86,7 @@
                     Close
                   </button>
 
+                  {{form.submit(class="btn btn-primary")}}
                 </div>
               </form>
             </div>
@@ -80,25 +94,67 @@
         </div>
         <!-- End Modal -->
         <div class="mt-4">
-          <div id="calendar" style="width: 80%; display: inline-block;"></div>
+          <table id="data" class="table table-striped mt-4">
+            <thead>
+              <tr>
+                <th>{{form.tanggal.label}}</th>
+                <th>{{form.kegiatan.label}}</th>
+                <th>{{form.deskripsi.label}}</th>
+                <th>{{form.output.label}}</th>
+                <th>Aksi</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for activity in daily_activity %}
+              <tr>
+                <td>{{ moment(activity.tanggal).format('DD MMMM YYYY') }}</td>
+                <td>{{ activity.kegiatan }}</td>
+                <td>{{ activity.deskripsi }}</td>
+                <td>{{ activity.output }}</td>
+                <td>
+                  <div class="btn-toolbar" role="toolbar">
+                    <div class="btn-group mr-2" role="group">
+                      <a href="#edit" class="btn-sm btn-primary">Edit</a>
+                    </div>
+                    <div class="btn-group" role="group">
+                      <a href="{{ url_for('daily_activity.delete_aktivity', id=activity.id) }}" class="btn-sm btn-danger">Delete</a>
+                    </div>
+                  </div>
+                  </div>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-{% endblock content %} 
-
-{% block scripts %}
-  <script src="{{ url_for('static', filename="fullcalendar/main.js") }}"></script>
-
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      var calendarEl = document.getElementById('calendar');
-      var calendar = new FullCalendar.Calendar(calendarEl, {
-        initialView: "dayGridMonth"
+{% endblock content %} {% block scripts %}
+<script src="{{ url_for('static', filename="plugins/dataTables/datatables.min.js") }}"></script>
+<script src="//cdn.datatables.net/plug-ins/1.12.1/sorting/datetime-moment.js"></script>
+<script>
+$(document).ready(function () {
+      var currentDate = new Date();
+      $('.disableFuturedate').datepicker({
+      format: 'dd/mm/yyyy',
+      autoclose:true,
+      endDate: "currentDate",
+      maxDate: currentDate
+      }).on('changeDate', function (ev) {
+        $(this).datepicker('hide');
       });
-      calendar.render();
-    })
-  </script>
+      $('.disableFuturedate').keyup(function () {
+        if (this.value.match(/[^0-9]/g)) {
+          this.value = this.value.replace(/[^0-9^-]/g, '');
+        }
+      });
+
+      $("#data").DataTable({
+
+      })
+  });
+</script>
 {% endblock scripts %}

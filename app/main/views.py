@@ -17,7 +17,7 @@ def index():
     if not current_user.is_authenticated:
         return redirect(url_for('auth.login'))
 
-    return render_template('index.html', title="Index")
+    return render_template('index.html', title="Dashboard")
 
 
 @main.get('/surat_masuk')
@@ -90,13 +90,6 @@ def feedback():
 @permission_required(Permission.ARSIP)
 def arsip():
     return render_template('arsip/arsip.html')
-
-
-@main.get('/daily_activity')
-@main.post('/daily_activity')
-@login_required
-def daily_activity():
-    return render_template('daily_activity/daily_activity.html')
 
 
 @main.get('/disposisi_ke')

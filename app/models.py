@@ -21,6 +21,8 @@ class User(UserMixin, db.Model):
 
     role_id = db.Column(db.Integer, db.ForeignKey('role.id'))
     bidang_id = db.Column(db.Integer, db.ForeignKey('bidang.id'))
+    dailyactivity_id = db.Column(
+        db.Integer, db.ForeignKey('daily_activity.id'))
 
     def __init__(self, **kwargs) -> None:
         super().__init__(**kwargs)
@@ -173,10 +175,13 @@ class SuratKeluar(db.Model):
 
 class DailyActivity(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    kegiatan = db.Column(db.String(64), nullable=False)
-    tanggal = db.Column(db.DateTime, nullable=False)
-    deskripsi = db.Column(db.Text, nullable=False)
-    output = db.Column(db.String(120), nullable=False)
+    kegiatan = db.Column(db.String(64))
+    tanggal = db.Column(db.DateTime)
+    deskripsi = db.Column(db.Text)
+    output = db.Column(db.String(120))
+
+    users = db.relationship('User', backref="dailyactivity", lazy='dynamic')
 
     def __repr__(self) -> str:
-        return "<Kegiatan {}>".format(self.kegiatan)
+        return "<Kegiatan {} {}>".format(self.kegiatan, type(self.tanggal))
+

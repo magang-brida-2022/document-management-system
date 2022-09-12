@@ -4,6 +4,7 @@ from flask_migrate import Migrate
 from flask_login import LoginManager
 from flask_bootstrap import Bootstrap4
 from flask_minify import Minify
+from flask_moment import Moment
 
 # import config
 from config import Config
@@ -12,6 +13,7 @@ db = SQLAlchemy()
 migrate = Migrate()
 bootstrap = Bootstrap4()
 minify = Minify(html=True, js=True, cssless=True)
+moment = Moment()
 
 login_manager = LoginManager()
 login_manager.session_protection = 'strong'
@@ -47,13 +49,16 @@ def create_app():
     login_manager.init_app(app)
     bootstrap.init_app(app)
     minify.init_app(app=app)
+    moment.init_app(app)
 
     from .auth import auth as auth_blueprint
     from .main import main as main_blueprint
     from .user import users as user_blueprint
+    from .daily_activity import daily_activity as daily_activity_blueprint
 
     app.register_blueprint(auth_blueprint, url_prefix='/auth')
     app.register_blueprint(user_blueprint, url_prefix='/user')
+    app.register_blueprint(daily_activity_blueprint, url_prefix="/activity")
     app.register_blueprint(main_blueprint)
 
     # error handler

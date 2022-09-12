@@ -1,9 +1,5 @@
 {% extends "base.html" %} {% block style%}
-<link
-  rel="stylesheet"
-  type="text/css"
-  href="https://cdn.datatables.net/1.10.25/css/dataTables.bootstrap5.css"
-/>
+<link rel="stylesheet" href="{{url_for('static', filename="plugins/dataTables/datatables.min.css") }}">
 {% endblock style%} {% block content %}
 <section class="content-header">
   <div class="container-fluid">
@@ -129,6 +125,7 @@
 </section>
 
 {% endblock content %} {% block scripts %}
+<script src="{{ url_for('static', filename="plugins/dataTables/datatables.min.js") }}"></script>
 <script>
   $(document).ready(function () {
     $("#data").DataTable();

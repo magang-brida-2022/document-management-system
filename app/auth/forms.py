@@ -1,7 +1,6 @@
-from xml.dom import ValidationErr
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, SelectField
-from wtforms.validators import DataRequired, Length, EqualTo
+from wtforms.validators import DataRequired, Length, EqualTo, ValidationError
 
 from ..models import User, Bidang
 
@@ -36,4 +35,4 @@ class RegistrationForm(FlaskForm):
 
     def validate_username(self, username):
         if User.query.filter_by(username=username.data).first():
-            raise ValidationErr("Username already registered")
+            raise ValidationError("Username already registered")

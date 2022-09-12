@@ -9,9 +9,12 @@
       <title>AppName</title>
     {% endif %}
 
+
     {% block style %}
 
     {% endblock style %}
+
+    {{moment.include_moment()}}
 
       <!-- Google Font: Source Sans Pro -->
     <link
@@ -241,6 +244,9 @@
                 <a href="{{ url_for('main.feedback') }}" class="nav-link ">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Feedback
+                  {% if TotalFeedback %}
+                      <span class="right badge badge-danger">{{ TotalFeedback }}</span>
+                    {% endif %}
                   </p>
                 </a>
               </li>
@@ -273,7 +279,7 @@
 
           {# daily report #}
            <li class="nav-item">
-            <a href="{{ url_for('main.daily_activity') }}" class="nav-link ">
+            <a href="{{ url_for('daily_activity.daily') }}" class="nav-link ">
               <i class="nav-icon far fa-calendar-alt"></i>
               <p>
                 Laporan Harian
@@ -282,6 +288,16 @@
             </a>
           </li>
 
+          {# rekap #}
+          <li class="nav-item">
+            <a href="{{ url_for('daily_activity.daily') }}" class="nav-link ">
+              <i class="nav-icon far fa-calendar-alt"></i>
+              <p>
+                Rekap
+              </p>
+            </a>
+          </li>
+          
           {% if current_user.is_administrator() %}
           
            <li class="nav-header">App Custom</li> 
