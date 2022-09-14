@@ -51,7 +51,7 @@ def edit_activity(id):
     form.tanggal.data = activity.tanggal
     form.deskripsi.data = activity.deskripsi
     form.output.data = activity.output
-    return render_template('daily_activity/edit_daily_activity.html', form=form)
+    return render_template('daily_activity/edit_daily_activity.html', form=form, title="Edit Laporan Harian")
 
 
 @daily_activity.get('/<id>/delete')

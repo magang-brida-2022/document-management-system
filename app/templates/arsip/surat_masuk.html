@@ -75,6 +75,10 @@
                     {{form.perihal(class="form-control")}}
                   </div>
                   <div class="form-group">
+                    {{form.jenis.label}}
+                    {{form.jenis(class="form-control")}}
+                  </div>
+                  <div class="form-group">
                     {{form.tanggal_surat.label}}
                     {{form.tanggal_surat(class="form-control")}}
                   </div>
@@ -86,16 +90,6 @@
                     {{form.lampiran.label}}
                     {{form.lampiran(class="form-control-file")}}
                   </div>
-                  {#
-                  <div class="form-group">
-                    {{form.disposisi.label}}
-                    {{form.disposisi(class="form-control")}}
-                  </div>
-                  <div class="form-group form-check">
-                    {{form.dilihat(class="form-check-input")}}
-                    {{form.dilihat.label(class="form-check-label")}}
-                  </div>
-                  #}
                 </div>
                 <div class="modal-footer">
                   <button
@@ -120,10 +114,14 @@
                 <th>{{form.no_surat.label}}</th>
                 <th>{{form.asal.label}}</th>
                 <th>{{form.perihal.label}}</th>
+                <th>{{form.jenis.label}}</th>
                 <th>{{form.tanggal_surat.label}}</th>
                 <th>{{form.tanggal_diterima.label}}</th>
                 <th>{{form.lampiran.label}}</th>
-                <th>Aksi</th>
+                {% if current_user.can(Permission.ARSIP) %}
+                  <th>Aksi</th>
+                {% endif %}
+                <th>Status</th>
               </tr>
             </thead>
             <tbody>
@@ -132,30 +130,35 @@
                 <td>{{ surat.nomor }}</td>
                 <td>{{ surat.asal }}</td>
                 <td>{{ surat.perihal }}</td>
+                <td>{{ surat.jenis }}</td>
                 <td>{{ moment(surat.tanggal_surat).format('MM/DD/YYYY') }}</td>
                 <td>{{ moment(surat.tanggal_diterima).format('MM/DD/YYYY') }}</td>
                 <td>
                   <div class="btn-toolbar" role="toolbar">
                     <div class="btn-group mr-2" role="group">
-                      <a href="{{ url_for('main.download_surat_masuk', upload_id=surat.id) }}" class="btn-sm btn-secondary">Download</a>
+                      {# <a href="{{ url_for('main.download_surat_masuk', upload_id=surat.id) }}" class="btn-sm btn-secondary">Download</a> #}
+                      <a href="{{ url_for('main.open_surat_masuk_dokumen', id=surat.id) }}" class="btn-sm btn-success" target="_blank">Dokumen</a>
                     </div>
                   </div>
                 </td>
+                    {% if current_user.can(Permission.ARSIP) %}
                 <td>
                    <div class="btn-toolbar" role="toolbar">
-                   <div class="btn-group mr-2" role="group">
-                      <a href="{{ url_for('main.open_surat_masuk_dokumen', id=surat.id) }}" class="btn-sm btn-success">Lihat Dokumen</a>
+                    <div class="btn-group mr-2" role="group">
+                      <a href="{{ url_for('main.surat_balasan') }}" class="btn-sm btn-primary">Balas</a>
                     </div>
-                    {% if current_user.can(Permission.ARSIP) %}
                     <div class="btn-group mr-2" role="group">
                       <a href="{{ url_for('main.edit_surat_masuk', id=surat.id) }}" class="btn-sm btn-primary">Edit</a>
                     </div>
                     <div class="btn-group" role="group">
                       <a href="{{ url_for('main.delete_surat_masuk', id=surat.id) }}" class="btn-sm btn-danger">Delete</a>
                     </div>
+                  </div>
+                  </div>
+                </td>
                     {% endif %}
-                  </div>
-                  </div>
+                <td>
+                  <a href="#status" class="btn btn-sm">Belum ditindak</a>
                 </td>
               </tr>
               {% endfor %}

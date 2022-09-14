@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     {% if title %}
-      <title>{{ title }} - AppName</title>
+      <title>{{ title }} | AppName</title>
     {% else %}
       <title>AppName</title>
     {% endif %}
@@ -19,8 +19,9 @@
     {{ toastr.include_toastr_css() }}
     {{ toastr.message() }}
 
+    {# <link rel="stylesheet" href="{{ url_for('static', filename="dist/css/globally.css") }}"> #}
 
-      <!-- Google Font: Source Sans Pro -->
+    <!-- Google Font: Source Sans Pro -->
     <link
       rel="stylesheet"
       href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback"
@@ -188,7 +189,7 @@
       <!-- Sidebar user panel (optional) -->
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
-          <img src="{{current_user.foto_profile}}" class="img-circle elevation-2" alt="User Image">
+          <img src="{{current_user.foto}}" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
           <a href="{{ url_for('users.profile') }}" class="d-block">
@@ -220,7 +221,7 @@
       <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <!-- Add icons to the links using the .nav-icon class
-               with font-awesome or any other icon font library -->
+            with font-awesome or any other icon font library -->
           <li class="nav-item">
             <a href="{{ url_for('main.index') }}" class="nav-link ">
               <i class="nav-icon fas fa-th"></i>
@@ -230,8 +231,19 @@
               </p>
             </a>
           </li>
-           {% if current_user.can(Permission.DISPOSISI) %}
-              <li class="nav-item">
+
+          <li class="nav-item has-treeview">
+            <a href="#" class="nav-link ">
+              <i class="nav-icon fas fa-copy"></i>
+              <p>
+                Master
+                <i class="fas fa-angle-left right"></i>
+                {# <span class="badge badge-info right">6</span> #}
+              </p>
+            </a>
+            <ul class="nav nav-treeview" style="display: none;">
+            {% if current_user.can(Permission.DISPOSISI) %}
+            <li class="nav-item">
                 <a href="{{ url_for('main.disposisi_ke') }}" class="nav-link ">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Disposisi
@@ -241,20 +253,22 @@
                   </p>
                 </a>
               </li>
-              {% endif %}
+            {% endif %}
 
-                {% if current_user.can(Permission.FEEDBACK) %}
+            {% if current_user.can(Permission.FEEDBACK) %}
               <li class="nav-item">
                 <a href="{{ url_for('main.feedback') }}" class="nav-link ">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Feedback
                   {% if TotalFeedback %}
                       <span class="right badge badge-danger">{{ TotalFeedback }}</span>
-                    {% endif %}
+                  {% endif %}
                   </p>
                 </a>
               </li>
-              {% endif %}
+            {% endif %}
+            </ul>
+          </li>
 
           <li class="nav-item has-treeview">
             <a href="#" class="nav-link ">
@@ -281,30 +295,36 @@
             </ul>
           </li>
 
-          {# daily report #}
-           <li class="nav-item">
-            <a href="{{ url_for('daily_activity.daily') }}" class="nav-link ">
-              <i class="nav-icon far fa-calendar-alt"></i>
-              <p>
-                Laporan Harian
-                {# <span class="right badge badge-danger">New</span> #}
-              </p>
-            </a>
-          </li>
 
-          {# rekap #}
-          <li class="nav-item">
-            <a href="#rekap" class="nav-link ">
-              <i class="nav-icon far fa-calendar-alt"></i>
+           <li class="nav-item has-treeview">
+            <a href="#" class="nav-link ">
+              <i class="nav-icon fas fa-copy"></i>
               <p>
-                Rekap
+                Aktivitas Harian
+                <i class="fas fa-angle-left right"></i>
+                {# <span class="badge badge-info right">6</span> #}
               </p>
             </a>
+            <ul class="nav nav-treeview" style="display: none;">
+            <li class="nav-item">
+                <a href="{{ url_for('daily_activity.daily') }}" class="nav-link ">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Laporan Harian</p>
+                </a>
+              </li>
+
+              <li class="nav-item">
+                <a href="#rekap" class="nav-link ">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Rekap Bulanan</p>
+                </a>
+              </li>
+            </ul>
           </li>
           
           {% if current_user.is_administrator() %}
           
-           <li class="nav-header">App Custom</li> 
+           <li class="nav-header">App Management</li> 
             <li class="nav-item">
             <a href="{{ url_for('main.bidang') }}" class="nav-link ">
               <i class="nav-icon far fa-user"></i>
@@ -329,7 +349,7 @@
             <a href="{{ url_for('auth.register') }}" class="nav-link ">
               <i class="nav-icon far fa-user"></i>
               <p>
-                User Management
+                User
                 {# <span class="right badge badge-danger">New</span> #}
               </p>
             </a>

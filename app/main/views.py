@@ -5,10 +5,10 @@ from io import BytesIO
 
 from app.decorators import admin_required, permission_required
 from app.models import Permission, Bidang, Disposisi
-from .forms import SuratMasukForm, SuratKeluarForm, DisposisiForm, BidangForm, DisposisiKeForm, EditSuratMasukForm, EditSuratKeluarForm, EditBidangForm, EditDisposisiForm, SudahDitindakLanjutForm
+from .forms import SuratMasukForm, SuratKeluarForm, DisposisiForm, BidangForm, DisposisiKeForm, EditSuratMasukForm, EditSuratKeluarForm, EditBidangForm, EditDisposisiForm, SudahDitindakLanjutForm, SuratBalasanForm
 from ..models import SuratMasuk, SuratKeluar, Bidang, Disposisi
 from . import main
-from .. import db, allowed_extension
+from .. import db, documents_allowed_extension
 
 
 @main.get('/')
@@ -32,21 +32,22 @@ def surat_masuk():
         no_surat = form.no_surat.data
         asal = form.asal.data
         perihal = form.perihal.data
+        jenis = form.jenis.data
         tanggal_surat = form.tanggal_surat.data
         tanggal_diterima = form.tanggal_diterima.data
         lampiran = form.lampiran.data
 
-        if lampiran and allowed_extension(lampiran.filename):
-            surat_masuk = SuratMasuk(nomor=no_surat, asal=asal, perihal=perihal, tanggal_surat=tanggal_surat,
+        if lampiran and documents_allowed_extension(lampiran.filename):
+            surat_masuk = SuratMasuk(nomor=no_surat, asal=asal, perihal=perihal, jenis=jenis, tanggal_surat=tanggal_surat,
                                      tanggal_diterima=tanggal_diterima, nama_file=lampiran.filename, lampiran=lampiran.read())
             db.session.add(surat_masuk)
             db.session.commit()
 
             flash("Surat masuk baru berhasil di tambahkan", "success")
-            return redirect(url_for('main.surat_masuk'))
+            return redirect(request.base_url)
         else:
-            flash('allowed file types are .pdf only', 'danger')
-            return redirect(request.url)
+            flash('allowed file types are .pdf only', 'error')
+            return redirect(request.base_url)
 
     return render_template('arsip/surat_masuk.html', form=form, surat_masuk=surat_masuk, title="Surat Masuk")
 
@@ -61,19 +62,22 @@ def surat_keluar():
 
     if form.validate_on_submit():
         nomor_surat = form.no_surat.data
-        jenis_surat = form.jenis_surat.data
-        ringkasan = form.ringkasan.data
+        jenis = form.jenis.data
+        perihal = form.perihal.data
         tanggal_dikeluarkan = form.tanggal_dikeluarkan.data
         tujuan = form.tujuan.data
         lampiran = form.lampiran.data
 
-        surat_keluar = SuratKeluar(nomor=nomor_surat, jenis=jenis_surat, ringkasan=ringkasan, tanggal_dikeluarkan=tanggal_dikeluarkan,
-                                   tujuan=tujuan, nama_file=lampiran.filename, lampiran=lampiran.read())
-        db.session.add(surat_keluar)
-        db.session.commit()
-
-        flash("Surat keluar baru berhasil ditambahkan", "success")
-        return redirect(request.base_url)
+        if lampiran and documents_allowed_extension(lampiran.filename):
+            surat_keluar = SuratKeluar(nomor=nomor_surat, jenis=jenis, perihal=perihal, tanggal_dikeluarkan=tanggal_dikeluarkan,
+                                       tujuan=tujuan, nama_file=lampiran.filename, lampiran=lampiran.read())
+            db.session.add(surat_keluar)
+            db.session.commit()
+            flash("Surat keluar baru berhasil ditambahkan", "success")
+            return redirect(request.base_url)
+        else:
+            flash('allowed file types are .pdf only', 'error')
+            return redirect(request.base_url)
 
     return render_template('arsip/surat_keluar.html', form=form, surat_keluar=surat_keluar, title="Surat Keluar")
 
@@ -148,6 +152,17 @@ def bidang():
         return redirect(url_for('main.bidang'))
 
     return render_template('arsip/tambah_bidang.html', form=form, bidang=bidang, title="Bidang Management")
+
+
+@main.get('/surat_balasan')
+@main.post('/surat_balasan')
+def surat_balasan():
+    form = SuratBalasanForm()
+
+    if form.validate_on_submit():
+        pass
+
+    return render_template("arsip/surat_balasan.html", form=form)
 
 
 '''
@@ -258,7 +273,8 @@ def edit_disposisi(id):
 @main.post('/ditindak/<id>')
 def edit_feedback(id):
     form = SudahDitindakLanjutForm()
-    surat_masuk = SuratMasuk.query.get_or_404(id)
+    surat_masuk = SuratMasuk.query.filter_by(
+        disposisi_ke=current_user.bidang.nama).all()
     if form.validate_on_submit():
         surat_masuk.tindak_lanjut = form.ditindak_lanjut.data
 
