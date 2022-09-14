@@ -22,11 +22,16 @@ login_manager.session_protection = 'strong'
 login_manager.login_view = 'auth.login'
 
 
-ALLOWED_EXTENSIONS = set(['pdf'])
+DOCS = set(['pdf'])
+IMG = set(['png', 'img'])
 
 
-def allowed_extension(filename):
-    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+def documents_allowed_extension(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in DOCS
+
+
+def images_allowed_extension(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in IMG
 
 
 def page_not_found(e):
