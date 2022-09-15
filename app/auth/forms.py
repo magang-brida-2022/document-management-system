@@ -1,5 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, SelectField
+from flask_wtf.file import FileField
 from wtforms.validators import DataRequired, Length, EqualTo, ValidationError
 
 from ..models import User, Bidang
@@ -26,12 +27,13 @@ class RegistrationForm(FlaskForm):
     bidang = SelectField('Bidang', coerce=int)
     jabatan = StringField('Jabatan', validators=[Length(0, 64)])
     no_telpon = StringField('No Telpon')
+    foto_profile = FileField("Select Photo Profile")
     submit = SubmitField('Register')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.bidang.choices = [(bidang.id, bidang.nama)
-                               for bidang in Bidang.query.order_by(Bidang.alias).all()]
+        self.bidang.choices = [(0, "---")]+[(bidang.id, bidang.nama)
+                                            for bidang in Bidang.query.order_by(Bidang.alias).all()]
 
     def validate_username(self, username):
         if User.query.filter_by(username=username.data).first():

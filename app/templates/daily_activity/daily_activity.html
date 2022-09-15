@@ -35,6 +35,7 @@ url_for('static', filename="plugins/dataTables/datatables.min.css") }}">
           Tambah Surat
         </button>
 
+
         <!-- Modal -->
         <div
           class="modal fade"
@@ -49,7 +50,7 @@ url_for('static', filename="plugins/dataTables/datatables.min.css") }}">
                 {{form.hidden_tag()}}
                 <div class="modal-header">
                   <h5 class="modal-title" id="tambahAktifitasModal">
-                    Tambah Surat Masuk
+                    Tambah Aktivitas
                   </h5>
                   <button
                     type="button"
@@ -107,14 +108,14 @@ url_for('static', filename="plugins/dataTables/datatables.min.css") }}">
             <tbody>
               {% for activity in daily_activity %}
               <tr>
-                <td>{{ moment(activity.tanggal).format('DD MMMM YYYY') }}</td>
+                <td>{{ moment(activity.tanggal).format('MM/DD/YYYY') }}</td>
                 <td>{{ activity.kegiatan }}</td>
                 <td>{{ activity.deskripsi }}</td>
                 <td>{{ activity.output }}</td>
                 <td>
                   <div class="btn-toolbar" role="toolbar">
                     <div class="btn-group mr-2" role="group">
-                      <a href="#edit" class="btn-sm btn-primary">Edit</a>
+                      <a href="{{ url_for('daily_activity.edit_activity', id=activity.id) }}" class="btn-sm btn-primary">Edit</a>
                     </div>
                     <div class="btn-group" role="group">
                       <a href="{{ url_for('daily_activity.delete_aktivity', id=activity.id) }}" class="btn-sm btn-danger">Delete</a>
@@ -134,7 +135,7 @@ url_for('static', filename="plugins/dataTables/datatables.min.css") }}">
 
 {% endblock content %} {% block scripts %}
 <script src="{{ url_for('static', filename="plugins/dataTables/datatables.min.js") }}"></script>
-<script src="//cdn.datatables.net/plug-ins/1.12.1/sorting/datetime-moment.js"></script>
+<script src="//cdn.datatables.net/plug-ins/1.10.11/sorting/date-eu.js"></script>
 <script>
 $(document).ready(function () {
       var currentDate = new Date();
@@ -152,9 +153,7 @@ $(document).ready(function () {
         }
       });
 
-      $("#data").DataTable({
-
-      })
-  });
+      $("#data").DataTable();
+  })
 </script>
 {% endblock scripts %}

@@ -5,7 +5,7 @@ from app.models import User, Role, Bidang
 from flask_login import login_required, current_user
 from app.decorators import admin_required, permission_required
 from .forms import EditProfileForm, EditProfileAdminForm
-from .. import db
+from .. import db, images_allowed_extension
 
 
 @users.get('/profile')
@@ -21,13 +21,18 @@ def profile():
 def edit_profile():
     form = EditProfileForm()
     if form.validate_on_submit():
-        current_user.nama = form.nama_lengkap.data
-        current_user.jabatan = form.jabatan.data
-        current_user.no_telpon = form.no_telpon.data
+        if form.foto.data and images_allowed_extension(form.foto.data.filename):
+            current_user.nama = form.nama_lengkap.data
+            current_user.jabatan = form.jabatan.data
+            current_user.no_telpon = form.no_telpon.data
+            current_user.foto = form.foto.data.read()
 
-        db.session.commit()
-        flash("User Profile update successfully", "success")
-        return redirect(url_for("users.profile"))
+            db.session.commit()
+            flash("User Profile update successfully", "success")
+            return redirect(url_for("users.profile"))
+        else:
+            flash('allowed file types are .img/.png only', 'error')
+            return redirect(request.base_url)
 
     form.nama_lengkap.data = current_user.nama
     form.jabatan.data = current_user.jabatan
@@ -44,17 +49,22 @@ def edit_profile_admin(id):
     form = EditProfileAdminForm(user)
 
     if form.validate_on_submit():
-        user.email = form.email.data
-        user.username = form.username.data
-        user.role = Role.query.get(form.role.data)
-        user.nama = form.nama_lengkap.data
-        user.bidang = Bidang.query.get(form.bidang.data)
-        user.jabatan = form.jabatan.data
-        user.no_telpon = form.no_telpon.data
+        if form.foto.data and images_allowed_extension(form.foto.data.filename):
+            user.email = form.email.data
+            user.username = form.username.data
+            user.role = Role.query.get(form.role.data)
+            user.nama = form.nama_lengkap.data
+            user.bidang = Bidang.query.get(form.bidang.data)
+            user.jabatan = form.jabatan.data
+            user.no_telpon = form.no_telpon.data
+            user.foto = form.foto.data.read()
 
-        db.session.commit()
-        flash("User Profile Updated Successfully.", 'success')
-        return redirect(url_for('auth.register'))
+            db.session.commit()
+            flash("User Profile Updated Successfully.", 'success')
+            return redirect(url_for('auth.register'))
+        else:
+            flash('allowed file types are .img/.png only', 'error')
+            return redirect(request.base_url)
 
     form.email.data = user.email
     form.username.data = user.username

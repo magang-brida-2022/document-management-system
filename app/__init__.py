@@ -5,6 +5,7 @@ from flask_login import LoginManager
 from flask_bootstrap import Bootstrap4
 from flask_minify import Minify
 from flask_moment import Moment
+from flask_toastr import Toastr
 
 # import config
 from config import Config
@@ -14,17 +15,23 @@ migrate = Migrate()
 bootstrap = Bootstrap4()
 minify = Minify(html=True, js=True, cssless=True)
 moment = Moment()
+toastr = Toastr()
 
 login_manager = LoginManager()
 login_manager.session_protection = 'strong'
 login_manager.login_view = 'auth.login'
 
 
-ALLOWED_EXTENSIONS = set(['pdf'])
+DOCS = set(['pdf'])
+IMG = set(['png', 'jpg'])
 
 
-def allowed_extension(filename):
-    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+def documents_allowed_extension(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in DOCS
+
+
+def images_allowed_extension(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in IMG
 
 
 def page_not_found(e):
@@ -50,6 +57,7 @@ def create_app():
     bootstrap.init_app(app)
     minify.init_app(app=app)
     moment.init_app(app)
+    toastr.init_app(app)
 
     from .auth import auth as auth_blueprint
     from .main import main as main_blueprint

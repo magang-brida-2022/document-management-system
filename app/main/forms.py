@@ -10,6 +10,8 @@ class SuratMasukForm(FlaskForm):
     no_surat = StringField('No Surat', validators=[DataRequired()])
     asal = StringField('Dari Instansi', validators=[DataRequired()])
     perihal = TextAreaField('Perihal', validators=[DataRequired()])
+    jenis = SelectField(
+        "Jenis", choices=[("", "---"), ('biasa', "Biasa"), ('luar_biasa', 'Luar Biasa')])
     tanggal_surat = DateField('Tanggal Surat', validators=[DataRequired()])
     tanggal_diterima = DateField(
         "Tanggal Diterima", validators=[DataRequired()])
@@ -26,18 +28,26 @@ class DisposisiKeForm(FlaskForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.disposisi.choices = [(disposisi.id, disposisi.nama)
-                                  for disposisi in Disposisi.query.order_by(Disposisi.alias).all()]
+        self.disposisi.choices = [(0, "---")]+[(disposisi.id, disposisi.nama)
+                                               for disposisi in Disposisi.query.order_by(Disposisi.alias).all()]
 
 
 class SuratKeluarForm(FlaskForm):
     no_surat = StringField('No Surat', validators=[DataRequired()])
-    jenis_surat = StringField('Jenis Surat', validators=[DataRequired()])
-    ringkasan = StringField('Ringkasan', validators=[DataRequired()])
+    jenis = SelectField("Jenis", choices=[
+                        ("", "---"), ('biasa', "Biasa"), ('luar_biasa', 'Luar Biasa')])
+    perihal = StringField('Perihal', validators=[DataRequired()])
     tanggal_dikeluarkan = DateField(
         'Taggal Dikeluarkan', validators=[DataRequired()])
     tujuan = StringField('Tujuan', validators=[DataRequired()])
     lampiran = FileField("Lampiran", validators=[DataRequired()])
+    submit = SubmitField("Simpan")
+
+
+class SuratBalasanForm(FlaskForm):
+    kepala = TextAreaField("Kepala Surat", validators=[DataRequired()])
+    isi = TextAreaField("Isi Surat", validators=[DataRequired()])
+    penutup = TextAreaField("Penutup", validators=[DataRequired()])
     submit = SubmitField("Simpan")
 
 

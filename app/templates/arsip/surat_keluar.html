@@ -68,12 +68,12 @@
                     {{form.no_surat(class="form-control")}}
                   </div>
                   <div class="form-group">
-                    {{form.jenis_surat.label}}
-                    {{form.jenis_surat(class="form-control")}}
+                    {{form.jenis.label}}
+                    {{form.jenis(class="form-control")}}
                   </div>
                   <div class="form-group">
-                    {{form.ringkasan.label}}
-                    {{form.ringkasan(class="form-control")}}
+                    {{form.perihal.label}}
+                    {{form.perihal(class="form-control")}}
                   </div>
                   <div class="form-group">
                     {{form.tanggal_dikeluarkan.label}}
@@ -109,8 +109,8 @@
             <thead>
               <tr>
                 <th>{{form.no_surat.label}}</th>
-                <th>{{form.jenis_surat.label}}</th>
-                <th>{{form.ringkasan.label}}</th>
+                <th>{{form.jenis.label}}</th>
+                <th>{{form.perihal.label}}</th>
                 <th>{{form.tanggal_dikeluarkan.label}}</th>
                 <th>{{form.tujuan.label}}</th>
                 <th>{{form.lampiran.label}}</th>
@@ -122,21 +122,22 @@
               <tr>
                 <td>{{ surat.nomor }}</td>
                 <td>{{ surat.jenis }}</td>
-                <td>{{ surat.ringkasan }}</td>
-                <td>{{ surat.tanggal_dikeluarkan }}</td>
+                <td>{{ surat.perihal }}</td>
+                <td>{{ moment(surat.tanggal_dikeluarkan).format('MM/DD/YYYY') }}</td>
                 <td>{{ surat.tujuan }}</td>
                 <td>
                  <div class="btn-toolbar" role="toolbar">
                     <div class="btn-group mr-2" role="group">
-                      <a href="{{ url_for('main.download_surat_keluar', upload_id=surat.id) }}" class="btn-sm btn-secondary">Download</a>
+                      {# <a href="{{ url_for('main.download_surat_keluar', upload_id=surat.id) }}" class="btn-sm btn-secondary">Download</a> #}
+                      <a href="{{ url_for('main.open_surat_keluar_dokumen', id=surat.id) }}" class="btn-sm btn-success" target="_blank">Lihat Dokumen</a>
                     </div>
                   </div>
                 </td>
                 <td>
                   <div class="btn-toolbar" role="toolbar">
-                   <div class="btn-group mr-2" role="group">
-                      <a href="{{ url_for('main.open_surat_keluar_dokumen', id=surat.id) }}" class="btn-sm btn-success">Lihat Dokumen</a>
-                    </div>
+                   {# <div class="btn-group mr-2" role="group">
+                      <a href="{{ url_for('main.open_surat_keluar_dokumen', id=surat.id) }}" class="btn-sm btn-warning">Lihat Dokumen</a>
+                    </div> #}
                     {% if current_user.can(Permission.ARSIP) %}
                     <div class="btn-group mr-2" role="group">
                       <a href="{{ url_for('main.edit_surat_keluar', id=surat.id) }}" class="btn-sm btn-primary">Edit</a>

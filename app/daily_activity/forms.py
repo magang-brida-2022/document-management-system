@@ -12,3 +12,7 @@ class DailyActivityForm(FlaskForm):
     deskripsi = TextAreaField('Deskripsi')
     output = StringField('Output')
     submit = SubmitField('Simpan')
+
+
+class EditDailyActivityForm(DailyActivityForm):
+    pass

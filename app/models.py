@@ -4,6 +4,8 @@ from typing import Union, NoReturn
 from flask_login import UserMixin, AnonymousUserMixin
 from flask import current_app
 from datetime import datetime
+from base64 import b64encode
+
 
 from . import login_manager, db
 
@@ -16,8 +18,7 @@ class User(UserMixin, db.Model):
     nama = db.Column(db.String(50))
     jabatan = db.Column(db.String(35))
     no_telpon = db.Column(db.String(100))
-    foto_profile = db.Column(db.String(
-        250), default="http://www.gravatar.com/avatar/3b3be63a4c2a439b013787725dfce802?d=identicon")
+    foto = db.Column(db.LargeBinary())
 
     role_id = db.Column(db.Integer, db.ForeignKey('role.id'))
     bidang_id = db.Column(db.Integer, db.ForeignKey('bidang.id'))
@@ -53,6 +54,10 @@ class User(UserMixin, db.Model):
     def check_password(self, password: str) -> bool:
         return check_password_hash(self.password_hash, password)
 
+    def get_photo(self):
+        if self.foto:
+            return b64encode(self.foto).decode('utf-8')
+
 
 class AnonymousUser(AnonymousUserMixin):
     def can(self, permissions) -> bool:
@@ -83,14 +88,6 @@ class Role(db.Model):
 
     @staticmethod
     def insert_roles():
-        """
-        role:
-            1. Super Admin
-            2. Pimpinan
-            3. Pegawai Tu
-            4. Pegawai
-        """
-
         roles = {
             'Pegawai': (Permission.LAPORAN_HARIAN | Permission.PERMOHONAN_SURAT, True),
             'Tu': (Permission.LAPORAN_HARIAN | Permission.PERMOHONAN_SURAT | Permission.REKAP_BULANAN | Permission.ARSIP, False),
@@ -144,15 +141,14 @@ class SuratMasuk(db.Model):
     nomor = db.Column(db.String(64), nullable=True)
     asal = db.Column(db.String(125), nullable=False)
     perihal = db.Column(db.Text, nullable=False)
+    jenis = db.Column(db.String(50))
     tanggal_surat = db.Column(db.DateTime, default=datetime.utcnow)
     tanggal_diterima = db.Column(db.DateTime, default=datetime.utcnow)
-    nama_file = db.Column(db.String(255), nullable=False)
     lampiran = db.Column(db.LargeBinary, nullable=False)
     disposisi_ke = db.Column(db.String(50))
     pesan = db.Column(db.Text)
     dilihat = db.Column(db.Boolean, default=False)
     tindak_lanjut = db.Column(db.Boolean, default=False)
-    # sifat
 
     def __repr__(self) -> str:
         return "<No Surat: {}>".format(self.nomor)
@@ -162,15 +158,14 @@ class SuratKeluar(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     nomor = db.Column(db.String(64), nullable=True)
     jenis = db.Column(db.String(125), nullable=False)
-    ringkasan = db.Column(db.String(255), nullable=False)
+    perihal = db.Column(db.String(255), nullable=False)
     tanggal_dikeluarkan = db.Column(db.DateTime, default=datetime.now)
     tujuan = db.Column(db.String(64), nullable=False)
     status = db.Column(db.Boolean, default=False)
-    nama_file = db.Column(db.String(255), nullable=False)
     lampiran = db.Column(db.LargeBinary, nullable=False)
 
     def __repr__(self) -> str:
-        return '<Surat keluar dengan nomor: {}, tujuan {}, status {}>'.format(self.nomor, self.tujuan, self.status)
+        return '<No Surat: {}>'.format(self.nomor)
 
 
 class DailyActivity(db.Model):
@@ -183,5 +178,4 @@ class DailyActivity(db.Model):
     users = db.relationship('User', backref="dailyactivity", lazy='dynamic')
 
     def __repr__(self) -> str:
-        return "<Kegiatan {} {}>".format(self.kegiatan, type(self.tanggal))
-
+        return "<Kegiatan {}>".format(self.kegiatan)
