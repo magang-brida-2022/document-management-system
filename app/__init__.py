@@ -23,7 +23,7 @@ login_manager.login_view = 'auth.login'
 
 
 DOCS = set(['pdf'])
-IMG = set(['png', 'img'])
+IMG = set(['png', 'jpg'])
 
 
 def documents_allowed_extension(filename):

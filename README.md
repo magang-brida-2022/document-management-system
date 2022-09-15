@@ -23,5 +23,5 @@
 - [ ] Realtime Notification
 - [ ] No refresh while posted the data
 - [ ] Rekap
-- [ ] Photo Profile
+- [✅] Photo Profile
 - ...

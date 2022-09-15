@@ -4,6 +4,8 @@ from typing import Union, NoReturn
 from flask_login import UserMixin, AnonymousUserMixin
 from flask import current_app
 from datetime import datetime
+from base64 import b64encode
+
 
 from . import login_manager, db
 
@@ -51,6 +53,10 @@ class User(UserMixin, db.Model):
 
     def check_password(self, password: str) -> bool:
         return check_password_hash(self.password_hash, password)
+
+    def get_photo(self):
+        if self.foto:
+            return b64encode(self.foto).decode('utf-8')
 
 
 class AnonymousUser(AnonymousUserMixin):
