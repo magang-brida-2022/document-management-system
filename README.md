@@ -22,7 +22,8 @@
 - [✅] UI :: Datetime Sorting daily activity
 - [ ] Realtime Notification
 - [ ] No refresh while posted the data
-- [ ] Rekap
+- [ ] Rekap Bulanan
 - [ ] Surat Balasan
 - [✅] Photo Profile
+- [ ] Surat Balasan
 - ...
