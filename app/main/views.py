@@ -1,14 +1,17 @@
-from multiprocessing.heap import reduce_arena
-from flask import render_template, flash, redirect, request, send_file, url_for
+import os
+from flask import render_template, flash, redirect, request, send_file, url_for, make_response
 from flask_login import login_required, current_user
 from io import BytesIO
+
 
 from app.decorators import admin_required, permission_required
 from app.models import Permission, Bidang, Disposisi
 from .forms import SuratMasukForm, SuratKeluarForm, DisposisiForm, BidangForm, DisposisiKeForm, EditSuratMasukForm, EditSuratKeluarForm, EditBidangForm, EditDisposisiForm, SudahDitindakLanjutForm, SuratBalasanForm
-from ..models import SuratMasuk, SuratKeluar, Bidang, Disposisi
+from ..models import SuratMasuk, SuratKeluar, Bidang, Disposisi, SuratBalasan
 from . import main
 from .. import db, documents_allowed_extension
+from .helpers.surat_balasan_helper import PDF
+from .. import create_app
 
 
 @main.get('/')
@@ -157,11 +160,41 @@ def bidang():
 @main.get('/surat_balasan')
 @main.post('/surat_balasan')
 def surat_balasan():
+    pdf = PDF()
     form = SuratBalasanForm()
 
-    if form.validate_on_submit():
-        pass
+    pdf.add_page(orientation='P', format='Legal')
 
+    pdf.gambar(os.path.join(create_app().static_folder, 'img/ntblogo.png'))
+    pdf.judul('PEMERINTAH PROVINSI NUSA TENGGARA BARAT', 'BADAN RISET DAN INOVASI DAERAH',
+              'Jalan Bypass ZAMIA 2 - Desa Lelede - Kecamatan Kediri - kode pos 83362', 'Kabupaten Lombok Barat - Provinsi NTB, Email: brida@ntbprov.go.id Website: brida.ntbprov.go.id')
+    pdf.garis()
+
+    _id = request.args.get('id')
+    surat_masuk = SuratMasuk.query.filter_by(
+        id=_id).first()
+
+    if form.validate_on_submit():
+        response = make_response(pdf.output())
+        response.headers.set('Content-Disposition',
+                             'attachment', filename='test.pdf')
+        response.headers.set('Content-Type', 'application/pdf')
+        return response
+
+        # return send_file(BytesIO(surat_keluar.lampiran), mimetype='application/pdf')
+
+        # return send_file(BytesIO(pdf.output(name="test.pdf")), mimetype="application/pdf")
+
+        # balas = SuratBalasan(kepala=form.kepala.data, isi=form.isi.data,
+        #                      penutup=form.penutup.data, surat_masuk=surat_masuk)
+        # db.session.add(balas)
+        # db.session.commit()
+        # flash("Surat Balasan Berhasil di Tambahkan", "success")
+        # return redirect(request.base_url)
+
+    form.kepala.data = 'test kepala data'
+    form.isi.data = 'test isi data'
+    form.penutup.data = 'test penututp data'
     return render_template("arsip/surat_balasan.html", form=form)
 
 

@@ -6,7 +6,7 @@ load_dotenv(os.path.join(basedir, '.env'))
 
 
 class Config(object):
-    SECRET_KEY = os.getenv('SECRET_KEY') or os.urandom(12)
+    SECRET_KEY = os.urandom(24)
 
     SQLALCHEMY_DATABASE_URI = 'postgresql://superiorkid:root@localhost/surat'
     SQLALCHEMY_TRACK_MODIFICATIONS = False

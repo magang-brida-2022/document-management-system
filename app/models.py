@@ -150,8 +150,23 @@ class SuratMasuk(db.Model):
     dilihat = db.Column(db.Boolean, default=False)
     tindak_lanjut = db.Column(db.Boolean, default=False)
 
+    balasan = db.relationship('SuratBalasan', backref="surat_masuk", lazy=True)
+
     def __repr__(self) -> str:
-        return "<No Surat: {}>".format(self.nomor)
+        return "<No Surat Masuk: {}>".format(self.nomor)
+
+
+class SuratBalasan(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    kepala = db.Column(db.Text, nullable=False)
+    isi = db.Column(db.Text, nullable=False)
+    penutup = db.Column(db.Text, nullable=False)
+
+    surat_masuk_id = db.Column(db.Integer, db.ForeignKey(
+        'surat_masuk.id'), nullable=False)
+
+    def __repr__(self) -> str:
+        return '<Balasan ID: {}>'.format(self.id)
 
 
 class SuratKeluar(db.Model):
@@ -165,7 +180,7 @@ class SuratKeluar(db.Model):
     lampiran = db.Column(db.LargeBinary, nullable=False)
 
     def __repr__(self) -> str:
-        return '<No Surat: {}>'.format(self.nomor)
+        return '<No Surat Keluar: {}>'.format(self.nomor)
 
 
 class DailyActivity(db.Model):
