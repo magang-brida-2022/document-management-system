@@ -35,5 +35,7 @@ class RekapBulananForm(FlaskForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # self.bulan.choices = [(0, "---")] + [(activity.tanggal, activity.tanggal.month)
-        # for activity in DailyActivity.query.all()]
+        self.tahun.choices = [(0, "---")] + list(set([(activity.tanggal.year, activity.tanggal.year)
+                                                      for activity in DailyActivity.query.all()]))
+        self.bulan.choices = [(0, "---")] + list(set([(activity.tanggal.month, activity.tanggal.month)
+                                                      for activity in DailyActivity.query.all()]))
