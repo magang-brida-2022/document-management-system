@@ -2,6 +2,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, SelectField
 from flask_wtf.file import FileField
 from wtforms.validators import DataRequired, Length, EqualTo, ValidationError
+from flask import flash
 
 from ..models import User, Bidang
 
@@ -11,7 +12,7 @@ class LoginForm(FlaskForm):
                            "placeholder": "Username", 'autofocus': True})
     password = PasswordField('Password', validators=[DataRequired()], render_kw={
                              "placeholder": "Password"})
-    remember_me = BooleanField('Keep me logged in')
+    remember_me = BooleanField('Ingat Saya')
     submit = SubmitField('Sign In')
 
 
@@ -35,6 +36,12 @@ class RegistrationForm(FlaskForm):
         self.bidang.choices = [(0, "---")]+[(bidang.id, bidang.nama)
                                             for bidang in Bidang.query.order_by(Bidang.alias).all()]
 
+    def validate_email(self, email):
+        if User.query.filter_by(email=email.data).first():
+            flash("Email already registered", "error")
+            return False
+
     def validate_username(self, username):
         if User.query.filter_by(username=username.data).first():
-            raise ValidationError("Username already registered")
+            flash("Username already registered", "error")
+            return False

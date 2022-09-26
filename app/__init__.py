@@ -19,8 +19,8 @@ toastr = Toastr()
 
 login_manager = LoginManager()
 login_manager.session_protection = 'strong'
+login_manager.login_message_category = 'error'
 login_manager.login_view = 'auth.login'
-
 
 DOCS = set(['pdf'])
 IMG = set(['png', 'jpg'])

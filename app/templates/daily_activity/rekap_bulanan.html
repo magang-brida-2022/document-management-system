@@ -1,12 +1,46 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Rekap Bulanan</title>
-  </head>
-  <body>
-    <h2>Rekap Bulanan</h2>
-  </body>
-</html>
+{% extends "base.html" %} {% block content %}
+<section class="content-header">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-6">
+        <h1 class="m-0">Rekap Bulanan</h1>
+      </div>
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item"><a href="#">Home</a></li>
+          <li class="breadcrumb-item"><a href="#">Aktivitas Harian</a></li>
+          <li class="breadcrumb-item active">Rekap Bulanan</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="content">
+  <div class="container-fluid">
+    <div class="card">
+      <div class="card-body">
+        <form method="post">
+          {{form.hidden_tag()}}
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              {{form.bulan.label}} {{form.bulan(class="form-control")}} {% for
+              error in form.bulan.errors %}
+              <div class="invalid-feedback">{{error}}</div>
+              {% endfor %}
+            </div>
+            <div class="form-group col-md-6">
+              {{form.tahun.label}} {{form.tahun(class="form-control")}} {% for
+              error in form.tahun.errors %}
+              <div class="invalid-feedback">{{ error }}</div>
+              {% endfor %}
+            </div>
+          </div>
+          {{form.submit(class="btn btn-primary")}}
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock content %}

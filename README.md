@@ -26,4 +26,6 @@
 - [ ] Surat Balasan
 - [✅] Photo Profile
 - [ ] Surat Balasan
+- [ ] Form Error Message
+- [ ] "Active" link
 - ...

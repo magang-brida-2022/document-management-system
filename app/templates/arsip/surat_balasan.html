@@ -22,13 +22,22 @@
         <form method="post">
           {{form.hidden_tag()}}
           <div class="form-group">
-            {{form.kepala.label}} {{form.kepala(class="form-control")}}
+            {{form.kepala.label}} {{form.kepala(class="form-control")}} {% for
+            error in form.kepala.errors %}
+            <div class="invalid-feedback">{{ error }}</div>
+            {% endfor %}
           </div>
           <div class="form-group">
-            {{form.isi.label}} {{form.isi(class="form-control")}}
+            {{form.isi.label}} {{form.isi(class="form-control")}} {% for error
+            in form.isi.errors %}
+            <div class="invalid-feedback">{{ error }}</div>
+            {% endfor %}
           </div>
           <div class="form-group">
-            {{form.penutup.label}} {{form.penutup(class="form-control")}}
+            {{form.penutup.label}} {{form.penutup(class="form-control")}} {% for
+            error in form.penutup.errors %}
+            <div class="invalid-feedback">{{ error }}</div>
+            {% endfor %}
           </div>
           {{form.submit(class="btn btn-primary")}}
         </form>

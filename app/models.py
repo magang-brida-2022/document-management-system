@@ -5,6 +5,8 @@ from flask_login import UserMixin, AnonymousUserMixin
 from flask import current_app
 from datetime import datetime
 from base64 import b64encode
+from sqlalchemy import extract
+from sqlalchemy.ext.hybrid import hybrid_property
 
 
 from . import login_manager, db
@@ -22,8 +24,9 @@ class User(UserMixin, db.Model):
 
     role_id = db.Column(db.Integer, db.ForeignKey('role.id'))
     bidang_id = db.Column(db.Integer, db.ForeignKey('bidang.id'))
-    dailyactivity_id = db.Column(
-        db.Integer, db.ForeignKey('daily_activity.id'))
+
+    posts = db.relationship(
+        'DailyActivity', backref="author", lazy=True)
 
     def __init__(self, **kwargs) -> None:
         super().__init__(**kwargs)
@@ -190,7 +193,24 @@ class DailyActivity(db.Model):
     deskripsi = db.Column(db.Text)
     output = db.Column(db.String(120))
 
-    users = db.relationship('User', backref="dailyactivity", lazy='dynamic')
+    user_id = db.Column(
+        db.Integer, db.ForeignKey('user.id'), nullable=False)
 
     def __repr__(self) -> str:
         return "<Kegiatan {}>".format(self.kegiatan)
+
+    @hybrid_property
+    def filter_by_year(self):
+        return self.tanggal.year
+
+    @filter_by_year.expression
+    def filter_by_year(cls):
+        return extract('year', cls.tanggal)
+
+    @hybrid_property
+    def filter_by_month(self):
+        return self.tanggal.month
+
+    @filter_by_month.expression
+    def filter_by_month(cls):
+        return extract('month', cls.tanggal)

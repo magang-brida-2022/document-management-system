@@ -23,18 +23,28 @@
           {{form.hidden_tag()}}
           <div class="form-row">
             <div class="form-group col-md-6">
-              {{form.kegiatan.label}} {{form.kegiatan(class="form-control")}}
+              {{form.tanggal.label}} {{form.tanggal(disabled=True,
+              class="form-control")}}
             </div>
             <div class="form-group col-md-6">
-              {{form.tanggal.label}} {{form.tanggal(class="form-control")}}
+              {{form.kegiatan.label}} {{form.kegiatan(class="form-control")}} {%
+              for error in form.kegiatan.errors %}
+              <div class="invalid-feedback">{{ error }}</div>
+              {% endfor %}
             </div>
           </div>
           <div class="form-row">
             <div class="form-group col-md-6">
               {{form.deskripsi.label}} {{form.deskripsi(class="form-control")}}
+              {% for error in form.deskripsi.errors %}
+              <div class="invalid-feedback">{{error}}</div>
+              {% endfor %}
             </div>
             <div class="form-group col-md-6">
-              {{form.output.label}} {{form.output(class="form-control")}}
+              {{form.output.label}} {{form.output(class="form-control")}} {% for
+              error in form.output.errors %}
+              <div class="invalid-feedback">{{error}}</div>
+              {% endfor %}
             </div>
           </div>
           {{form.submit(class="btn btn-primary")}}

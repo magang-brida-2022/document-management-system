@@ -23,10 +23,16 @@
           {{form.hidden_tag()}}
           <div class="form-row">
             <div class="form-group col-md-6">
-              {{form.alias.label}} {{form.alias(class="form-control")}}
+              {{form.alias.label}} {{form.alias(class="form-control")}} {% for
+              error in form.alias.errors %}
+              <div class="invalid-feedback">{{ error }}</div>
+              {% endfor %}
             </div>
             <div class="form-group col-md-6">
-              {{form.nama.label}} {{form.nama(class="form-control")}}
+              {{form.nama.label}} {{form.nama(class="form-control")}} {% for
+              error in form.nama.errors %}
+              <div class="invalid-feedback">{{error}}</div>
+              {% endfor %}
             </div>
           </div>
           {{form.submit(class="btn btn-primary")}}
