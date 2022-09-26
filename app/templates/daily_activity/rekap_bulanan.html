@@ -3,12 +3,13 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-sm-6">
-        <h1 class="m-0">Edit Disposisi</h1>
+        <h1 class="m-0">Rekap Bulanan</h1>
       </div>
       <div class="col-sm-6">
         <ol class="breadcrumb float-sm-right">
           <li class="breadcrumb-item"><a href="#">Home</a></li>
-          <li class="breadcrumb-item active">Edit Disposisi</li>
+          <li class="breadcrumb-item"><a href="#">Aktivitas Harian</a></li>
+          <li class="breadcrumb-item active">Rekap Bulanan</li>
         </ol>
       </div>
     </div>
@@ -23,15 +24,15 @@
           {{form.hidden_tag()}}
           <div class="form-row">
             <div class="form-group col-md-6">
-              {{form.alias.label}} {{form.alias(class="form-control")}} {% for
-              error in form.alias.errors %}
+              {{form.bulan.label}} {{form.bulan(class="form-control")}} {% for
+              error in form.bulan.errors %}
               <div class="invalid-feedback">{{error}}</div>
               {% endfor %}
             </div>
             <div class="form-group col-md-6">
-              {{form.nama.label}} {{form.nama(class="form-control")}} {% for
-              error in form.nama.errors %}
-              <div class="invalid-feedback">{{error}}</div>
+              {{form.tahun.label}} {{form.tahun(class="form-control")}} {% for
+              error in form.tahun.errors %}
+              <div class="invalid-feedback">{{ error }}</div>
               {% endfor %}
             </div>
           </div>

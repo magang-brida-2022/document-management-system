@@ -1,10 +1,10 @@
 from flask import render_template, flash, redirect, url_for, request
-from flask_login import login_required
+from flask_login import login_required, current_user
 from datetime import datetime
 
 from . import daily_activity
-from .forms import DailyActivityForm, EditDailyActivityForm
-from ..models import DailyActivity
+from .forms import DailyActivityForm, EditDailyActivityForm, RekapBulananForm
+from ..models import DailyActivity, User
 from .. import db
 
 
@@ -13,15 +13,12 @@ from .. import db
 @login_required
 def daily():
     form = DailyActivityForm()
-    daily_activity = DailyActivity.query.all()
+    daily_activity = current_user.posts
 
     if form.validate_on_submit():
         date_parse = datetime.strptime(form.tanggal.data, "%m/%d/%Y")
-
-        print(type(date_parse))
-
         new_activity = DailyActivity(tanggal=date_parse, kegiatan=form.kegiatan.data,
-                                     deskripsi=form.deskripsi.data, output=form.output.data)
+                                     deskripsi=form.deskripsi.data, output=form.output.data, author=current_user)
         db.session.add(new_activity)
         db.session.commit()
         flash("Aktivitas Berhasil Ditambahkan", "success")
@@ -39,12 +36,11 @@ def edit_activity(id):
 
     if form.validate_on_submit():
         activity.kegiatan = form.kegiatan.data
-        activity.tanggal = form.tanggal.data
         activity.deskripsi = form.deskripsi.data
         activity.output = form.output.data
 
         db.session.commit()
-        flash("Edited Successfully", "success")
+        flash("Edit Aktifitas Harian Sukses", "success")
         return redirect(url_for('daily_activity.daily'))
 
     form.kegiatan.data = activity.kegiatan
@@ -63,3 +59,13 @@ def delete_aktivity(id):
     db.session.commit()
     flash("Aktivitas berhasil di Hapus", "success")
     return redirect(url_for('daily_activity.daily'))
+
+
+@daily_activity.get('/rekap')
+@daily_activity.post('/rekap')
+def rekap_bulanan():
+    form = RekapBulananForm()
+    if form.validate_on_submit():
+        pass
+
+    return render_template('daily_activity/rekap_bulanan.html', form=form)

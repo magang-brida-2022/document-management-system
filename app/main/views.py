@@ -42,7 +42,7 @@ def surat_masuk():
 
         if lampiran and documents_allowed_extension(lampiran.filename):
             surat_masuk = SuratMasuk(nomor=no_surat, asal=asal, perihal=perihal, jenis=jenis, tanggal_surat=tanggal_surat,
-                                     tanggal_diterima=tanggal_diterima, nama_file=lampiran.filename, lampiran=lampiran.read())
+                                     tanggal_diterima=tanggal_diterima, lampiran=lampiran.read())
             db.session.add(surat_masuk)
             db.session.commit()
 
@@ -73,7 +73,7 @@ def surat_keluar():
 
         if lampiran and documents_allowed_extension(lampiran.filename):
             surat_keluar = SuratKeluar(nomor=nomor_surat, jenis=jenis, perihal=perihal, tanggal_dikeluarkan=tanggal_dikeluarkan,
-                                       tujuan=tujuan, nama_file=lampiran.filename, lampiran=lampiran.read())
+                                       tujuan=tujuan, lampiran=lampiran.read())
             db.session.add(surat_keluar)
             db.session.commit()
             flash("Surat keluar baru berhasil ditambahkan", "success")
@@ -220,7 +220,7 @@ def edit_surat_masuk(id):
         surat_masuk.perihal = form.perihal.data
         surat_masuk.tanggal_surat = form.tanggal_surat.data
         surat_masuk.tanggal_diterima = form.tanggal_diterima.data
-        surat_masuk.disposisi_ke = form.disposisi.data
+        surat_masuk.disposisi_ke = Disposisi.query.get(form.disposisi.data)
 
         db.session.commit()
         flash("surat masuk update successfully", 'success')
@@ -245,11 +245,11 @@ def edit_surat_keluar(id):
     if form.validate_on_submit():
         if form.lampiran.data is not None:
             surat_keluar.lampiran = form.lampiran.data.read()
-            surat_keluar.nama_file = form.lampura.data.filename
+            surat_keluar.nama_file = form.lampiran.data.filename
 
         surat_keluar.nomor = form.no_surat.data
-        surat_keluar.jenis = form.jenis_surat.data
-        surat_keluar.ringkasan = form.ringkasan.data
+        surat_keluar.jenis = form.jenis.data
+        surat_keluar.perihal = form.perihal.data
         surat_keluar.tanggal_dikeluarkan = form.tanggal_dikeluarkan.data
         surat_keluar.tujuan = form.tujuan.data
 
@@ -258,8 +258,8 @@ def edit_surat_keluar(id):
         return redirect(url_for('main.surat_keluar'))
 
     form.no_surat.data = surat_keluar.nomor
-    form.jenis_surat.data = surat_keluar.jenis
-    form.ringkasan.data = surat_keluar.ringkasan
+    form.jenis.data = surat_keluar.jenis
+    form.perihal.data = surat_keluar.perihal
     form.tanggal_dikeluarkan.data = surat_keluar.tanggal_dikeluarkan
     form.tujuan.data = surat_keluar.tujuan
     form.lampiran.data = surat_keluar.lampiran
@@ -306,8 +306,7 @@ def edit_disposisi(id):
 @main.post('/ditindak/<id>')
 def edit_feedback(id):
     form = SudahDitindakLanjutForm()
-    surat_masuk = SuratMasuk.query.filter_by(
-        disposisi_ke=current_user.bidang.nama).all()
+    surat_masuk = SuratMasuk.query.get_or_404(id)
     if form.validate_on_submit():
         surat_masuk.tindak_lanjut = form.ditindak_lanjut.data
 
@@ -337,7 +336,6 @@ def delete_surat_masuk(id):
 
 @main.get('/surat_keluar/<id>/delete')
 @main.post('/surat_keluar/<id>/delete')
-@admin_required
 def delete_surat_keluar(id):
     delete_surat = SuratKeluar.query.filter_by(id=id).first()
     db.session.delete(delete_surat)
@@ -406,37 +404,3 @@ def download_surat_masuk(upload_id):
 def download_surat_keluar(upload_id):
     surat_keluar = SuratKeluar.query.filter_by(id=upload_id).first()
     return send_file(BytesIO(surat_keluar.lampiran), download_name=surat_keluar.nama_file, as_attachment=True)
-
-
-'''
-    =========================
-    Eksperiment route 
-    ========================
-'''
-
-
-@main.get('/protected')
-@login_required
-def protected_routes():
-    return 'only authenticate users are allowed!'
-
-
-@main.get('/admin')
-@login_required
-@admin_required
-def for_admin_only():
-    return "For administrators!"
-
-
-@main.get('/pegawaitu')
-@login_required
-@permission_required(Permission.ARSIP)
-def for_admin_tu():
-    return "for admin tu"
-
-
-@main.get('/pegawai')
-@login_required
-@permission_required(Permission.PERMOHONAN_SURAT)
-def for_pagawai():
-    return "for staff"

@@ -23,33 +23,54 @@
           {{form.hidden_tag()}}
           <div class="form-row">
             <div class="form-group col-md-6">
-              {{form.no_surat.label}} {{form.no_surat(class="form-control")}}
+              {{form.no_surat.label}} {{form.no_surat(class="form-control")}} {%
+              for error in form.no_surat.errors %}
+              <div class="invalid-feedback">{{error}}</div>
+              {% endfor %}
             </div>
             <div class="form-group col-md-6">
-              {{form.asal.label}} {{form.asal(class="form-control")}}
+              {{form.asal.label}} {{form.asal(class="form-control")}} {% for
+              error in form.asal.errors %}
+              <div class="invalid-feedback">{{ error }}</div>
+              {% endfor %}
             </div>
           </div>
           <div class="form-group">
-            {{form.perihal.label}} {{form.perihal(class="form-control")}}
+            {{form.perihal.label}} {{form.perihal(class="form-control")}} {% for
+            error in form.perihal.errors %}
+            <div class="invalid-feedback">{{ error }}</div>
+            {% endfor %}
           </div>
           {# tanggal #}
           <div class="form-row">
             <div class="form-group col-md-6">
               {{form.tanggal_surat.label}}
-              {{form.tanggal_surat(class="form-control")}}
+              {{form.tanggal_surat(class="form-control")}} {% for error in
+              form.tanggal_surat.errors %}
+              <div class="invalid-feedback">{{ error }}</div>
+              {% endfor %}
             </div>
             <div class="form-group col-md-6">
               {{form.tanggal_diterima.label}}
-              {{form.tanggal_diterima(class="form-control")}}
+              {{form.tanggal_diterima(class="form-control")}} {% for error in
+              form.tanggal_diterima.errors %}
+              <div class="invalid-feedback">{{ error }}</div>
+              {% endfor %}
             </div>
           </div>
           <div class="form-row">
             <div class="form-group col-md-6">
               {{form.disposisi.label}} {{form.disposisi(class="form-control")}}
+              {% for error in form.disposisi.errors %}
+              <div class="invalid-feedback">{{ error }}</div>
+              {% endfor %}
             </div>
             <div class="form-group col-md-6">
               {{ form.lampiran.label }}
-              {{form.lampiran(class="form-control-file")}}
+              {{form.lampiran(class="form-control-file")}} {% for error in
+              form.lampiran.errors %}
+              <div class="invalid-feedback">{{ error }}</div>
+              {% endfor %}
             </div>
           </div>
           {{form.submit(class="btn btn-primary")}}
