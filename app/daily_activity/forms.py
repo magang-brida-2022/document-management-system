@@ -2,6 +2,7 @@ from flask_wtf import FlaskForm
 from flask import flash
 from wtforms import StringField, SubmitField, TextAreaField, SelectField
 from wtforms.validators import DataRequired, ValidationError
+from flask_login import current_user
 
 from ..models import DailyActivity
 
@@ -36,6 +37,6 @@ class RekapBulananForm(FlaskForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.tahun.choices = [(0, "---")] + list(set([(activity.tanggal.year, activity.tanggal.year)
-                                                      for activity in DailyActivity.query.all()]))
+                                                      for activity in DailyActivity.query.filter_by(author=current_user).all()]))
         self.bulan.choices = [(0, "---")] + list(set([(activity.tanggal.month, activity.tanggal.month)
-                                                      for activity in DailyActivity.query.all()]))
+                                                      for activity in DailyActivity.query.filter_by(author=current_user).all()]))
