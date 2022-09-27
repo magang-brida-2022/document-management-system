@@ -66,6 +66,9 @@ def delete_aktivity(id):
 def rekap_bulanan():
     form = RekapBulananForm()
     if form.validate_on_submit():
-        pass
+        cetak = DailyActivity.query.filter(
+            DailyActivity.filter_by_month == form.bulan.data, DailyActivity.filter_by_year == form.tahun.data).filter_by(author=current_user).all()
+
+        print(cetak)
 
     return render_template('daily_activity/rekap_bulanan.html', form=form)
