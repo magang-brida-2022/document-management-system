@@ -22,10 +22,10 @@
 - [✅] UI :: Datetime Sorting daily activity
 - [ ] Realtime Notification
 - [ ] No refresh while posted the data
-- [ ] Rekap Bulanan
-- [ ] Surat Balasan
+- [✅] Rekap Bulanan
 - [✅] Photo Profile
 - [ ] Surat Balasan
 - [ ] Form Error Message
 - [ ] "Active" link
+- [✅] Confirmation Dialog While Data Delete
 - ...

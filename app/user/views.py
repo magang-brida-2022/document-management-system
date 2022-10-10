@@ -1,4 +1,4 @@
-from flask import render_template, abort, flash, url_for, redirect, request
+from flask import render_template, abort, flash, url_for, redirect, request, abort
 from . import users
 
 from app.models import User, Role, Bidang
@@ -77,7 +77,11 @@ def edit_profile_admin(id):
 @login_required
 @admin_required
 def delete_user(id):
-    user = User.query.get_or_404(id)
+    user = User.query.filter_by(id=id).first()
+
+    if not user:
+        abort(404)
+
     db.session.delete(user)
     db.session.commit()
     flash("User deleted Successfully", "success")

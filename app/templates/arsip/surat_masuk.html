@@ -86,6 +86,10 @@
                     {{form.tanggal_diterima.label}}
                     {{form.tanggal_diterima(class="form-control")}}
                   </div>
+                   <div class="form-group">
+                    {{form.rak.label}}
+                    {{form.rak(class="form-control")}}
+                  </div>
                   <div class="form-group">
                     {{form.lampiran.label}}
                     {{form.lampiran(class="form-control-file")}}
@@ -117,10 +121,9 @@
                 <th>{{form.jenis.label}}</th>
                 <th>{{form.tanggal_surat.label}}</th>
                 <th>{{form.tanggal_diterima.label}}</th>
+                <th>Rak</th>
                 <th>{{form.lampiran.label}}</th>
-                {% if current_user.can(Permission.ARSIP) %}
-                  <th>Aksi</th>
-                {% endif %}
+                <th>Aksi</th>
                 <th>Status</th>
               </tr>
             </thead>
@@ -130,35 +133,75 @@
                 <td>{{ surat.nomor }}</td>
                 <td>{{ surat.asal }}</td>
                 <td>{{ surat.perihal }}</td>
-                <td>{{ surat.jenis }}</td>
-                <td>{{ moment(surat.tanggal_surat).format('MM/DD/YYYY') }}</td>
+                  <td>
+                  {% if surat.jenis == 'luar_biasa' %}
+                      <span class="badge badge-warning">{{ surat.jenis }}</span>    
+                  {% else %}
+                      <span class="badge badge-info">{{ surat.jenis }}</span>    
+                  {% endif %}
+                  </td>
                 <td>{{ moment(surat.tanggal_diterima).format('MM/DD/YYYY') }}</td>
+                <td>{{ moment(surat.tanggal_surat).format('MM/DD/YYYY') }}</td>
+                <td>{{ surat.rak }}</td>
                 <td>
                   <div class="btn-toolbar" role="toolbar">
                     <div class="btn-group mr-2" role="group">
-                      {# <a href="{{ url_for('main.download_surat_masuk', upload_id=surat.id) }}" class="btn-sm btn-secondary">Download</a> #}
                       <a href="{{ url_for('main.open_surat_masuk_dokumen', id=surat.id) }}" class="btn-sm btn-success" target="_blank">Dokumen</a>
-                    </div>
+                      {# <a href="{{ url_for('main.detail_surat_masuk') }}?id={{ surat.id }}" class="btn-sm btn-success">Detail</a> #}
+                     </div> 
                   </div>
-                </td>
-                    {% if current_user.can(Permission.ARSIP) %}
+                </td>   
                 <td>
                    <div class="btn-toolbar" role="toolbar">
-                    <div class="btn-group mr-2" role="group">
-                      <a href="{{ url_for('main.surat_balasan') }}?id={{ surat.id }}" class="btn-sm btn-primary">Balas</a>
-                    </div>
+                    {% if current_user.can(Permission.FEEDBACK) %}
+                      <div class="btn-group mr-2" role="group">
+                        <a href="{{ url_for('main.surat_balasan') }}?id={{ surat.id }}" class="btn-sm btn-primary">Balas</a>
+                      </div>
+                    {% endif %}
+                    
+                    {% if current_user.can(Permission.ARSIP) %}
                     <div class="btn-group mr-2" role="group">
                       <a href="{{ url_for('main.edit_surat_masuk', id=surat.id) }}" class="btn-sm btn-primary">Edit</a>
                     </div>
                     <div class="btn-group" role="group">
-                      <a href="{{ url_for('main.delete_surat_masuk', id=surat.id) }}" class="btn-sm btn-danger">Delete</a>
+                       <button type="button" class="btn-sm btn-danger" data-toggle="modal" data-target="#deleteDataModal{{ surat.id }}">
+                        Delete
+                      </button>
                     </div>
                   </div>
-                  </div>
-                </td>
                     {% endif %}
+                  </div>
+
+                  {# modal #}
+                  <div class="modal fade" id="deleteDataModal{{ surat.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                      <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Menghapus Data</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                          </div>
+                          <div class="modal-body">
+                            Apakah anda yakin untuk menghapus data
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn-sm btn-secondary" data-dismiss="modal">Tidak</button>
+                            <a href="{{ url_for('main.delete_surat_masuk', id=surat.id) }}" class="btn-sm btn-danger">Iya</a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    {# end modal #}
+
+                </td>
                 <td>
-                  <a href="#status" class="btn btn-sm">Belum ditindak</a>
+                  {% if not surat.disposisi_ke %}
+                    <span class="badge badge-danger">Belum Ditindak</span>    
+                  {% else %}
+                    <span class="badge badge-success">Sudah Didisposisi</span>    
+                  {% endif %}
+                  
                 </td>
               </tr>
               {% endfor %}
@@ -166,7 +209,7 @@
           </table>
         </div>
       </div>
-    </div>
+    </div>           
   </div>
 </section>
 

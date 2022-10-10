@@ -7,7 +7,7 @@ from io import BytesIO
 from app.decorators import admin_required, permission_required
 from app.models import Permission, Bidang, Disposisi
 from .forms import SuratMasukForm, SuratKeluarForm, DisposisiForm, BidangForm, DisposisiKeForm, EditSuratMasukForm, EditSuratKeluarForm, EditBidangForm, EditDisposisiForm, SudahDitindakLanjutForm, SuratBalasanForm
-from ..models import SuratMasuk, SuratKeluar, Bidang, Disposisi, SuratBalasan
+from ..models import SuratMasuk, SuratKeluar, Bidang, Disposisi, User
 from . import main
 from .. import db, documents_allowed_extension
 from .helpers.surat_balasan_helper import PDF
@@ -20,7 +20,11 @@ def index():
     if not current_user.is_authenticated:
         return redirect(url_for('auth.login'))
 
-    return render_template('index.html', title="Dashboard")
+    total_user = User.query.count()
+    total_surat_masuk = SuratMasuk.query.count()
+    total_surat_keluar = SuratKeluar.query.count()
+
+    return render_template('index.html', title="Dashboard", total_user=total_user, total_surat_masuk=total_surat_masuk, total_surat_keluar=total_surat_keluar)
 
 
 @main.get('/surat_masuk')
@@ -38,11 +42,12 @@ def surat_masuk():
         jenis = form.jenis.data
         tanggal_surat = form.tanggal_surat.data
         tanggal_diterima = form.tanggal_diterima.data
+        rak = form.rak.data
         lampiran = form.lampiran.data
 
         if lampiran and documents_allowed_extension(lampiran.filename):
             surat_masuk = SuratMasuk(nomor=no_surat, asal=asal, perihal=perihal, jenis=jenis, tanggal_surat=tanggal_surat,
-                                     tanggal_diterima=tanggal_diterima, lampiran=lampiran.read())
+                                     tanggal_diterima=tanggal_diterima, rak=rak, lampiran=lampiran.read())
             db.session.add(surat_masuk)
             db.session.commit()
 
@@ -72,8 +77,8 @@ def surat_keluar():
         lampiran = form.lampiran.data
 
         if lampiran and documents_allowed_extension(lampiran.filename):
-            surat_keluar = SuratKeluar(nomor=nomor_surat, jenis=jenis, perihal=perihal, tanggal_dikeluarkan=tanggal_dikeluarkan,
-                                       tujuan=tujuan, lampiran=lampiran.read())
+            surat_keluar = SuratKeluar(nomor=nomor_surat, jenis=jenis, perihal=perihal,
+                                       tanggal_dikeluarkan=tanggal_dikeluarkan, tujuan=tujuan, lampiran=lampiran.read())
             db.session.add(surat_keluar)
             db.session.commit()
             flash("Surat keluar baru berhasil ditambahkan", "success")
@@ -101,7 +106,8 @@ def arsip():
 
 @main.get('/disposisi_ke')
 def disposisi_ke():
-    surat_masuk = SuratMasuk.query.filter_by(dilihat=False)
+    surat_masuk = SuratMasuk.query.filter(
+        SuratMasuk.disposisi_ke == None).all()
     return render_template('arsip/disposisi.html', surat_masuk=surat_masuk, title="Atur Disposisi")
 
 
@@ -113,15 +119,12 @@ def diteruskan(id):
     if form.validate_on_submit():
         disposisi.disposisi_ke = form.disposisi.data
         disposisi.pesan = form.pesan.data
-        disposisi.dilihat = form.dilihat.data
+        disposisi.dilihat = True
         db.session.commit()
 
         flash('Disposisi Successfully', 'success')
         return redirect(url_for('main.disposisi_ke'))
 
-    form.disposisi.data = disposisi.disposisi_ke
-    form.pesan.data = disposisi.pesan
-    form.dilihat.data = disposisi.dilihat
     return render_template('arsip/disposisi_ke.html', form=form, disposisi=disposisi, title="Pilih Disposisi")
 
 
@@ -181,17 +184,6 @@ def surat_balasan():
         response.headers.set('Content-Type', 'application/pdf')
         return response
 
-        # return send_file(BytesIO(surat_keluar.lampiran), mimetype='application/pdf')
-
-        # return send_file(BytesIO(pdf.output(name="test.pdf")), mimetype="application/pdf")
-
-        # balas = SuratBalasan(kepala=form.kepala.data, isi=form.isi.data,
-        #                      penutup=form.penutup.data, surat_masuk=surat_masuk)
-        # db.session.add(balas)
-        # db.session.commit()
-        # flash("Surat Balasan Berhasil di Tambahkan", "success")
-        # return redirect(request.base_url)
-
     form.kepala.data = 'test kepala data'
     form.isi.data = 'test isi data'
     form.penutup.data = 'test penututp data'
@@ -218,6 +210,7 @@ def edit_surat_masuk(id):
         surat_masuk.nomor = form.no_surat.data
         surat_masuk.asal = form.asal.data
         surat_masuk.perihal = form.perihal.data
+        surat_masuk.rak = form.rak.data
         surat_masuk.tanggal_surat = form.tanggal_surat.data
         surat_masuk.tanggal_diterima = form.tanggal_diterima.data
         surat_masuk.disposisi_ke = Disposisi.query.get(form.disposisi.data)
@@ -232,6 +225,7 @@ def edit_surat_masuk(id):
     form.tanggal_surat.data = surat_masuk.tanggal_surat
     form.tanggal_diterima.data = surat_masuk.tanggal_diterima
     form.lampiran.data = surat_masuk.lampiran
+    form.rak.data = surat_masuk.rak
     form.disposisi.data = surat_masuk.disposisi_ke
 
     return render_template('arsip/edit_surat_masuk.html', form=form, title="Edit Surat Masuk")
@@ -387,7 +381,7 @@ def open_surat_keluar_dokumen(id):
 
 '''
     =========================
-    download dokumen 
+    download dokumen
     ========================
 '''
 
