@@ -1,10 +1,10 @@
-from flask import render_template, flash, redirect, url_for, request
+from flask import render_template, flash, redirect, url_for, request, make_response
 from flask_login import login_required, current_user
 from datetime import datetime
 
 from . import daily_activity
 from .forms import DailyActivityForm, EditDailyActivityForm, RekapBulananForm
-from ..models import DailyActivity, User
+from ..models import DailyActivity
 from .. import db
 
 
@@ -66,6 +66,9 @@ def delete_aktivity(id):
 def rekap_bulanan():
     form = RekapBulananForm()
     if form.validate_on_submit():
-        pass
+        cetak = DailyActivity.query.filter(
+            DailyActivity.filter_by_month == form.bulan.data, DailyActivity.filter_by_year == form.tahun.data).filter_by(author=current_user).all()
+
+        return render_template('daily_activity/cetak_daily_activity.html', data=cetak)
 
     return render_template('daily_activity/rekap_bulanan.html', form=form)

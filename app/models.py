@@ -147,13 +147,14 @@ class SuratMasuk(db.Model):
     jenis = db.Column(db.String(50))
     tanggal_surat = db.Column(db.DateTime, default=datetime.utcnow)
     tanggal_diterima = db.Column(db.DateTime, default=datetime.utcnow)
+    rak = db.Column(db.String, nullable=False)
     lampiran = db.Column(db.LargeBinary, nullable=False)
     disposisi_ke = db.Column(db.String(50))
     pesan = db.Column(db.Text)
     dilihat = db.Column(db.Boolean, default=False)
     tindak_lanjut = db.Column(db.Boolean, default=False)
 
-    balasan = db.relationship('SuratBalasan', backref="surat_masuk", lazy=True)
+    # balasan = db.relationship('SuratBalasan', backref="surat_masuk", lazy=True)
 
     def __repr__(self) -> str:
         return "<No Surat Masuk: {}>".format(self.nomor)
@@ -165,8 +166,8 @@ class SuratBalasan(db.Model):
     isi = db.Column(db.Text, nullable=False)
     penutup = db.Column(db.Text, nullable=False)
 
-    surat_masuk_id = db.Column(db.Integer, db.ForeignKey(
-        'surat_masuk.id'), nullable=False)
+    # surat_masuk_id = db.Column(db.Integer, db.ForeignKey(
+    #     'surat_masuk.id'), nullable=False)
 
     def __repr__(self) -> str:
         return '<Balasan ID: {}>'.format(self.id)
@@ -194,7 +195,7 @@ class DailyActivity(db.Model):
     output = db.Column(db.String(120))
 
     user_id = db.Column(
-        db.Integer, db.ForeignKey('user.id'), nullable=False)
+        db.Integer, db.ForeignKey('user.id'))
 
     def __repr__(self) -> str:
         return "<Kegiatan {}>".format(self.kegiatan)

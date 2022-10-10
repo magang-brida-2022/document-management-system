@@ -35,6 +35,7 @@ def login():
 @admin_required
 def register():
     all_user = User.query.all()
+    print(all_user)
     form = RegistrationForm()
 
     if form.validate_on_submit():
