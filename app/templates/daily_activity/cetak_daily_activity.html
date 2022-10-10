@@ -1,0 +1,45 @@
+<head>
+  {{ moment.include_moment() }}
+  {{bootstrap.}}
+</head>
+<div class="container-fluid">
+    <!-- Page Heading -->
+    <table>
+        <tr align="left">
+            <th rowspan="2"><img src="{{ url_for('static', filename="img/kop.png") }}" width="100%">
+            </th>
+        </tr>
+    </table>
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h1 class="m-0 font-weight-bold">Data Kegiatan Harian</h1>
+        </div>
+        <div class="card-body">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0" border="1">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Kegiatan</th>
+                        <th>Tanggal</th>
+                        <th>Deskripsi</th>
+                        <th>Output</th>
+                    </tr>
+                </thead>
+                <tbody>
+                        {% for activity in data %}
+                        <tr>
+                          <td>{{loop.index}}</td>
+                          <td>{{activity.kegiatan}}</td>
+                          <td>{{ moment(activity.tanggal).format('MM/DD/YYYY') }}</td>
+                          <td>{{activity.deskripsi}}</td>
+                          <td>{{activity.output}}</td>
+                          </tr>
+                </tbody>
+                        {% endfor %}
+            </table>
+        </div>
+    </div>
+</div>
+<script>
+    window.print()
+</script>
