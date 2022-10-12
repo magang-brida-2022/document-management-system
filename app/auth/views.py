@@ -51,7 +51,7 @@ def register():
             flash('allowed file types are .img/.png only', 'error')
             return redirect(request.base_url)
 
-    return render_template('auth/register.html', form=form, all_user=all_user, title="User Management")
+    return render_template('auth/register.html', form=form, all_user=all_user, title="User Management", page='user_management')
 
 
 @auth.get('/logout')

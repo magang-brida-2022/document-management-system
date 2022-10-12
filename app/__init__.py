@@ -38,7 +38,7 @@ def page_not_found(e):
     return render_template('error/404.html'), 404
 
 
-def internat_server_error(e):
+def internal_server_error(e):
     db.session.rollback()
     return render_template('error/500.html'), 500
 
@@ -72,6 +72,6 @@ def create_app():
     # error handler
     app.register_error_handler(404, page_not_found)
     app.register_error_handler(403, forbidden)
-    app.register_error_handler(500, internat_server_error)
+    app.register_error_handler(500, internal_server_error)
 
     return app

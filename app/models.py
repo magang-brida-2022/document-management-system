@@ -121,7 +121,7 @@ class Permission:
 
 class Bidang(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    alias = db.Column(db.String(50))
+    kode = db.Column(db.String(50))
     nama = db.Column(db.String(100))
 
     users = db.relationship('User', backref="bidang", lazy='dynamic')

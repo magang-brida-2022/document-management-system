@@ -1,6 +1,3 @@
-from email import header
-from re import sub
-from typing import Text
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField
 from wtforms import StringField, DateField,  SubmitField, TextAreaField, SelectField, BooleanField
@@ -56,7 +53,7 @@ class SuratBalasanForm(FlaskForm):
 
 
 class BidangForm(FlaskForm):
-    alias = StringField("Alias", validators=[DataRequired()])
+    kode = StringField("Kode Bidang", validators=[DataRequired()])
     nama = StringField("Nama Bidang", validators=[DataRequired()])
     submit = SubmitField("Tambah")
 

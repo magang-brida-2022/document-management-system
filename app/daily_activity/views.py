@@ -24,7 +24,7 @@ def daily():
         flash("Aktivitas Berhasil Ditambahkan", "success")
         return redirect(request.url)
 
-    return render_template('daily_activity/daily_activity.html', form=form, title="Daily Activity", daily_activity=daily_activity)
+    return render_template('daily_activity/daily_activity.html', form=form, title="Daily Activity", daily_activity=daily_activity, page='activity')
 
 
 @daily_activity.get('<id>/edit')
@@ -71,4 +71,4 @@ def rekap_bulanan():
 
         return render_template('daily_activity/cetak_daily_activity.html', data=cetak)
 
-    return render_template('daily_activity/rekap_bulanan.html', form=form)
+    return render_template('daily_activity/rekap_bulanan.html', form=form, page='rekap')
