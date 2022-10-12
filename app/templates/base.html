@@ -223,7 +223,7 @@
           <!-- Add icons to the links using the .nav-icon class
             with font-awesome or any other icon font library -->
           <li class="nav-item">
-            <a href="{{ url_for('main.index') }}" class="nav-link ">
+            <a href="{{ url_for('main.index') }}" class="nav-link {% if page == 'dashboard' %}active{% endif %} ">
               <i class="nav-icon fas fa-th"></i>
               <p>
                 Dashboard
@@ -245,7 +245,7 @@
             <ul class="nav nav-treeview" style="display: none;">
             {% if current_user.can(Permission.DISPOSISI) %}
             <li class="nav-item">
-                <a href="{{ url_for('main.disposisi_ke') }}" class="nav-link ">
+                <a href="{{ url_for('main.disposisi_ke') }}" class="nav-link {% if page == 'disposisi' %}active{% endif %}">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Disposisi
                     {% if TotalDisposisi %}
@@ -258,7 +258,7 @@
 
             {% if current_user.can(Permission.FEEDBACK) %}
               <li class="nav-item">
-                <a href="{{ url_for('main.feedback') }}" class="nav-link ">
+                <a href="{{ url_for('main.feedback') }}" class="nav-link {% if page == 'feedback' %}active{%endif%}">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Feedback
                   {% if TotalFeedback %}
@@ -283,13 +283,13 @@
             </a>
             <ul class="nav nav-treeview" style="display: none;">
               <li class="nav-item">
-                <a href="{{ url_for('main.surat_masuk') }}" class="nav-link ">
+                <a href="{{ url_for('main.surat_masuk') }}" class="nav-link {% if page == 'surat_masuk' %}active{% endif %}">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Surat Masuk</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="{{ url_for('main.surat_keluar') }}" class="nav-link ">
+                <a href="{{ url_for('main.surat_keluar') }}" class="nav-link {% if page == 'surat_keluar' %}active{% endif %}">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Surat Keluar</p>
                 </a>
@@ -309,14 +309,14 @@
             </a>
             <ul class="nav nav-treeview" style="display: none;">
             <li class="nav-item">
-                <a href="{{ url_for('daily_activity.daily') }}" class="nav-link ">
+                <a href="{{ url_for('daily_activity.daily') }}" class="nav-link {% if page == 'activity'%}active{% endif %}">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Laporan Harian</p>
                 </a>
               </li>
 
               <li class="nav-item">
-                <a href="{{ url_for('daily_activity.rekap_bulanan') }}" class="nav-link ">
+                <a href="{{ url_for('daily_activity.rekap_bulanan') }}" class="nav-link {% if page == 'rekap' %}active{% endif %}">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Rekap Bulanan</p>
                 </a>
@@ -328,7 +328,7 @@
           
            <li class="nav-header">App Management</li> 
             <li class="nav-item">
-            <a href="{{ url_for('main.bidang') }}" class="nav-link ">
+            <a href="{{ url_for('main.bidang') }}" class="nav-link {% if page == 'bidang' %}active{% endif %}">
               <i class="nav-icon far fa-user"></i>
               <p>
                 Bidang
@@ -338,7 +338,7 @@
           </li>
 
            <li class="nav-item">
-            <a href="{{ url_for('main.disposisi') }}" class="nav-link ">
+            <a href="{{ url_for('main.disposisi') }}" class="nav-link {% if page == 'disposisi_management' %}active{% endif %}">
               <i class="nav-icon far fa-user"></i>
               <p>
                 Disposisi
@@ -348,7 +348,7 @@
           </li>
 
           <li class="nav-item">
-            <a href="{{ url_for('auth.register') }}" class="nav-link ">
+            <a href="{{ url_for('auth.register') }}" class="nav-link {% if page == 'user_management'%}active{% endif%}">
               <i class="nav-icon far fa-user"></i>
               <p>
                 User

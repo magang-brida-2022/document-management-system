@@ -59,7 +59,7 @@ href="{{url_for('static', filename="plugins/dataTables/datatables.min.css") }}">
                 </div>
                 <div class="modal-body">
                   <div class="form-group">
-                    {{form.alias.label}} {{form.alias(class="form-control")}}
+                    {{form.kode.label}} {{form.kode(class="form-control")}}
                   </div>
                   <div class="form-group">
                     {{form.nama.label}} {{form.nama(class="form-control")}}
@@ -86,7 +86,7 @@ href="{{url_for('static', filename="plugins/dataTables/datatables.min.css") }}">
           <table id="data" class="table table-striped mt-4">
             <thead>
               <tr>
-                <th>{{form.alias.label}}</th>
+                <th>{{form.kode.label}}</th>
                 <th>{{form.nama.label}}</th>
                 <th>Aksi</th>
               </tr>
@@ -94,7 +94,7 @@ href="{{url_for('static', filename="plugins/dataTables/datatables.min.css") }}">
             <tbody>
               {% for b in bidang %}
               <tr>
-                <td>{{ b.alias }}</td>
+                <td>{{ b.kode }}</td>
                 <td>{{ b.nama }}</td>
                 <td>
                   <div class="btn-toolbar" role="toolbar">

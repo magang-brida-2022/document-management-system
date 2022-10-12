@@ -24,7 +24,7 @@ def index():
     total_surat_masuk = SuratMasuk.query.count()
     total_surat_keluar = SuratKeluar.query.count()
 
-    return render_template('index.html', title="Dashboard", total_user=total_user, total_surat_masuk=total_surat_masuk, total_surat_keluar=total_surat_keluar)
+    return render_template('index.html', title="Dashboard", total_user=total_user, total_surat_masuk=total_surat_masuk, total_surat_keluar=total_surat_keluar, page='dashboard')
 
 
 @main.get('/surat_masuk')
@@ -57,7 +57,7 @@ def surat_masuk():
             flash('allowed file types are .pdf only', 'error')
             return redirect(request.base_url)
 
-    return render_template('arsip/surat_masuk.html', form=form, surat_masuk=surat_masuk, title="Surat Masuk")
+    return render_template('arsip/surat_masuk.html', form=form, surat_masuk=surat_masuk, title="Surat Masuk", page='surat_masuk')
 
 
 @main.get('/surat_keluar')
@@ -87,14 +87,14 @@ def surat_keluar():
             flash('allowed file types are .pdf only', 'error')
             return redirect(request.base_url)
 
-    return render_template('arsip/surat_keluar.html', form=form, surat_keluar=surat_keluar, title="Surat Keluar")
+    return render_template('arsip/surat_keluar.html', form=form, surat_keluar=surat_keluar, title="Surat Keluar", page='surat_keluar')
 
 
 @main.get('/ditindak/')
 @main.post('/ditindak/')
 def feedback():
     surat_masuk = SuratMasuk.query.filter_by(tindak_lanjut=False).all()
-    return render_template('arsip/feedback.html', surat_masuk=surat_masuk)
+    return render_template('arsip/feedback.html', surat_masuk=surat_masuk, page='feedback')
 
 
 @main.get('/arsip')
@@ -108,7 +108,7 @@ def arsip():
 def disposisi_ke():
     surat_masuk = SuratMasuk.query.filter(
         SuratMasuk.disposisi_ke == None).all()
-    return render_template('arsip/disposisi.html', surat_masuk=surat_masuk, title="Atur Disposisi")
+    return render_template('arsip/disposisi.html', surat_masuk=surat_masuk, title="Atur Disposisi", page='disposisi')
 
 
 @main.get('/diteruskan/<id>')
@@ -141,7 +141,7 @@ def disposisi():
         flash('Data Berhasil di Tambahkan', 'success')
         return redirect(url_for('main.disposisi'))
 
-    return render_template('arsip/tambah_disposisi.html', form=form, disposisi=disposisi, title="Disposisi Management")
+    return render_template('arsip/tambah_disposisi.html', form=form, disposisi=disposisi, title="Disposisi Management", page='disposisi_management')
 
 
 @main.get('/bidang')
@@ -151,13 +151,13 @@ def bidang():
     form = BidangForm()
     bidang = Bidang.query.all()
     if form.validate_on_submit():
-        bidang_baru = Bidang(alias=form.alias.data, nama=form.nama.data)
+        bidang_baru = Bidang(kode=form.kode.data, nama=form.nama.data)
         db.session.add(bidang_baru)
         db.session.commit()
         flash('Data berhasil di Tambahkan', 'success')
         return redirect(url_for('main.bidang'))
 
-    return render_template('arsip/tambah_bidang.html', form=form, bidang=bidang, title="Bidang Management")
+    return render_template('arsip/tambah_bidang.html', form=form, bidang=bidang, title="Bidang Management", page="bidang")
 
 
 @main.get('/surat_balasan')
@@ -266,14 +266,14 @@ def edit_bidang(id):
     form = EditBidangForm()
     bidang = Bidang.query.filter_by(id=id).first()
     if form.validate_on_submit():
-        bidang.alias = form.alias.data
+        bidang.kode = form.kode.data
         bidang.nama = form.nama.data
 
         db.session.commit()
         flash('Update Bidang Successfully', 'success')
         return redirect(url_for('main.bidang'))
 
-    form.alias.data = bidang.alias
+    form.kode.data = bidang.kode
     form.nama.data = bidang.nama
     return render_template('arsip/edit_bidang.html', form=form, bidang=bidang, title="Edit Bidang")
 

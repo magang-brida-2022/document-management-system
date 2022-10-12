@@ -31,7 +31,7 @@ class EditProfileAdminForm(FlaskForm):
         self.role.choices = [(0, "---")] + [(role.id, role.name)
                                             for role in Role.query.order_by(Role.name).all()]
         self.bidang.choices = [(0, "---")] + [(bidang.id, bidang.nama)
-                                              for bidang in Bidang.query.order_by(Bidang.alias).all()]
+                                              for bidang in Bidang.query.order_by(Bidang.kode).all()]
 
     def validate_email(self, email):
         if email.data != self.user.email and User.query.filter_by(email=email.data).first():

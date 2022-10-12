@@ -10,7 +10,7 @@
 - [✅] daily report
 - [✅] Disable future date select
 - [✅] Edit surat masuk & surat keluar
-- [✅] User Profile and Editing [user and admin level]
+- [✅] User Profil+e and Editing [user and admin level]
 - [ ] UI :: Dashboard
 - [✅] UI :: Login
 - [✅] UI :: Surat Masuk

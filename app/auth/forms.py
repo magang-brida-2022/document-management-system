@@ -34,7 +34,7 @@ class RegistrationForm(FlaskForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.bidang.choices = [(0, "---")]+[(bidang.id, bidang.nama)
-                                            for bidang in Bidang.query.order_by(Bidang.alias).all()]
+                                            for bidang in Bidang.query.order_by(Bidang.kode).all()]
 
     def validate_email(self, email):
         if User.query.filter_by(email=email.data).first():
