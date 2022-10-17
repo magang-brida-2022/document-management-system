@@ -22,15 +22,15 @@ class SuratMasukForm(FlaskForm):
 
 
 class DisposisiKeForm(FlaskForm):
-    disposisi = SelectField('Disposisi Ke', coerce=int,
+    disposisi = SelectField('Disposisi Ke', coerce=str,
                             validators=[DataRequired()])
     pesan = TextAreaField('Pesan')
     submit = SubmitField('Simpan')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.disposisi.choices = [(0, "---")]+[(disposisi.id, disposisi.nama)
-                                               for disposisi in Disposisi.query.order_by(Disposisi.alias).all()]
+        self.disposisi.choices = [('0', "---")]+[(disposisi.nama, disposisi.nama)
+                                                 for disposisi in Disposisi.query.order_by(Disposisi.alias).all()]
 
 
 class SuratKeluarForm(FlaskForm):
