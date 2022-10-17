@@ -26,6 +26,7 @@
       rel="stylesheet"
       href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback"
     />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="{{ url_for('static',
     filename="plugins/fontawesome-free/css/all.min.css") }}">
@@ -235,7 +236,7 @@
           {% if current_user.can(Permission.DISPOSISI) or current_user.can(Permission.FEEDBACK) %}
             <li class="nav-item has-treeview">
             <a href="#" class="nav-link ">
-              <i class="nav-icon fas fa-copy"></i>
+              <i class="nav-icon bi bi-menu-app"></i>
               <p>
                 Master
                 <i class="fas fa-angle-left right"></i>
@@ -300,7 +301,7 @@
 
            <li class="nav-item has-treeview">
             <a href="#" class="nav-link ">
-              <i class="nav-icon fas fa-copy"></i>
+              <i class="nav-icon bi bi-calendar-check"></i>
               <p>
                 Aktivitas Harian
                 <i class="fas fa-angle-left right"></i>
@@ -329,7 +330,7 @@
            <li class="nav-header">App Management</li> 
             <li class="nav-item">
             <a href="{{ url_for('main.bidang') }}" class="nav-link {% if page == 'bidang' %}active{% endif %}">
-              <i class="nav-icon far fa-user"></i>
+              <i class="nav-icon bi bi-building"></i>
               <p>
                 Bidang
                 {# <span class="right badge badge-danger">New</span> #}
@@ -339,7 +340,7 @@
 
            <li class="nav-item">
             <a href="{{ url_for('main.disposisi') }}" class="nav-link {% if page == 'disposisi_management' %}active{% endif %}">
-              <i class="nav-icon far fa-user"></i>
+              <i class="nav-icon bi bi-diagram-2"></i>
               <p>
                 Disposisi
                 {# <span class="right badge badge-danger">New</span> #}
@@ -349,7 +350,7 @@
 
           <li class="nav-item">
             <a href="{{ url_for('auth.register') }}" class="nav-link {% if page == 'user_management'%}active{% endif%}">
-              <i class="nav-icon far fa-user"></i>
+              <i class="nav-icon bi bi-people-fill"></i>
               <p>
                 User
                 {# <span class="right badge badge-danger">New</span> #}
@@ -435,6 +436,8 @@
     <script src="{{ url_for('static', filename="dist/js/pages/dashboard.js") }}"></script>
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap5.js"></script>
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
 
     {{ toastr.include_toastr_js() }}
 

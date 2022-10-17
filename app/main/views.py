@@ -1,8 +1,8 @@
-import os
 from flask import render_template, flash, redirect, request, send_file, url_for, make_response
 from flask_login import login_required, current_user
 from io import BytesIO
-
+from docxtpl import DocxTemplate
+from sqlalchemy import and_
 
 from app.decorators import admin_required, permission_required
 from app.models import Permission, Bidang, Disposisi
@@ -10,7 +10,6 @@ from .forms import SuratMasukForm, SuratKeluarForm, DisposisiForm, BidangForm, D
 from ..models import SuratMasuk, SuratKeluar, Bidang, Disposisi, User
 from . import main
 from .. import db, documents_allowed_extension
-from .helpers.surat_balasan_helper import PDF
 from .. import create_app
 
 
@@ -93,8 +92,15 @@ def surat_keluar():
 @main.get('/ditindak/')
 @main.post('/ditindak/')
 def feedback():
-    surat_masuk = SuratMasuk.query.filter_by(tindak_lanjut=False).all()
-    return render_template('arsip/feedback.html', surat_masuk=surat_masuk, page='feedback')
+    # surat masuk yang belum ditindaklanjuti
+    surat_masuk = SuratMasuk.query.filter(and_(
+        SuratMasuk.disposisi_ke == current_user.bidang.nama, SuratMasuk.tindak_lanjut == False)).all()
+
+    # surat masuk yang sudah ditindaklanjuti
+    surat_masuk_confirm = SuratMasuk.query.filter(and_(
+        SuratMasuk.disposisi_ke == current_user.bidang.nama, SuratMasuk.tindak_lanjut == True)).all()
+
+    return render_template('arsip/feedback.html', surat_masuk=surat_masuk, page='feedback', surat_masuk_confirm=surat_masuk_confirm)
 
 
 @main.get('/arsip')
@@ -163,22 +169,20 @@ def bidang():
 @main.get('/surat_balasan')
 @main.post('/surat_balasan')
 def surat_balasan():
-    pdf = PDF()
     form = SuratBalasanForm()
-
-    pdf.add_page(orientation='P', format='Legal')
-
-    pdf.gambar(os.path.join(create_app().static_folder, 'img/ntblogo.png'))
-    pdf.judul('PEMERINTAH PROVINSI NUSA TENGGARA BARAT', 'BADAN RISET DAN INOVASI DAERAH',
-              'Jalan Bypass ZAMIA 2 - Desa Lelede - Kecamatan Kediri - kode pos 83362', 'Kabupaten Lombok Barat - Provinsi NTB, Email: brida@ntbprov.go.id Website: brida.ntbprov.go.id')
-    pdf.garis()
-
     _id = request.args.get('id')
+
+    document = DocxTemplate(
+        url_for('static', filename='docx_template/demo.docx'))
+
     surat_masuk = SuratMasuk.query.filter_by(
         id=_id).first()
 
     if form.validate_on_submit():
-        response = make_response(pdf.output())
+        context = {"sayHi": "Hello From Python"}
+        document.render(context)
+
+        response = make_response(document.save())
         response.headers.set('Content-Disposition',
                              'attachment', filename='test.pdf')
         response.headers.set('Content-Type', 'application/pdf')
@@ -299,16 +303,12 @@ def edit_disposisi(id):
 @main.get('/ditindak/<id>')
 @main.post('/ditindak/<id>')
 def edit_feedback(id):
-    form = SudahDitindakLanjutForm()
+    # form = SudahDitindakLanjutForm()
     surat_masuk = SuratMasuk.query.get_or_404(id)
-    if form.validate_on_submit():
-        surat_masuk.tindak_lanjut = form.ditindak_lanjut.data
-
-        db.session.commit()
-        flash("Task Complete", "success")
-        return redirect(url_for('main.feedback'))
-
-    return render_template('arsip/edit_feedback.html', form=form, surat_masuk=surat_masuk)
+    surat_masuk.tindak_lanjut = True
+    db.session.commit()
+    flash("Task Complete", "success")
+    return redirect(url_for('main.feedback'))
 
 
 '''
