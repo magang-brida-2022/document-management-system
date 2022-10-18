@@ -1,3 +1,5 @@
+import os
+
 from flask import render_template, flash, redirect, request, send_file, url_for, make_response
 from flask_login import login_required, current_user
 from io import BytesIO
@@ -173,22 +175,26 @@ def bidang():
 def surat_balasan():
     form = SuratBalasanForm()
     _id = request.args.get('id')
+    docx_in_memory = BytesIO()
 
-    document = DocxTemplate(
-        url_for('static', filename='docx_template/demo.docx'))
+    SRCDIR = os.path.dirname(os.path.abspath(__file__))
+    DATADIR = os.path.join(SRCDIR, 'docx_template')
+    document = DocxTemplate(os.path.join(DATADIR, 'balasan_magang.docx'))
 
     surat_masuk = SuratMasuk.query.filter_by(
         id=_id).first()
 
     if form.validate_on_submit():
-        context = {"sayHi": "Hello From Python"}
+
+        context = {
+            "sayhi": "Hello Form"
+        }
+
         document.render(context)
 
-        response = make_response(document.save())
-        response.headers.set('Content-Disposition',
-                             'attachment', filename='test.pdf')
-        response.headers.set('Content-Type', 'application/pdf')
-        return response
+        document.save(docx_in_memory)
+        docx_in_memory.seek(0)
+        return send_file(docx_in_memory, as_attachment=True, download_name='test.docx')
 
     form.kepala.data = 'test kepala data'
     form.isi.data = 'test isi data'
