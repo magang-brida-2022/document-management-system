@@ -114,7 +114,9 @@ def arsip():
 def disposisi_ke():
     surat_masuk = SuratMasuk.query.filter(
         SuratMasuk.disposisi_ke == None).all()
-    return render_template('arsip/disposisi.html', surat_masuk=surat_masuk, title="Atur Disposisi", page='disposisi')
+
+    history = SuratMasuk.query.filter(SuratMasuk.disposisi_ke != None).all()
+    return render_template('arsip/disposisi.html', surat_masuk=surat_masuk, history=history, title="Atur Disposisi", page='disposisi')
 
 
 @main.get('/diteruskan/<id>')

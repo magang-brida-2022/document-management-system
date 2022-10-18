@@ -25,7 +25,7 @@
     <div class="card">
       <div class="card-body">
         <div class="mt-4">
-          <table id="data" class="table table-striped mt-4">
+          <table class="table table-striped mt-4 display">
             <thead>
               <tr>
                 <th>Nomor Surat</th>
@@ -70,6 +70,50 @@
         </div>
       </div>
     </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h4>Riwayat Disposisi</h4>
+      </div>
+      <div class="card-body">
+        <div class="mt-4">
+          <table class="table table-striped mt-4 display">
+            <thead>
+              <tr>
+                <th>Nomor Surat</th>
+                <th>Dari Instansi</th>
+                <th>Perihal</th>
+                <th>Dokumen</th>
+                <th>Disposisi</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for surat in history %}
+              <tr>
+                <td>{{ surat.nomor }}</td>
+                <td>{{ surat.asal }}</td>
+                <td>{{ surat.perihal }}</td>
+                <td>
+                  <div class="btn-toolbar" role="toolbar">
+                    <div class="btn-group mr-2" role="group">
+                      <a
+                        href="{{ url_for('main.open_surat_masuk_dokumen', id=surat.id) }}"
+                        class="btn-sm btn-success"
+                        >Lihat Dokumen</a
+                      >
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  {{ surat.disposisi_ke }}
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -77,7 +121,7 @@
 <script src="{{ url_for('static', filename="plugins/dataTables/datatables.min.js") }}"></script>
 <script>
   $(document).ready(function () {
-    $("#data").DataTable();
+    $("table.display").DataTable();
   });
 </script>
 {% endblock scripts %}
