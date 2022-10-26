@@ -94,6 +94,7 @@ def surat_keluar():
 
 @main.get('/ditindak/')
 @main.post('/ditindak/')
+@login_required
 def feedback():
     # surat masuk yang belum ditindaklanjuti
     surat_masuk = SuratMasuk.query.filter(and_(
@@ -438,9 +439,6 @@ def generate_surat(id):
     docx_in_memory = BytesIO()
     SRCDIR = os.path.dirname(os.path.abspath(__file__))
     DATADIR = os.path.join(SRCDIR, 'docx_template')
-
-    print(surat.tanggal_diterima)
-    print(type(surat.tanggal_diterima))
 
     if form.validate_on_submit():
         context = {

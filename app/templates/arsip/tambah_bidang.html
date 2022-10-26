@@ -5,7 +5,7 @@ href="{{url_for('static', filename="plugins/dataTables/datatables.min.css") }}">
   <div class="container-fluid">
     <div class="row">
       <div class="col-sm-6">
-        <h1 class="m-0">Bidang</h1>
+        {# <h1 class="m-0">Bidang</h1> #}
       </div>
       <div class="col-sm-6">
         <ol class="breadcrumb float-sm-right">
@@ -21,12 +21,15 @@ href="{{url_for('static', filename="plugins/dataTables/datatables.min.css") }}">
 
 <section class="content">
   <div class="container-fluid">
-    <div class="card">
+    <div class="card card-primary">
+      <div class="card-header">
+        <h3 class="card-title">Bidang</h3>
+      </div>
       <div class="card-body">
         <!-- Button trigger modal -->
         <button
           type="button"
-          class="btn btn-primary"
+          class="btn btn-info"
           data-toggle="modal"
           data-target="#tambahBidang"
         >
