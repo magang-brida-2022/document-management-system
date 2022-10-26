@@ -16,33 +16,76 @@
 </section>
 
 <section class="content">
-  <div class="container-fluid">
-    <div class="card">
-      <div class="card-body">
-        <form method="post">
-          {{form.hidden_tag()}}
-          <div class="form-group">
-            {{form.kepala.label}} {{form.kepala(class="form-control")}} {% for
-            error in form.kepala.errors %}
-            <div class="invalid-feedback">{{ error }}</div>
-            {% endfor %}
+      <div class="container-fluid">
+        <div class="row">
+          <!-- left column -->
+          <div class="col-md-6">
+            <!-- general form elements -->
+            <div class="card card-primary">
+              <div class="card-header">
+                <h3 class="card-title">Jenis Surat</h3>
+              </div>
+              <!-- /.card-header -->
+              <!-- form start -->
+              <form method="post">
+                {{jenis_surat_form.hidden_tag()}}
+                <div class="card-body">
+                  <div class="form-group">
+                    {{jenis_surat_form.jenis.label}}
+                    {{jenis_surat_form.jenis(class="form-control")}}
+                  </div>
+                </div>
+                <!-- /.card-body -->
+
+                <div class="card-footer">
+                  {{jenis_surat_form.submit(class="btn btn-primary")}}
+                </div>
+              </form>
+            </div>
+            <!-- /.card -->
           </div>
-          <div class="form-group">
-            {{form.isi.label}} {{form.isi(class="form-control")}} {% for error
-            in form.isi.errors %}
-            <div class="invalid-feedback">{{ error }}</div>
-            {% endfor %}
-          </div>
-          <div class="form-group">
-            {{form.penutup.label}} {{form.penutup(class="form-control")}} {% for
-            error in form.penutup.errors %}
-            <div class="invalid-feedback">{{ error }}</div>
-            {% endfor %}
-          </div>
-          {{form.submit(class="btn btn-primary")}}
-        </form>
-      </div>
-    </div>
-  </div>
-</section>
+
+
+                   <div class="row">
+                    <div class="col-sm-6">
+                      <!-- text input -->
+                      <div class="form-group">
+                        {{magang_form.perihal.label}}
+                        {{magang_form.perihal(class="form-control", disabled=True)}}
+                      </div>
+                    </div>
+                    <div class="col-sm-4">
+                      <div class="form-group">
+                        {{magang_form.tujuan.label}}
+                        {{magang_form.tujuan(class="form-control")}}
+                      </div>
+                    </div>
+                     <div class="col-sm-2">
+                      <div class="form-group">
+                        {{magang_form.jumlah_hari.label}}
+                        {{magang_form.jumlah_hari(class="form-control")}}
+                      </div>
+                    </div>
+                  </div>
+                  </div>
+                  <div class="card-footer">
+                  {{ magang_form.submit(class="btn btn-primary") }}
+                  {# <a href="#generate" class="btn btn-primary">Generate</a> #}
+                </div>
+                </form>
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+          </div>          
+          {% endif %}
+          <!--/.col (right) -->
+        </div>
+        <!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </section>
+
 {% endblock content %}

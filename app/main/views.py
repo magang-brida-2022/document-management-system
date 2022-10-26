@@ -1,6 +1,6 @@
 import os
 
-from flask import render_template, flash, redirect, request, send_file, url_for, make_response
+from flask import render_template, flash, redirect, request, send_file, url_for, make_response, abort
 from flask_login import login_required, current_user
 from io import BytesIO
 from docxtpl import DocxTemplate
@@ -8,11 +8,12 @@ from sqlalchemy import and_
 
 from app.decorators import admin_required, permission_required
 from app.models import Permission, Bidang, Disposisi
-from .forms import SuratMasukForm, SuratKeluarForm, DisposisiForm, BidangForm, DisposisiKeForm, EditSuratMasukForm, EditSuratKeluarForm, EditBidangForm, EditDisposisiForm, SudahDitindakLanjutForm, SuratBalasanForm
+from .forms import SuratMagangForm, SuratMasukForm, SuratKeluarForm, DisposisiForm, BidangForm, DisposisiKeForm, EditSuratMasukForm, EditSuratKeluarForm, EditBidangForm, EditDisposisiForm, JenisSuratBalasanForm
 from ..models import SuratMasuk, SuratKeluar, Bidang, Disposisi, User
 from . import main
 from .. import db, documents_allowed_extension
 from .. import create_app
+from .utils.local_datetime_formatting import to_localtime
 
 
 @main.get('/')
@@ -170,36 +171,42 @@ def bidang():
     return render_template('arsip/tambah_bidang.html', form=form, bidang=bidang, title="Bidang Management", page="bidang")
 
 
-@main.get('/surat_balasan')
-@main.post('/surat_balasan')
-def surat_balasan():
-    form = SuratBalasanForm()
-    _id = request.args.get('id')
-    docx_in_memory = BytesIO()
+# @main.get('/surat_balasan')
+# @main.post('/surat_balasan')
+# def surat_balasan():
+    # _id = request.args.get('id')
+    # jenis_surat_form = JenisSuratBalasanForm()
+    # surat_masuk = SuratMasuk.query.filter_by(id=_id).first()
 
-    SRCDIR = os.path.dirname(os.path.abspath(__file__))
-    DATADIR = os.path.join(SRCDIR, 'docx_template')
-    document = DocxTemplate(os.path.join(DATADIR, 'balasan_magang.docx'))
+    # docx_in_memory = BytesIO()
+    # SRCDIR = os.path.dirname(os.path.abspath(__file__))
+    # DATADIR = os.path.join(SRCDIR, 'docx_template')
 
-    surat_masuk = SuratMasuk.query.filter_by(
-        id=_id).first()
+    # if jenis_surat_form.validate_on_submit():
+    #     if jenis_surat_form.jenis.data == 'magang':
+    #         magang_form = SuratMagangFormatForm()
+    #         if magang_form.validate_on_submit():
+    #             context = {
+    #                 "nomor": magang_form.nomor.data,
+    #                 "asal": magang_form.asal.data,
+    #                 "perihal": magang_form.perihal.data,
+    #                 "tujuan": magang_form.tujuan.data,
+    #                 "jumlah_hari": magang_form.jumlah_hari.data,
+    #             }
 
-    if form.validate_on_submit():
+    #             document = DocxTemplate(os.path.join(
+    #                 DATADIR, 'balasan_magang.docx'))
+    #             document.render(context)
+    #             document.save(docx_in_memory)
+    #             docx_in_memory.seek(0)
+    #             return send_file(docx_in_memory, as_attachment=True, download_name='test.docx')
 
-        context = {
-            "sayhi": "Hello Form"
-        }
+    #         magang_form.perihal.data = surat_masuk.perihal
+    #         magang_form.nomor.data = surat_masuk.nomor
+    #         magang_form.asal.data = surat_masuk.asal
+    #         return render_template('arsip/surat_balasan.html', jenis_surat_form=jenis_surat_form, magang_form=magang_form)
 
-        document.render(context)
-
-        document.save(docx_in_memory)
-        docx_in_memory.seek(0)
-        return send_file(docx_in_memory, as_attachment=True, download_name='test.docx')
-
-    form.kepala.data = 'test kepala data'
-    form.isi.data = 'test isi data'
-    form.penutup.data = 'test penututp data'
-    return render_template("arsip/surat_balasan.html", form=form)
+    # return render_template('arsip/surat_balasan.html', jenis_surat_form=jenis_surat_form)
 
 
 '''
@@ -209,8 +216,8 @@ def surat_balasan():
 '''
 
 
-@main.get('/surat_masuk/edit/<id>')
-@main.post('/surat_masuk/edit/<id>')
+@ main.get('/surat_masuk/edit/<id>')
+@ main.post('/surat_masuk/edit/<id>')
 def edit_surat_masuk(id):
     form = EditSuratMasukForm()
     surat_masuk = SuratMasuk.query.filter_by(id=id).first()
@@ -243,8 +250,8 @@ def edit_surat_masuk(id):
     return render_template('arsip/edit_surat_masuk.html', form=form, title="Edit Surat Masuk")
 
 
-@main.get('/surat_keluar/<id>/edit')
-@main.post('/surat_keluar/<id>/edit')
+@ main.get('/surat_keluar/<id>/edit')
+@ main.post('/surat_keluar/<id>/edit')
 def edit_surat_keluar(id):
     form = EditSuratKeluarForm()
     surat_keluar = SuratKeluar.query.filter_by(id=id).first()
@@ -272,8 +279,8 @@ def edit_surat_keluar(id):
     return render_template('arsip/edit_surat_keluar.html', form=form, title="Edit Surat Keluar")
 
 
-@main.get('/bidang/<id>/edit')
-@main.post('/bidang/<id>/edit')
+@ main.get('/bidang/<id>/edit')
+@ main.post('/bidang/<id>/edit')
 def edit_bidang(id):
     form = EditBidangForm()
     bidang = Bidang.query.filter_by(id=id).first()
@@ -290,8 +297,8 @@ def edit_bidang(id):
     return render_template('arsip/edit_bidang.html', form=form, bidang=bidang, title="Edit Bidang")
 
 
-@main.get('/disposisi/<id>/edit')
-@main.post('/disposisi/<id>/edit')
+@ main.get('/disposisi/<id>/edit')
+@ main.post('/disposisi/<id>/edit')
 def edit_disposisi(id):
     form = EditDisposisiForm()
     disposisi = Disposisi.query.filter_by(id=id).first()
@@ -308,8 +315,8 @@ def edit_disposisi(id):
     return render_template('arsip/edit_disposisi.html', form=form, disposisi=disposisi, title="Edit Disposisi")
 
 
-@main.get('/ditindak/<id>')
-@main.post('/ditindak/<id>')
+@ main.get('/ditindak/<id>')
+@ main.post('/ditindak/<id>')
 def edit_feedback(id):
     # form = SudahDitindakLanjutForm()
     surat_masuk = SuratMasuk.query.get_or_404(id)
@@ -326,8 +333,8 @@ def edit_feedback(id):
 '''
 
 
-@main.get('/surat_masuk/<id>/delete')
-@main.post('/surat_masuk/<id>/delete')
+@ main.get('/surat_masuk/<id>/delete')
+@ main.post('/surat_masuk/<id>/delete')
 def delete_surat_masuk(id):
     delete_surat = SuratMasuk.query.filter_by(id=id).first()
     db.session.delete(delete_surat)
@@ -336,8 +343,8 @@ def delete_surat_masuk(id):
     return redirect(url_for('main.surat_masuk'))
 
 
-@main.get('/surat_keluar/<id>/delete')
-@main.post('/surat_keluar/<id>/delete')
+@ main.get('/surat_keluar/<id>/delete')
+@ main.post('/surat_keluar/<id>/delete')
 def delete_surat_keluar(id):
     delete_surat = SuratKeluar.query.filter_by(id=id).first()
     db.session.delete(delete_surat)
@@ -346,9 +353,9 @@ def delete_surat_keluar(id):
     return redirect(url_for('main.surat_keluar'))
 
 
-@main.get('/bidang/<id>/delete')
-@main.post('/bidang/<id>/delete')
-@admin_required
+@ main.get('/bidang/<id>/delete')
+@ main.post('/bidang/<id>/delete')
+@ admin_required
 def delete_bidang(id):
     delete_bidang = Bidang.query.filter_by(id=id).first()
     db.session.delete(delete_bidang)
@@ -357,9 +364,9 @@ def delete_bidang(id):
     return redirect(url_for('main.bidang'))
 
 
-@main.get('/disposisi/<id>/delete')
-@main.post('/disposisi/<id>/delete')
-@admin_required
+@ main.get('/disposisi/<id>/delete')
+@ main.post('/disposisi/<id>/delete')
+@ admin_required
 def delete_disposisi(id):
     delete_disposisi = Disposisi.query.filter_by(id=id).first()
     db.session.delete(delete_disposisi)
@@ -375,13 +382,13 @@ def delete_disposisi(id):
 '''
 
 
-@main.get('/surat_masuk/lampiran/<id>/open')
+@ main.get('/surat_masuk/lampiran/<id>/open')
 def open_surat_masuk_dokumen(id):
     surat_masuk = SuratMasuk.query.filter_by(id=id).first()
     return send_file(BytesIO(surat_masuk.lampiran), mimetype='application/pdf')
 
 
-@main.get('/surat_keluar/lampiran/<id>/open')
+@ main.get('/surat_keluar/lampiran/<id>/open')
 def open_surat_keluar_dokumen(id):
     surat_keluar = SuratKeluar.query.filter_by(id=id).first()
     return send_file(BytesIO(surat_keluar.lampiran), mimetype='application/pdf')
@@ -394,15 +401,65 @@ def open_surat_keluar_dokumen(id):
 '''
 
 
-@main.get('/surat_masuk_download/<upload_id>')
-@login_required
+@ main.get('/surat_masuk_download/<upload_id>')
+@ login_required
 def download_surat_masuk(upload_id):
     surat_masuk = SuratMasuk.query.filter_by(id=upload_id).first()
     return send_file(BytesIO(surat_masuk.lampiran), download_name=surat_masuk.nama_file, as_attachment=True)
 
 
-@main.get('/surat_keluar_download/<upload_id>')
-@login_required
+@ main.get('/surat_keluar_download/<upload_id>')
+@ login_required
 def download_surat_keluar(upload_id):
     surat_keluar = SuratKeluar.query.filter_by(id=upload_id).first()
     return send_file(BytesIO(surat_keluar.lampiran), download_name=surat_keluar.nama_file, as_attachment=True)
+
+
+@main.get('/surat_balasan/jenis_surat')
+@main.post('/surat_balasan/jenis_surat')
+def pilih_jenis_surat():
+    form = JenisSuratBalasanForm()
+    _id = request.args.get('id')
+
+    if form.validate_on_submit():
+        jenis = form.jenis.data
+        if jenis == "magang":
+            return redirect(url_for('main.generate_surat', id=_id))
+
+    return render_template('arsip/jenis_surat.html', form=form)
+
+
+@main.get('/surat_balasan/magang/<int:id>')
+@main.post('/surat_balasan/magang/<int:id>')
+def generate_surat(id):
+    surat = SuratMasuk.query.filter_by(id=id).first()
+    form = SuratMagangForm()
+
+    docx_in_memory = BytesIO()
+    SRCDIR = os.path.dirname(os.path.abspath(__file__))
+    DATADIR = os.path.join(SRCDIR, 'docx_template')
+
+    print(surat.tanggal_diterima)
+    print(type(surat.tanggal_diterima))
+
+    if form.validate_on_submit():
+        context = {
+            "penerima": surat.asal,
+            "nomor_surat_masuk": surat.nomor,
+            "tanggal_diterima": to_localtime(surat.tanggal_diterima),
+            "perihal": surat.perihal,
+            "tanggal_mulai": form.tanggal_mulai.data,
+            "lama_kegiatan": form.lama_kegiatan.data,
+            "tanggal_surat": form.tanggal_surat.data,
+            "sifat_surat": form.sifat_surat.data,
+            "jumlah_lampiran": form.jumlah_lampiran.data
+        }
+
+        document = DocxTemplate(os.path.join(
+            DATADIR, 'balasan_magang.docx'))
+        document.render(context)
+        document.save(docx_in_memory)
+        docx_in_memory.seek(0)
+        return send_file(docx_in_memory, as_attachment=True, download_name='untitled.docx')
+
+    return render_template('arsip/surat_balasan_form/balasan_magang.html', form=form, surat=surat)

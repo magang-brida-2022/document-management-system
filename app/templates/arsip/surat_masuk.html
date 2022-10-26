@@ -155,7 +155,8 @@
                    <div class="btn-toolbar" role="toolbar">
                     {% if current_user.can(Permission.FEEDBACK) %}
                       <div class="btn-group mr-2" role="group">
-                        <a href="{{ url_for('main.surat_balasan') }}?id={{ surat.id }}" class="btn-sm btn-primary">Balas</a>
+                        {# <a href="{{ url_for('main.surat_balasan') }}?id={{ surat.id }}" class="btn-sm btn-primary">Balas</a> #}
+                        <a href="{{ url_for('main.pilih_jenis_surat')}}?id={{ surat.id }}" class="btn-sm btn-primary">Balas</a>
                       </div>
                     {% endif %}
                     
