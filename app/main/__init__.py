@@ -1,5 +1,4 @@
 from flask import Blueprint
-from sqlalchemy import or_
 
 from ..models import Permission, SuratMasuk
 

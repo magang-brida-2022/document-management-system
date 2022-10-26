@@ -1,3 +1,4 @@
+from wsgiref.validate import validator
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField
 from wtforms import StringField, DateField,  SubmitField, TextAreaField, SelectField, BooleanField
@@ -45,11 +46,11 @@ class SuratKeluarForm(FlaskForm):
     submit = SubmitField("Simpan")
 
 
-class SuratBalasanForm(FlaskForm):
-    kepala = TextAreaField("Kepala Surat", validators=[DataRequired()])
-    isi = TextAreaField("Isi Surat", validators=[DataRequired()])
-    penutup = TextAreaField("Penutup", validators=[DataRequired()])
-    submit = SubmitField("Simpan")
+# class SuratBalasanForm(FlaskForm):
+#     kepala = TextAreaField("Kepala Surat", validators=[DataRequired()])
+#     isi = TextAreaField("Isi Surat", validators=[DataRequired()])
+#     penutup = TextAreaField("Penutup", validators=[DataRequired()])
+#     submit = SubmitField("Simpan")
 
 
 class BidangForm(FlaskForm):
@@ -90,3 +91,20 @@ class EditBidangForm(BidangForm):
 
 class EditDisposisiForm(DisposisiForm):
     pass
+
+
+class JenisSuratBalasanForm(FlaskForm):
+    jenis = SelectField(u'Jenis Surat', choices=[
+                        ('0', '---'), ('magang', 'Magang'), ('other', 'Other')])
+    submit = SubmitField('Pilih')
+
+
+class SuratMagangForm(FlaskForm):
+    tanggal_mulai = StringField('Tanggal Mulai', validators=[DataRequired()])
+    lama_kegiatan = StringField('Lama Kegiatan', validators=[DataRequired()])
+    tanggal_surat = StringField('Tanggal Surat', validators=[DataRequired()])
+    sifat_surat = SelectField('Sifat Surat', choices=[("0", "---"), (
+        'biasa', "Biasa"), ('luar_biasa', 'Luar Biasa')])
+    jumlah_lampiran = StringField(
+        'Jumlah Lampiran', validators=[DataRequired()])
+    submit = SubmitField('Generate')

@@ -3,12 +3,13 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-sm-6">
-        {# <h1 class="m-0">Edit Bidang</h1> #}
+        {# <h1 class="m-0">Jenis Surat</h1> #}
       </div>
       <div class="col-sm-6">
         <ol class="breadcrumb float-sm-right">
           <li class="breadcrumb-item"><a href="#">Home</a></li>
-          <li class="breadcrumb-item active">Edit Bidang</li>
+          <li class="breadcrumb-item active">Surat Balasan</li>
+          <li class="breadcrumb-item active">Jenis Surat</li>
         </ol>
       </div>
     </div>
@@ -19,24 +20,13 @@
   <div class="container-fluid">
     <div class="card card-primary">
       <div class="card-header">
-        <h3 class="card-title">Edit Bidang</h3>
+        <h3 class="card-title">Jenis Surat</h3>
       </div>
       <div class="card-body">
         <form method="post">
           {{form.hidden_tag()}}
-          <div class="form-row">
-            <div class="form-group col-md-6">
-              {{form.kode.label}} {{form.kode(class="form-control")}} {% for
-              error in form.kode.errors %}
-              <div class="invalid-feedback">{{ error }}</div>
-              {% endfor %}
-            </div>
-            <div class="form-group col-md-6">
-              {{form.nama.label}} {{form.nama(class="form-control")}} {% for
-              error in form.nama.errors %}
-              <div class="invalid-feedback">{{error}}</div>
-              {% endfor %}
-            </div>
+          <div class="form-group">
+            {{form.jenis.label}} {{form.jenis(class="form-control")}}
           </div>
           {{form.submit(class="btn btn-primary")}}
         </form>
