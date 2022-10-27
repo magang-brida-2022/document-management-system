@@ -8,10 +8,9 @@ from ..models import User, Bidang
 
 
 class LoginForm(FlaskForm):
-    username = StringField('Username', validators=[DataRequired()], render_kw={
-                           "placeholder": "Username", 'autofocus': True})
-    password = PasswordField('Password', validators=[DataRequired()], render_kw={
-                             "placeholder": "Password"})
+    username = StringField('Username', validators=[
+                           DataRequired()], render_kw={'autofocus': True})
+    password = PasswordField('Password', validators=[DataRequired()])
     remember_me = BooleanField('Ingat Saya')
     submit = SubmitField('Sign In')
 
