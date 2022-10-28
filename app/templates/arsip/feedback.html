@@ -57,19 +57,13 @@ endblock style%} {% block content %}
                 </td>
                 <td>{{ surat.pesan }}</td>
                 <td>
-                  {# <a
-                    href="{{ url_for('main.edit_feedback', id=surat.id) }}"
-                    class="btn-sm btn-primary"
-                    >Sudah Ditindak?</a
-                  > #}
-
                   <!-- Button trigger modal -->
-                  <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#konfidmasi">
+                  <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#konfirmasi">
                     Konfirmasi
                   </button>
 
                   <!-- Modal -->
-                  <div class="modal fade" id="konfidmasi" tabindex="-1" aria-labelledby="konfirmasiModalLabel" aria-hidden="true">
+                  <div class="modal fade" id="konfirmasi" tabindex="-1" aria-labelledby="konfirmasiModalLabel" aria-hidden="true">
                     <div class="modal-dialog">
                       <div class="modal-content">
                         <div class="modal-header">

@@ -37,7 +37,7 @@
           data-toggle="modal"
           data-target="#tambahUser"
         >
-          Tambah User
+          <i class="bi bi-plus-circle-fill"></i> Tambah User
         </button>
 
         <!-- Modal -->
@@ -138,21 +138,20 @@
                 <td>{{ user.nama }}</td>
                 <td>{{ user.bidang.nama }}</td>
                 <td>{{ user.no_telpon }}</td>
-                <td>{{ user.jabatan }}</td>
                 <td>
                   <div class="btn-toolbar" role="toolbar">
                     <div class="btn-group mr-2" role="group">
                       <a
                         href="{{ url_for('users.edit_profile_admin', id=user.id) }}"
                         class="btn-sm btn-primary"
-                        >Edit</a
+                        ><i class="bi bi-pencil-square"></i> Edit</a
                       >
                     </div>
                     
                     {% if not user.role.name == 'Administrator' %}
                     <div class="btn-group" role="group">
                       <button type="button" class="btn-sm btn-danger" data-toggle="modal" data-target="#deleteDataModal{{ user.id }}">
-                        Delete
+                        <i class="bi bi-trash-fill"></i> Delete
                       </button>
                     </div>
                     {% endif %}

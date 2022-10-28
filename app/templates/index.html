@@ -29,12 +29,12 @@
   <!-- Main content -->
   <section class="content">
     <div class="container-fluid">
-     <div class="jumbotron jumbotron-fluid bg-danger">
-      <div class="container-fluid ml-3">
-        <h1 class="display-5">Selamat Datang, {{ current_user.nama | capitalize }}</h1>
-        <p class="lead"><q>Tidak kerja, tidak makan. Semangat!!</q> - <i>Ibu Sekban</i></p>
+      <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <strong>Selamat Datang!</strong> {{ current_user.nama }}  Semoga harimu menyenangkan.
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
       </div>
-    </div>
       <!-- Small boxes (Stat box) -->
       <div class="row">
         <div class="col-lg-3 col-6">
@@ -49,7 +49,6 @@
               <i class="ion ion-bag"></i>
             </div>
             <a href="#" class="small-box-footer"
-              >More info <i class="fas fa-arrow-circle-right"></i
             ></a>
           </div>
         </div>
@@ -66,7 +65,6 @@
               <i class="ion ion-stats-bars"></i>
             </div>
             <a href="#" class="small-box-footer"
-              >More info <i class="fas fa-arrow-circle-right"></i
             ></a>
           </div>
         </div>
@@ -77,13 +75,12 @@
             <div class="inner">
               <h3>{{ total_user }}</h3>
 
-              <p>User Registrations</p>
+              <p>Pengguna Terdaftar</p>
             </div>
             <div class="icon">
               <i class="ion ion-person-add"></i>
             </div>
             <a href="#" class="small-box-footer"
-              >More info <i class="fas fa-arrow-circle-right"></i
             ></a>
           </div>
         </div>
@@ -102,13 +99,15 @@
         <h3 class="card-title">Agenda</h3>
       </div>
       <div class="card-body">
+        {% if current_user.can(Permission.ARSIP) %}
         <!-- Button trigger modal -->
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-          Tambah Agenda
+        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#tambahAgendaModal">
+          <i class="bi bi-plus-circle-fill"></i> Tambah Agenda
         </button>
+        {% endif %}
 
           <!-- Modal -->
-          <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal fade" id="tambahAgendaModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
               <div class="modal-content">
                 <div class="modal-header">
@@ -140,7 +139,7 @@
                     </div>
                   </div>
                   <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
                     {{agenda_form.submit(class="btn btn-primary")}}
                   </div>
                 </form>
@@ -151,6 +150,7 @@
           <table id="data" class="table table-striped mt-4">
             <thead>
               <tr>
+                <td>No</td>
                 <td>Hari/Tanggal</td>
                 <td>Waktu</td>
                 <td>Agenda</td>
@@ -160,6 +160,7 @@
             <tbody>
               {% for agenda_harian in agenda  %}
                <tr>
+                <td>{{ loop.index }}</td>
                 <td>{{agenda_harian.tanggal}}</td>
                 <td>{{ agenda_harian.waktu }}</td>
                 <td>{{ agenda_harian.agenda }}</td>

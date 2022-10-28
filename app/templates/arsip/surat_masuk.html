@@ -36,7 +36,7 @@
           data-toggle="modal"
           data-target="#tambahSurat"
         >
-          Tambah Surat
+         <i class="bi bi-plus-circle-fill"></i> Tambah Surat
         </button>
         {% endif %}
 
@@ -149,7 +149,7 @@
                 <td>
                   <div class="btn-toolbar" role="toolbar">
                     <div class="btn-group mr-2" role="group">
-                      <a href="{{ url_for('main.open_surat_masuk_dokumen', id=surat.id) }}" class="btn-sm btn-success" target="_blank">Dokumen</a>
+                      <a href="{{ url_for('main.open_surat_masuk_dokumen', id=surat.id) }}" class="btn-sm btn-success" target="_blank"><i class="bi bi-file-earmark-pdf-fill"></i> Dokumen</a>
                       {# <a href="{{ url_for('main.detail_surat_masuk') }}?id={{ surat.id }}" class="btn-sm btn-success">Detail</a> #}
                      </div> 
                   </div>
@@ -159,17 +159,17 @@
                     {% if current_user.can(Permission.FEEDBACK) %}
                       <div class="btn-group mr-2" role="group">
                         {# <a href="{{ url_for('main.surat_balasan') }}?id={{ surat.id }}" class="btn-sm btn-primary">Balas</a> #}
-                        <a href="{{ url_for('main.pilih_jenis_surat')}}?id={{ surat.id }}" class="btn-sm btn-primary">Balas</a>
+                        <a href="{{ url_for('main.pilih_jenis_surat')}}?id={{ surat.id }}" class="btn-sm btn-primary"><i class="bi bi-reply-fill"></i> Balas</a>
                       </div>
                     {% endif %}
                     
                     {% if current_user.can(Permission.ARSIP) %}
                     <div class="btn-group mr-2" role="group">
-                      <a href="{{ url_for('main.edit_surat_masuk', id=surat.id) }}" class="btn-sm btn-primary">Edit</a>
+                      <a href="{{ url_for('main.edit_surat_masuk', id=surat.id) }}" class="btn-sm btn-primary"><i class="bi bi-pencil-square"></i> Edit</a>
                     </div>
                     <div class="btn-group" role="group">
                        <button type="button" class="btn-sm btn-danger" data-toggle="modal" data-target="#deleteDataModal{{ surat.id }}">
-                        Delete
+                        <i class="bi bi-trash-fill"></i> Delete
                       </button>
                     </div>
                   </div>

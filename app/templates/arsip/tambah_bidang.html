@@ -33,7 +33,7 @@ href="{{url_for('static', filename="plugins/dataTables/datatables.min.css") }}">
           data-toggle="modal"
           data-target="#tambahBidang"
         >
-          Tambah Bidang
+          <i class="bi bi-plus-circle-fill"></i> Tambah Bidang
         </button>
         <!-- Modal -->
         <div
@@ -105,12 +105,12 @@ href="{{url_for('static', filename="plugins/dataTables/datatables.min.css") }}">
                       <a
                         href="{{ url_for('main.edit_bidang', id=b.id) }}"
                         class="btn-sm btn-primary"
-                        >Edit</a
+                        ><i class="bi bi-pencil-square"></i> Edit</a
                       >
                     </div>
                     <div class="btn-group mr-2" role="group">
                       <button type="button" class="btn-sm btn-danger" data-toggle="modal" data-target="#deleteDataModal{{ b.id }}">
-                        Delete
+                        <i class="bi bi-trash-fill"></i> Delete
                       </button>
                     </div>
 

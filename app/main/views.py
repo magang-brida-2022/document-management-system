@@ -27,12 +27,12 @@ def index():
     agenda = Agenda.query.all()
 
     if agenda_form.validate_on_submit():
-        if agenda_form.waktu_selesai:
+        if agenda_form.waktu_selesai.data:
             waktu = f"{agenda_form.waktu_mulai.data} - {agenda_form.waktu_selesai.data}"
         else:
-            waktu = {agenda_form.waktu_mulai}
+            waktu = agenda_form.waktu_mulai.data
         agenda = agenda_form.kegiatan.data
-        tempat = agenda_form.tempat
+        tempat = agenda_form.tempat.data
 
         agenda_baru = Agenda(waktu=waktu, agenda=agenda, tempat=tempat)
         db.session.add(agenda_baru)
