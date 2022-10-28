@@ -35,7 +35,7 @@ url_for('static', filename="plugins/dataTables/datatables.min.css") }}">
           data-toggle="modal"
           data-target="#tambahAktifitas"
         >
-          Tambah Aktivitas
+          <i class="bi bi-plus-circle-fill"></i> Tambah Aktivitas
         </button>
 
 
@@ -118,11 +118,11 @@ url_for('static', filename="plugins/dataTables/datatables.min.css") }}">
                 <td>
                   <div class="btn-toolbar" role="toolbar">
                     <div class="btn-group mr-2" role="group">
-                      <a href="{{ url_for('daily_activity.edit_activity', id=activity.id) }}" class="btn-sm btn-primary">Edit</a>
+                      <a href="{{ url_for('daily_activity.edit_activity', id=activity.id) }}" class="btn-sm btn-primary"><i class="bi bi-pencil-square"></i> Edit</a>
                     </div>
                     <div class="btn-group" role="group">
                       <button type="button" class="btn-sm btn-danger" data-toggle="modal" data-target="#deleteDataModal{{ activity.id }}">
-                        Delete
+                        <i class="bi bi-trash-fill"></i> Delete
                       </button>
                     </div>
 

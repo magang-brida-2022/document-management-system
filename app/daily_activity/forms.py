@@ -26,13 +26,11 @@ class EditDailyActivityForm(FlaskForm):
     tanggal = StringField('Tanggal')
     deskripsi = TextAreaField('Deskripsi')
     output = StringField('Output')
-    submit = SubmitField('Simpan')
 
 
 class RekapBulananForm(FlaskForm):
     bulan = SelectField('Bulan', coerce=int)
     tahun = SelectField('Tahun', coerce=int)
-    submit = SubmitField('Cetak')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

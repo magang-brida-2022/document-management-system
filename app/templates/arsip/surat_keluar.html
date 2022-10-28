@@ -36,7 +36,7 @@
           data-toggle="modal"
           data-target="#tambahSurat"
         >
-          Tambah Data
+          <i class="bi bi-plus-circle-fill"></i> Tambah Data
         </button>
         {% endif %}
 
@@ -132,7 +132,7 @@
                  <div class="btn-toolbar" role="toolbar">
                     <div class="btn-group mr-2" role="group">
                       {# <a href="{{ url_for('main.download_surat_keluar', upload_id=surat.id) }}" class="btn-sm btn-secondary">Download</a> #}
-                      <a href="{{ url_for('main.open_surat_keluar_dokumen', id=surat.id) }}" class="btn-sm btn-success" target="_blank">Lihat Dokumen</a>
+                      <a href="{{ url_for('main.open_surat_keluar_dokumen', id=surat.id) }}" class="btn-sm btn-success" target="_blank"><i class="bi bi-file-earmark-pdf-fill"></i> Dokumen</a>
                     </div>
                   </div>
                 </td>
@@ -143,11 +143,11 @@
                     </div> #}
                     {% if current_user.can(Permission.ARSIP) %}
                     <div class="btn-group mr-2" role="group">
-                      <a href="{{ url_for('main.edit_surat_keluar', id=surat.id) }}" class="btn-sm btn-primary">Edit</a>
+                      <a href="{{ url_for('main.edit_surat_keluar', id=surat.id) }}" class="btn-sm btn-primary"><i class="bi bi-pencil-square"></i> Edit</a>
                     </div>
                     <div class="btn-group" role="group">
                       <button type="button" class="btn-sm btn-danger" data-toggle="modal" data-target="#deleteDataModal{{surat.id}}">
-                        Delete
+                        <i class="bi bi-trash-fill"></i> Delete
                       </button>
                     </div>
                     {% endif %}
