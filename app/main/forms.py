@@ -108,3 +108,11 @@ class SuratMagangForm(FlaskForm):
     jumlah_lampiran = StringField(
         'Jumlah Lampiran', validators=[DataRequired()])
     submit = SubmitField('Generate')
+
+
+class AgendaForm(FlaskForm):
+    waktu_mulai = StringField('Waktu Mulai', validators=[DataRequired()])
+    waktu_selesai = StringField('Waktu Selesai')
+    kegiatan = TextAreaField('Kegiatan')
+    tempat = StringField('Tempat')
+    submit = SubmitField("Tambah")
