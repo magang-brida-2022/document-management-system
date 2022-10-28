@@ -1,4 +1,8 @@
-{% extends "base.html" %} {% block content %}
+{% extends "base.html" %} 
+{% block style%}
+<link rel="stylesheet" href="{{ url_for('static', filename="plugins/dataTables/datatables.min.css") }}">
+{% endblock style%}
+{% block content %}
   
   <!-- Content Header (Page header) -->
   <div class="content-header">
@@ -25,6 +29,12 @@
   <!-- Main content -->
   <section class="content">
     <div class="container-fluid">
+     <div class="jumbotron jumbotron-fluid bg-danger">
+      <div class="container-fluid ml-3">
+        <h1 class="display-5">Selamat Datang, {{ current_user.nama | capitalize }}</h1>
+        <p class="lead"><q>Tidak kerja, tidak makan. Semangat!!</q> - <i>Ibu Sekban</i></p>
+      </div>
+    </div>
       <!-- Small boxes (Stat box) -->
       <div class="row">
         <div class="col-lg-3 col-6">
@@ -77,24 +87,6 @@
             ></a>
           </div>
         </div>
-        <!-- ./col -->
-        {# <div class="col-lg-3 col-6">
-          <!-- small box -->
-          <div class="small-box bg-danger">
-            <div class="inner">
-              <h3>65</h3>
-
-              <p>Unique Visitors</p>
-            </div>
-            <div class="icon">
-              <i class="ion ion-pie-graph"></i>
-            </div>
-            <a href="#" class="small-box-footer"
-              >More info <i class="fas fa-arrow-circle-right"></i
-            ></a>
-          </div>
-        </div> #}
-        <!-- ./col -->
       </div>
       <!-- /.row -->
     </div>
@@ -102,4 +94,93 @@
   </section>
   <!-- /.content -->
 <!-- /.content-wrapper -->
+
+<section class="content">
+  <div class="container-fluid">
+    <div class="card card-primary">
+      <div class="card-header">
+        <h3 class="card-title">Agenda</h3>
+      </div>
+      <div class="card-body">
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+          Tambah Agenda
+        </button>
+
+          <!-- Modal -->
+          <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Tambah Agenda</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <form method="post">
+                    {{agenda_form.hidden_tag()}}
+                    <div class="form-group">
+                      {{agenda_form.waktu_mulai.label}}
+                      {{agenda_form.waktu_mulai(class="form-control")}}
+                      <small class="form-text text-muted"><b>Contoh: </b>09:00</small>
+                    </div>
+                    <div class="form-group">
+                      {{agenda_form.waktu_selesai.label}}
+                      {{agenda_form.waktu_selesai(class="form-control")}}
+                      <small class="form-text text-muted"><b>Contoh: </b>11:00</small>
+                    </div>
+                    <div class="form-group">
+                      {{agenda_form.kegiatan.label()}}
+                      {{agenda_form.kegiatan(class="form-control")}}
+                    </div>
+                    <div class="form-group">
+                      {{agenda_form.tempat.label}}
+                      {{agenda_form.tempat(class="form-control")}}
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    {{agenda_form.submit(class="btn btn-primary")}}
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+         <div class="mt-4">
+          <table id="data" class="table table-striped mt-4">
+            <thead>
+              <tr>
+                <td>Hari/Tanggal</td>
+                <td>Waktu</td>
+                <td>Agenda</td>
+                <td>Tempat</td>
+              </tr>
+            </thead>
+            <tbody>
+              {% for agenda_harian in agenda  %}
+               <tr>
+                <td>{{agenda_harian.tanggal}}</td>
+                <td>{{ agenda_harian.waktu }}</td>
+                <td>{{ agenda_harian.agenda }}</td>
+                <td>{{ agenda_harian.tempat }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 {% endblock content %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename="plugins/dataTables/datatables.min.js") }}"></script>
+<script>
+  $(document).ready(function () {
+    $("#data").DataTable();
+  });
+</script>
+{% endblock scripts %}

@@ -215,3 +215,14 @@ class DailyActivity(db.Model):
     @filter_by_month.expression
     def filter_by_month(cls):
         return extract('month', cls.tanggal)
+
+
+class Agenda(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    tanggal = db.Column(db.DateTime, default=datetime.utcnow)
+    waktu = db.Column(db.String(50))
+    agenda = db.Column(db.String(225), nullable=False)
+    tempat = db.Column(db.String(100))
+
+    def __repr__(self) -> str:
+        return f'<Agenda {self.agenda}>'

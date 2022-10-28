@@ -8,8 +8,8 @@ from sqlalchemy import and_
 
 from app.decorators import admin_required, permission_required
 from app.models import Permission, Bidang, Disposisi
-from .forms import SuratMagangForm, SuratMasukForm, SuratKeluarForm, DisposisiForm, BidangForm, DisposisiKeForm, EditSuratMasukForm, EditSuratKeluarForm, EditBidangForm, EditDisposisiForm, JenisSuratBalasanForm
-from ..models import SuratMasuk, SuratKeluar, Bidang, Disposisi, User
+from .forms import SuratMagangForm, SuratMasukForm, SuratKeluarForm, DisposisiForm, BidangForm, DisposisiKeForm, EditSuratMasukForm, EditSuratKeluarForm, EditBidangForm, EditDisposisiForm, JenisSuratBalasanForm, AgendaForm
+from ..models import SuratMasuk, SuratKeluar, Bidang, Disposisi, User, Agenda
 from . import main
 from .. import db, documents_allowed_extension
 from .. import create_app
@@ -17,16 +17,35 @@ from .utils.local_datetime_formatting import to_localtime
 
 
 @main.get('/')
+@main.post('/')
 # @login_required
 def index():
     if not current_user.is_authenticated:
         return redirect(url_for('auth.login'))
 
+    agenda_form = AgendaForm()
+    agenda = Agenda.query.all()
+
+    if agenda_form.validate_on_submit():
+        if agenda_form.waktu_selesai:
+            waktu = f"{agenda_form.waktu_mulai.data} - {agenda_form.waktu_selesai.data}"
+        else:
+            waktu = {agenda_form.waktu_mulai}
+        agenda = agenda_form.kegiatan.data
+        tempat = agenda_form.tempat
+
+        agenda_baru = Agenda(waktu=waktu, agenda=agenda, tempat=tempat)
+        db.session.add(agenda_baru)
+        db.session.commit()
+        flash("Agenda Berhasil Ditambahkan", "success")
+
+        return redirect(url_for('main.index'))
+
     total_user = User.query.count()
     total_surat_masuk = SuratMasuk.query.count()
     total_surat_keluar = SuratKeluar.query.count()
 
-    return render_template('index.html', title="Dashboard", total_user=total_user, total_surat_masuk=total_surat_masuk, total_surat_keluar=total_surat_keluar, page='dashboard')
+    return render_template('index.html', title="Dashboard", total_user=total_user, total_surat_masuk=total_surat_masuk, total_surat_keluar=total_surat_keluar, page='dashboard', agenda_form=agenda_form, agenda=agenda)
 
 
 @main.get('/surat_masuk')
@@ -170,44 +189,6 @@ def bidang():
         return redirect(url_for('main.bidang'))
 
     return render_template('arsip/tambah_bidang.html', form=form, bidang=bidang, title="Bidang Management", page="bidang")
-
-
-# @main.get('/surat_balasan')
-# @main.post('/surat_balasan')
-# def surat_balasan():
-    # _id = request.args.get('id')
-    # jenis_surat_form = JenisSuratBalasanForm()
-    # surat_masuk = SuratMasuk.query.filter_by(id=_id).first()
-
-    # docx_in_memory = BytesIO()
-    # SRCDIR = os.path.dirname(os.path.abspath(__file__))
-    # DATADIR = os.path.join(SRCDIR, 'docx_template')
-
-    # if jenis_surat_form.validate_on_submit():
-    #     if jenis_surat_form.jenis.data == 'magang':
-    #         magang_form = SuratMagangFormatForm()
-    #         if magang_form.validate_on_submit():
-    #             context = {
-    #                 "nomor": magang_form.nomor.data,
-    #                 "asal": magang_form.asal.data,
-    #                 "perihal": magang_form.perihal.data,
-    #                 "tujuan": magang_form.tujuan.data,
-    #                 "jumlah_hari": magang_form.jumlah_hari.data,
-    #             }
-
-    #             document = DocxTemplate(os.path.join(
-    #                 DATADIR, 'balasan_magang.docx'))
-    #             document.render(context)
-    #             document.save(docx_in_memory)
-    #             docx_in_memory.seek(0)
-    #             return send_file(docx_in_memory, as_attachment=True, download_name='test.docx')
-
-    #         magang_form.perihal.data = surat_masuk.perihal
-    #         magang_form.nomor.data = surat_masuk.nomor
-    #         magang_form.asal.data = surat_masuk.asal
-    #         return render_template('arsip/surat_balasan.html', jenis_surat_form=jenis_surat_form, magang_form=magang_form)
-
-    # return render_template('arsip/surat_balasan.html', jenis_surat_form=jenis_surat_form)
 
 
 '''
@@ -461,3 +442,8 @@ def generate_surat(id):
         return send_file(docx_in_memory, as_attachment=True, download_name='untitled.docx')
 
     return render_template('arsip/surat_balasan_form/balasan_magang.html', form=form, surat=surat)
+
+
+@main.get('/settings')
+def settings():
+    return render_template('settings.html')
