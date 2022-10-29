@@ -21,7 +21,7 @@ def daily():
                                      deskripsi=form.deskripsi.data, output=form.output.data, author=current_user)
         db.session.add(new_activity)
         db.session.commit()
-        flash("Aktivitas Berhasil Ditambahkan", "success")
+        flash("Aktivitas berhasil ditambahkan.", "success")
         return redirect(request.url)
 
     return render_template('daily_activity/daily_activity.html', form=form, title="Daily Activity", daily_activity=daily_activity, page='activity')
@@ -40,7 +40,7 @@ def edit_activity(id):
         activity.output = form.output.data
 
         db.session.commit()
-        flash("Edit Aktifitas Harian Sukses", "success")
+        flash("Edit aktivitas harian sukses", "success")
         return redirect(url_for('daily_activity.daily'))
 
     form.kegiatan.data = activity.kegiatan
@@ -57,7 +57,7 @@ def delete_aktivity(id):
     del_aktivity = DailyActivity.query.get_or_404(id)
     db.session.delete(del_aktivity)
     db.session.commit()
-    flash("Aktivitas berhasil di Hapus", "success")
+    flash("Aktivitas berhasil dihapus", "success")
     return redirect(url_for('daily_activity.daily'))
 
 

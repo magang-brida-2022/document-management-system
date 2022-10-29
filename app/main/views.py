@@ -39,7 +39,7 @@ def index():
         agenda_baru = Agenda(waktu=waktu, agenda=agenda, tempat=tempat)
         db.session.add(agenda_baru)
         db.session.commit()
-        flash("Agenda Berhasil Ditambahkan", "success")
+        flash("Agenda berhasil ditambahkan.", "success")
 
         return redirect(url_for('main.index'))
 
@@ -74,10 +74,11 @@ def surat_masuk():
             db.session.add(surat_masuk)
             db.session.commit()
 
-            flash("Surat masuk baru berhasil di tambahkan", "success")
+            flash("Surat masuk baru berhasil ditambahkan", "success")
             return redirect(request.base_url)
         else:
-            flash('allowed file types are .pdf only', 'error')
+            flash('support hanya file dengan format .pdf', 'error')
+
             return redirect(request.base_url)
 
     return render_template('arsip/surat_masuk.html', form=form, surat_masuk=surat_masuk, title="Surat Masuk", page='surat_masuk')
@@ -107,7 +108,7 @@ def surat_keluar():
             flash("Surat keluar baru berhasil ditambahkan", "success")
             return redirect(request.base_url)
         else:
-            flash('allowed file types are .pdf only', 'error')
+            flash('support hanya file dengan format .pdf', 'error')
             return redirect(request.base_url)
 
     return render_template('arsip/surat_keluar.html', form=form, surat_keluar=surat_keluar, title="Surat Keluar", page='surat_keluar')
@@ -155,7 +156,7 @@ def diteruskan(id):
         disposisi.dilihat = True
         db.session.commit()
 
-        flash('Disposisi Successfully', 'success')
+        flash('Disposisi berhasil.', 'success')
         return redirect(url_for('main.disposisi_ke'))
 
     return render_template('arsip/disposisi_ke.html', form=form, disposisi=disposisi, title="Pilih Disposisi")
@@ -171,7 +172,7 @@ def disposisi():
         disposisi_baru = Disposisi(alias=form.alias.data, nama=form.nama.data)
         db.session.add(disposisi_baru)
         db.session.commit()
-        flash('Data Berhasil di Tambahkan', 'success')
+        flash('Aksi berhasil dilakukan.', 'success')
         return redirect(url_for('main.disposisi'))
 
     return render_template('arsip/tambah_disposisi.html', form=form, disposisi=disposisi, title="Disposisi Management", page='disposisi_management')
@@ -187,7 +188,7 @@ def bidang():
         bidang_baru = Bidang(kode=form.kode.data, nama=form.nama.data)
         db.session.add(bidang_baru)
         db.session.commit()
-        flash('Data berhasil di Tambahkan', 'success')
+        flash('Data berhasil ditambahkan.', 'success')
         return redirect(url_for('main.bidang'))
 
     return render_template('arsip/tambah_bidang.html', form=form, bidang=bidang, title="Bidang Management", page="bidang")
@@ -219,7 +220,7 @@ def edit_surat_masuk(id):
         surat_masuk.disposisi_ke = Disposisi.query.get(form.disposisi.data)
 
         db.session.commit()
-        flash("surat masuk update successfully", 'success')
+        flash("Berhasil memperbarui.", 'success')
         return redirect(url_for('main.surat_masuk'))
 
     form.no_surat.data = surat_masuk.nomor
@@ -251,7 +252,7 @@ def edit_surat_keluar(id):
         surat_keluar.tujuan = form.tujuan.data
 
         db.session.commit()
-        flash('Surat Keluar Update Successfully', "Success")
+        flash('Berhasil memperbarui.', "Success")
         return redirect(url_for('main.surat_keluar'))
 
     form.no_surat.data = surat_keluar.nomor
@@ -273,7 +274,7 @@ def edit_bidang(id):
         bidang.nama = form.nama.data
 
         db.session.commit()
-        flash('Update Bidang Successfully', 'success')
+        flash('Berhasil memperbarui.', 'success')
         return redirect(url_for('main.bidang'))
 
     form.kode.data = bidang.kode
@@ -291,7 +292,7 @@ def edit_disposisi(id):
         disposisi.nama = form.nama.data
 
         db.session.commit()
-        flash("Update Disposisi Successfully", 'success')
+        flash("Berhasil memperbarui.", 'success')
         return redirect(url_for('main.disposisi'))
 
     form.alias.data = disposisi.alias
@@ -323,7 +324,7 @@ def delete_surat_masuk(id):
     delete_surat = SuratMasuk.query.filter_by(id=id).first()
     db.session.delete(delete_surat)
     db.session.commit()
-    flash('Delete Surat Successfully', "success")
+    flash('Berhasil menghapus data', "success")
     return redirect(url_for('main.surat_masuk'))
 
 
@@ -333,7 +334,7 @@ def delete_surat_keluar(id):
     delete_surat = SuratKeluar.query.filter_by(id=id).first()
     db.session.delete(delete_surat)
     db.session.commit()
-    flash('Delete Surat Successfully', "success")
+    flash('Berhasil menghapus data.', "success")
     return redirect(url_for('main.surat_keluar'))
 
 
@@ -344,7 +345,7 @@ def delete_bidang(id):
     delete_bidang = Bidang.query.filter_by(id=id).first()
     db.session.delete(delete_bidang)
     db.session.commit()
-    flash("Delete Bidang Successfully", 'success')
+    flash("Berhasil menghapus data.", 'success')
     return redirect(url_for('main.bidang'))
 
 
@@ -355,7 +356,7 @@ def delete_disposisi(id):
     delete_disposisi = Disposisi.query.filter_by(id=id).first()
     db.session.delete(delete_disposisi)
     db.session.commit()
-    flash('Delete Bidang Successfully', 'success')
+    flash('Berhasil menghapus data.', 'success')
     return redirect(url_for('main.disposisi'))
 
 

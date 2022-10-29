@@ -25,7 +25,8 @@ def login():
             login_user(user, remember=form.remember_me.data)
             return redirect(request.args.get('next') or url_for('main.index'))
 
-        flash('Invalid Username or password', 'error')
+        flash(
+            'Username atau Password yang anda masukkan salah. Silahkan coba lagi.', 'error')
 
     return render_template('auth/login.html', form=form, title="Login")
 
@@ -45,10 +46,10 @@ def register():
                         nama=form.nama_lengkap.data, bidang=Bidang.query.get(form.bidang.data), jabatan=form.jabatan.data, no_telpon=form.no_telpon.data, foto=form.foto_profile.data.read())
             db.session.add(user)
             db.session.commit()
-            flash('User created successfully', 'success')
+            flash('Penguna baru berhasil dibuat.', 'success')
             return redirect(request.base_url)
         else:
-            flash('allowed file types are .img/.png only', 'error')
+            flash('support hanya file dengan format .img/.png', 'error')
             return redirect(request.base_url)
 
     return render_template('auth/register.html', form=form, all_user=all_user, title="User Management", page='user_management')
@@ -58,5 +59,5 @@ def register():
 @login_required
 def logout():
     logout_user()
-    flash('You have been logged out', "warning")
+    flash('Logout berhasil', "warning")
     return redirect(url_for('auth.login'))
