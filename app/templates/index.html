@@ -146,7 +146,7 @@
               </div>
             </div>
           </div>
-         <div class="mt-4">
+          <div class="mt-4">
           <table id="data" class="table table-striped mt-4">
             <thead>
               <tr>
@@ -159,11 +159,11 @@
             </thead>
             <tbody>
               {% for agenda_harian in agenda  %}
-               <tr>
+              <tr>
                 <td>{{ loop.index }}</td>
                 <td>{{agenda_harian.tanggal}}</td>
-                <td>{{ agenda_harian.waktu }}</td>
                 <td>{{ agenda_harian.agenda }}</td>
+                <td>{{ agenda_harian.waktu }}</td>
                 <td>{{ agenda_harian.tempat }}</td>
               </tr>
               {% endfor %}

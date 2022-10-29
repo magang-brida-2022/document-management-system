@@ -4,7 +4,8 @@ from flask import render_template, flash, redirect, request, send_file, url_for,
 from flask_login import login_required, current_user
 from io import BytesIO
 from docxtpl import DocxTemplate
-from sqlalchemy import and_
+from sqlalchemy import and_, func
+from datetime import date
 
 from app.decorators import admin_required, permission_required
 from app.models import Permission, Bidang, Disposisi
@@ -14,6 +15,7 @@ from . import main
 from .. import db, documents_allowed_extension
 from .. import create_app
 from .utils.local_datetime_formatting import to_localtime
+from .utils.peserta_formatting import string_formatter
 
 
 @main.get('/')
@@ -24,7 +26,7 @@ def index():
         return redirect(url_for('auth.login'))
 
     agenda_form = AgendaForm()
-    agenda = Agenda.query.all()
+    agenda = Agenda.query.filter(func.date(Agenda.tanggal) == date.today())
 
     if agenda_form.validate_on_submit():
         if agenda_form.waktu_selesai.data:
@@ -422,11 +424,13 @@ def generate_surat(id):
     DATADIR = os.path.join(SRCDIR, 'docx_template')
 
     if form.validate_on_submit():
+        peserta = string_formatter(form.peserta.data)
         context = {
             "penerima": surat.asal,
             "nomor_surat_masuk": surat.nomor,
             "tanggal_diterima": to_localtime(surat.tanggal_diterima),
             "perihal": surat.perihal,
+            "peserta": peserta,
             "tanggal_mulai": form.tanggal_mulai.data,
             "lama_kegiatan": form.lama_kegiatan.data,
             "tanggal_surat": form.tanggal_surat.data,
