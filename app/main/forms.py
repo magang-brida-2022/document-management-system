@@ -103,6 +103,7 @@ class SuratMagangForm(FlaskForm):
     tanggal_mulai = StringField('Tanggal Mulai', validators=[DataRequired()])
     lama_kegiatan = StringField('Lama Kegiatan', validators=[DataRequired()])
     tanggal_surat = StringField('Tanggal Surat', validators=[DataRequired()])
+    peserta = TextAreaField('Peserta', validators=[DataRequired()])
     sifat_surat = SelectField('Sifat Surat', choices=[("0", "---"), (
         'biasa', "Biasa"), ('luar_biasa', 'Luar Biasa')])
     jumlah_lampiran = StringField(

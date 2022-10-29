@@ -39,6 +39,13 @@
               <small class="form-text text-muted"><b>Contoh:</b> 22 Juni 2000 </small>
             </div>
           </div>
+          <div class="form-group">
+            {{form.peserta.label}}
+            {{form.peserta(class="form-control")}}
+            <small class="form-text text-muted"><b>- </b>Untuk memisahkan antara nama dan jurusan gunakan tanda ></small>
+            <small class="form-text text-muted"><b>- </b>Gunakan koma , untuk memisahkan jika peserta magang lebih dari satu (1)</small>
+            <small class="form-text text-muted"><b>Contoh </b>Samsul Rahmatullan > Teknik Informatika, Sultan Arif Rahman > Teknik Lingkungan</small>
+          </div>
           <div class="form-row"> 
            <div class="form-group col-md-6">
               {{form.lama_kegiatan.label}}
