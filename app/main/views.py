@@ -9,7 +9,7 @@ from datetime import date
 
 from app.decorators import admin_required, permission_required
 from app.models import Permission, Bidang, Disposisi
-from .forms import SuratMagangForm, SuratMasukForm, SuratKeluarForm, DisposisiForm, BidangForm, DisposisiKeForm, EditSuratMasukForm, EditSuratKeluarForm, EditBidangForm, EditDisposisiForm, JenisSuratBalasanForm, AgendaForm
+from .forms import SuratMagangForm, SuratMasukForm, SuratKeluarForm, DisposisiForm, BidangForm, DisposisiKeForm, EditSuratMasukForm, EditSuratKeluarForm, EditBidangForm, EditDisposisiForm, JenisSuratBalasanForm, AgendaForm, InformasiBadanForm
 from ..models import SuratMasuk, SuratKeluar, Bidang, Disposisi, User, Agenda
 from . import main
 from .. import db, documents_allowed_extension
@@ -451,4 +451,12 @@ def generate_surat(id):
 
 @main.get('/settings')
 def settings():
-    return render_template('settings.html')
+    return render_template('settings.html', page="pengaturan")
+
+
+@main.get('/informasi-badan')
+@main.post('/informasi-badan')
+@main.get('/informasi-badan')
+def badan_info():
+    form = InformasiBadanForm()
+    return render_template('badan.html', form=form)

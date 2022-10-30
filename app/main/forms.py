@@ -1,3 +1,4 @@
+from tokenize import String
 from wsgiref.validate import validator
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField
@@ -117,3 +118,12 @@ class AgendaForm(FlaskForm):
     kegiatan = TextAreaField('Kegiatan')
     tempat = StringField('Tempat')
     submit = SubmitField("Tambah")
+
+
+class InformasiBadanForm(FlaskForm):
+    nama_badan = StringField('Nama Badan', validators=[DataRequired()])
+    kepala_badan = StringField("Kepala Badan", validators=[DataRequired()])
+    email = StringField("Email")
+    alamat = StringField('Alamat')
+    telpon = StringField('Telpon')
+    submit = SubmitField('Simpan')

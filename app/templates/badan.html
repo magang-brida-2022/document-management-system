@@ -1,0 +1,227 @@
+{% extends "base.html" %} {% block style%}
+<link rel="stylesheet" href="{{ url_for('static', filename="plugins/dataTables/datatables.min.css") }}">
+{% endblock style%} {% block content %}
+<section class="content-header">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-6">
+        {# <h1 class="m-0">Surat Masuk</h1> #}
+      </div>
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item">
+            <a href="{{ url_for('main.index') }}">Home</a>
+          </li>
+          <li class="breadcrumb-item">Arsip</li>
+          <li class="breadcrumb-item active">Surat Masuk</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="content">
+  <div class="container-fluid">
+    <div class="card card-primary">
+      <div class="card-header">
+        <h3 class="card-title">Surat Masuk</h3>
+      </div>
+      <div class="card-body">
+        {% if current_user.can(Permission.ARSIP) %}
+
+        <!-- Button trigger modal -->
+        <button
+          type="button"
+          class="btn btn-info"
+          data-toggle="modal"
+          data-target="#tambahSurat"
+        >
+         <i class="bi bi-plus-circle-fill"></i> Tambah Surat
+        </button>
+        {% endif %}
+
+        <!-- Modal -->
+        <div
+          class="modal fade"
+          id="tambahSurat"
+          tabindex="-1"
+          aria-labelledby="tambahSuratModal"
+          aria-hidden="true"
+        >
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <form method="post" enctype="multipart/form-data">
+                {{form.hidden_tag()}}
+                <div class="modal-header">
+                  <h5 class="modal-title" id="tambahSuratModal">
+                    Tambah Surat Masuk
+                  </h5>
+                  <button
+                    type="button"
+                    class="close"
+                    data-dismiss="modal"
+                    aria-label="Close"
+                  >
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <div class="form-group">
+                    {{form.no_surat.label}}
+                    {{form.no_surat(class="form-control")}}
+                  </div>
+                  <div class="form-group">
+                    {{form.asal.label}} {{form.asal(class="form-control")}}
+                  </div>
+                  <div class="form-group">
+                    {{form.perihal.label}}
+                    {{form.perihal(class="form-control")}}
+                  </div>
+                  <div class="form-group">
+                    {{form.jenis.label}}
+                    {{form.jenis(class="form-control")}}
+                  </div>
+                  <div class="form-group">
+                    {{form.tanggal_surat.label}}
+                    {{form.tanggal_surat(class="form-control")}}
+                  </div>
+                  <div class="form-group">
+                    {{form.tanggal_diterima.label}}
+                    {{form.tanggal_diterima(class="form-control")}}
+                  </div>
+                   <div class="form-group">
+                    {{form.rak.label}}
+                    {{form.rak(class="form-control")}}
+                  </div>
+                  <div class="form-group">
+                    {{form.lampiran.label}}
+                    {{form.lampiran(class="form-control-file")}}
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-dismiss="modal"
+                  >
+                    Close
+                  </button>
+
+                  {{form.submit(class="btn btn-primary")}}
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+        <!-- End Modal -->
+        <div class="mt-4">
+          <table id="data" class="table table-striped mt-4">
+            <thead>
+              <tr>
+                <th>{{form.no_surat.label}}</th>
+                <th>{{form.asal.label}}</th>
+                <th>{{form.perihal.label}}</th>
+                <th>{{form.jenis.label}}</th>
+                <th>{{form.tanggal_surat.label}}</th>
+                <th>{{form.tanggal_diterima.label}}</th>
+                <th>Rak</th>
+                <th>{{form.lampiran.label}}</th>
+                <th>Aksi</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for surat in surat_masuk %}
+              <tr>
+                <td>{{ surat.nomor }}</td>
+                <td>{{ surat.asal }}</td>
+                <td>{{ surat.perihal }}</td>
+                  <td>
+                  {% if surat.jenis == 'luar_biasa' %}
+                      <span class="badge badge-warning">{{ surat.jenis }}</span>    
+                  {% else %}
+                      <span class="badge badge-info">{{ surat.jenis }}</span>    
+                  {% endif %}
+                  </td>
+                <td>{{ moment(surat.tanggal_diterima).format('MM/DD/YYYY') }}</td>
+                <td>{{ moment(surat.tanggal_surat).format('MM/DD/YYYY') }}</td>
+                <td>{{ surat.rak }}</td>
+                <td>
+                  <div class="btn-toolbar" role="toolbar">
+                    <div class="btn-group mr-2" role="group">
+                      <a href="{{ url_for('main.open_surat_masuk_dokumen', id=surat.id) }}" class="btn-sm btn-success" target="_blank"><i class="bi bi-file-earmark-pdf-fill"></i> Dokumen</a>
+                      {# <a href="{{ url_for('main.detail_surat_masuk') }}?id={{ surat.id }}" class="btn-sm btn-success">Detail</a> #}
+                     </div> 
+                  </div>
+                </td>   
+                <td>
+                   <div class="btn-toolbar" role="toolbar">
+                    {% if current_user.can(Permission.FEEDBACK) %}
+                      <div class="btn-group mr-2" role="group">
+                        {# <a href="{{ url_for('main.surat_balasan') }}?id={{ surat.id }}" class="btn-sm btn-primary">Balas</a> #}
+                        <a href="{{ url_for('main.pilih_jenis_surat')}}?id={{ surat.id }}" class="btn-sm btn-primary"><i class="bi bi-reply-fill"></i> Balas</a>
+                      </div>
+                    {% endif %}
+                    
+                    {% if current_user.can(Permission.ARSIP) %}
+                    <div class="btn-group mr-2" role="group">
+                      <a href="{{ url_for('main.edit_surat_masuk', id=surat.id) }}" class="btn-sm btn-primary"><i class="bi bi-pencil-square"></i> Edit</a>
+                    </div>
+                    <div class="btn-group" role="group">
+                       <button type="button" class="btn-sm btn-danger" data-toggle="modal" data-target="#deleteDataModal{{ surat.id }}">
+                        <i class="bi bi-trash-fill"></i> Delete
+                      </button>
+                    </div>
+                  </div>
+                    {% endif %}
+                  </div>
+
+                  {# modal #}
+                  <div class="modal fade" id="deleteDataModal{{ surat.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                      <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Menghapus Data</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                          </div>
+                          <div class="modal-body">
+                            Apakah anda yakin untuk menghapus data
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn-sm btn-secondary" data-dismiss="modal">Tidak</button>
+                            <a href="{{ url_for('main.delete_surat_masuk', id=surat.id) }}" class="btn-sm btn-danger">Iya</a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    {# end modal #}
+
+                </td>
+                <td>
+                  {% if not surat.disposisi_ke %}
+                    <span class="badge badge-danger">Belum Ditindak</span>    
+                  {% else %}
+                    <span class="badge badge-success">Sudah Didisposisi</span>    
+                  {% endif %}
+                  
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>           
+  </div>
+</section>
+
+{% endblock content %} {% block scripts %}
+<script src="{{ url_for('static', filename="plugins/dataTables/datatables.min.js") }}"></script>
+<script>
+  $(document).ready(function () {
+    $("#data").DataTable();
+  });
+</script>
+{% endblock scripts %}
