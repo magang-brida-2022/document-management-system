@@ -9,7 +9,7 @@
     {{ toastr.include_toastr_css() }}
     {{ toastr.message() }}
 <!--===============================================================================================-->	
-	<link rel="icon" type="image/png" href="{{ url_for('static', filename="login/images/icons/favicon.ico") }}"/>
+	<link rel="icon" type="image/png" href="{{ url_for('static', filename="img/logo.png") }}"/>
 <!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename="login/vendor/bootstrap/css/bootstrap.min.css") }}">
 <!--===============================================================================================-->
@@ -43,16 +43,25 @@
 						{{form.username(class="input100")}}
 						<span class="focus-input100"></span>
 						{{form.username.label(class="label-input100")}}
+						{% for error in form.username.errors %}
+							<span style="color: red;">[{{error}}]</span>
+						{% endfor %}
 					 </div>
 				    <div class="wrap-input100">
 						{{form.password(class="input100")}}
 						<span class="focus-input100"></span>
 						{{form.password.label(class="label-input100")}}
+						{% for error in form.password.errors %}
+							<span style="color: red;">[{{error}}]</span>
+						{% endfor %}
 					  </div>
 					 <div class="flex-sb-m w-full p-t-3 p-b-32">
 						<div class="contact100-form-checkbox">
 							{{form.remember_me(class="input-checkbox100")}}
 							{{form.remember_me.label(class="label-checkbox100")}}
+							{% for error in form.remember_me.errors %}
+								<span style="color: red;">[{{error}}]</span>
+							{% endfor %}
 						</div>				
 					</div>
 					<div class="container-login100-form-btn">

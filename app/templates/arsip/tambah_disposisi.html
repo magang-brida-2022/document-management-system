@@ -63,9 +63,15 @@
                 <div class="modal-body">
                   <div class="form-group">
                     {{form.alias.label}} {{form.alias(class="form-control")}}
+                    {% for error in form.kode.errors %}
+                      <span style="color: red;">[{{error}}]</span>
+                    {% endfor %}
                   </div>
                   <div class="form-group">
                     {{form.nama.label}} {{form.nama(class="form-control")}}
+                    {% for error in form.nama.errors %}
+                      <span style="color: red;">[{{error}}]</span>
+                    {% endfor %}
                   </div>
                 </div>
                 <div class="modal-footer">
