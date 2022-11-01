@@ -28,6 +28,9 @@
           <div class="form-row">
             <div class="form-group col-md-6">
               {{form.ditindak_lanjut.label}} {{form.ditindak_lanjut}}
+              {% for error in form.ditindak_lanjut.errors %}
+                <span style="color: red;">[{{error}}]</span>
+              {% endfor %}
             </div>
           </div>
           {{form.submit(class="btn btn-primary")}}

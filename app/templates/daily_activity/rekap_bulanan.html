@@ -27,15 +27,15 @@
           {{form.hidden_tag()}}
           <div class="form-row">
             <div class="form-group col-md-6">
-              {{form.bulan.label}} {{form.bulan(class="form-control")}} {% for
-              error in form.bulan.errors %}
-              <div class="invalid-feedback">{{error}}</div>
+              {{form.bulan.label}} {{form.bulan(class="form-control")}}
+              {% for error in form.bulan.errors %}
+                <span style="color: red;">[{{error}}]</span>
               {% endfor %}
             </div>
             <div class="form-group col-md-6">
-              {{form.tahun.label}} {{form.tahun(class="form-control")}} {% for
-              error in form.tahun.errors %}
-              <div class="invalid-feedback">{{ error }}</div>
+              {{form.tahun.label}} {{form.tahun(class="form-control")}}
+              {% for error in form.tahun.errors %}
+                <span style="color: red;">[{{error}}]</span>
               {% endfor %}
             </div>
           </div>
