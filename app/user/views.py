@@ -18,6 +18,7 @@ def profile():
 
 @users.get('/edit-profile')
 @users.post('/edit-profile')
+@login_required
 def edit_profile():
     form = EditProfileForm()
     if form.validate_on_submit():

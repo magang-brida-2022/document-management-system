@@ -2,9 +2,11 @@ from flask import render_template, flash, redirect, url_for, request, make_respo
 from flask_login import login_required, current_user
 from datetime import datetime
 
+from app.decorators import permission_required
+
 from . import daily_activity
 from .forms import DailyActivityForm, EditDailyActivityForm, RekapBulananForm
-from ..models import DailyActivity
+from ..models import DailyActivity, Permission
 from .. import db
 
 
@@ -63,6 +65,7 @@ def delete_aktivity(id):
 
 @daily_activity.get('/rekap')
 @daily_activity.post('/rekap')
+@login_required
 def rekap_bulanan():
     form = RekapBulananForm()
     if form.validate_on_submit():

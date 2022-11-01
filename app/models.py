@@ -226,3 +226,16 @@ class Agenda(db.Model):
 
     def __repr__(self) -> str:
         return f'<Agenda {self.agenda}>'
+
+
+class InformasiBadan(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    nama = db.Column(db.String(200))
+    kepala = db.Column(db.String(150))
+    nip_kaban = db.Column(db.String(100))
+    alamat = db.Column(db.String(200))
+    email = db.Column(db.String(80))
+    telpon = db.Column(db.String(15))
+
+    def __repr__(self) -> str:
+        return f"<Badan {self.nama}"
