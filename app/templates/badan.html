@@ -1,0 +1,68 @@
+{% extends "base.html" %} {% block style%}
+<link rel="stylesheet" href="{{ url_for('static', filename="plugins/dataTables/datatables.min.css") }}">
+{% endblock style%} {% block content %}
+<section class="content-header">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-6">
+        {# <h1 class="m-0">Surat Masuk</h1> #}
+      </div>
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item">
+            <a href="{{ url_for('main.index') }}">Home</a>
+          </li>
+          <li class="breadcrumb-item">Home</li>
+          <li class="breadcrumb-item active">Informasi Badan</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="content">
+  <div class="container-fluid">
+       <div class="card card-primary">
+      <div class="card-header">
+        <h3 class="card-title">Informasi Badan</h3>
+      </div>
+      <div class="card-body">
+        <form method="post">
+          {{form.hidden_tag()}}
+          <div class="form-row">
+            <div class="form-group col-md-4">
+              {{form.nama_badan.label}} {{form.nama_badan(class="form-control")}}
+            </div>
+            <div class="form-group col-md-4">
+              {{form.kepala_badan.label}} {{form.kepala_badan(class="form-control")}}
+            </div>
+             <div class="form-group col-md-4">
+              {{form.nip_kepala.label}} {{form.nip_kepala(class="form-control")}}
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-4">
+              {{form.email.label}} {{form.email(class="form-control")}}
+            </div>
+            <div class="form-group col-md-4">
+              {{form.alamat.label}} {{form.alamat(class="form-control")}}
+            </div>
+            <div class="form-group col-md-4">
+              {{form.telpon.label}} {{form.telpon(class="form-control")}}
+            </div>
+          </div>
+          {{form.submit(class="btn btn-primary")}}
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock content %} {% block scripts %}
+<script src="{{ url_for('static', filename="plugins/dataTables/datatables.min.js") }}"></script>
+<script>
+  $(document).ready(function () {
+    $("#data").DataTable();
+  });
+</script>
+{% endblock scripts %}

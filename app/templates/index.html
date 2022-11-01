@@ -84,6 +84,23 @@
             ></a>
           </div>
         </div>
+
+        <div class="col-lg-3 col-6">
+          <!-- small box -->
+          <div class="small-box bg-warning">
+            <div class="inner">
+              <h3>120</h3>
+
+              <p>Surat Balasan</p>
+            </div>
+            <div class="icon">
+              <i class="ion ion-person-add"></i>
+            </div>
+            <a href="#" class="small-box-footer"
+            ></a>
+          </div>
+        </div>
+
       </div>
       <!-- /.row -->
     </div>
@@ -152,8 +169,8 @@
               <tr>
                 <td>No</td>
                 <td>Hari/Tanggal</td>
-                <td>Waktu</td>
                 <td>Agenda</td>
+                <td>Waktu</td>
                 <td>Tempat</td>
               </tr>
             </thead>
@@ -161,7 +178,7 @@
               {% for agenda_harian in agenda  %}
               <tr>
                 <td>{{ loop.index }}</td>
-                <td>{{agenda_harian.tanggal}}</td>
+                <td>{{ moment(agenda_harian.tanggal).format('DD MMMM YYYY') }}</td>
                 <td>{{ agenda_harian.agenda }}</td>
                 <td>{{ agenda_harian.waktu }}</td>
                 <td>{{ agenda_harian.tempat }}</td>

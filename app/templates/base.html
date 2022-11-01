@@ -286,36 +286,16 @@
           
           {% if current_user.is_administrator() %}
           
-           <li class="nav-header">Pengaturan</li> 
+           <li class="nav-header">Aplikasi</li> 
             <li class="nav-item">
-            <a href="{{ url_for('main.bidang') }}" class="nav-link {% if page == 'bidang' %}active{% endif %}">
-              <i class="nav-icon bi bi-building"></i>
-              <p>
-                Bidang
-                {# <span class="right badge badge-danger">New</span> #}
-              </p>
-            </a>
-          </li>
-
-           <li class="nav-item">
-            <a href="{{ url_for('main.disposisi') }}" class="nav-link {% if page == 'disposisi_management' %}active{% endif %}">
-              <i class="nav-icon bi bi-diagram-2"></i>
-              <p>
-                Disposisi
-                {# <span class="right badge badge-danger">New</span> #}
-              </p>
-            </a>
-          </li>
-
-          <li class="nav-item">
-            <a href="{{ url_for('auth.register') }}" class="nav-link {% if page == 'user_management'%}active{% endif%}">
-              <i class="nav-icon bi bi-people-fill"></i>
-              <p>
-                User
-                {# <span class="right badge badge-danger">New</span> #}
-              </p>
-            </a>
-          </li>
+              <a href="{{ url_for('main.settings') }}" class="nav-link {% if page == 'pengaturan'%}active{% endif%}">
+                <i class="bi bi-gear-wide-connected"></i>
+                <p>
+                  Pengaturan
+                  {# <span class="right badge badge-danger">New</span> #}
+                </p>
+              </a>
+            </li>
           
           {% endif %}
 

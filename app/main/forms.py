@@ -1,7 +1,8 @@
+from tokenize import String
 from wsgiref.validate import validator
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField
-from wtforms import StringField, DateField,  SubmitField, TextAreaField, SelectField, BooleanField
+from wtforms import StringField, DateField,  SubmitField, TextAreaField, SelectField, BooleanField, IntegerField
 from wtforms.validators import DataRequired
 
 from ..models import Disposisi
@@ -117,3 +118,13 @@ class AgendaForm(FlaskForm):
     kegiatan = TextAreaField('Kegiatan')
     tempat = StringField('Tempat')
     submit = SubmitField("Tambah")
+
+
+class InformasiBadanForm(FlaskForm):
+    nama_badan = StringField('Nama Badan', validators=[DataRequired()])
+    kepala_badan = StringField("Kepala Badan", validators=[DataRequired()])
+    nip_kepala = StringField('NIP', validators=[DataRequired()])
+    email = StringField("Email")
+    alamat = StringField('Alamat')
+    telpon = StringField('Telpon')
+    submit = SubmitField('Simpan')

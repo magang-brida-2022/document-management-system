@@ -9,8 +9,8 @@ from datetime import date
 
 from app.decorators import admin_required, permission_required
 from app.models import Permission, Bidang, Disposisi
-from .forms import SuratMagangForm, SuratMasukForm, SuratKeluarForm, DisposisiForm, BidangForm, DisposisiKeForm, EditSuratMasukForm, EditSuratKeluarForm, EditBidangForm, EditDisposisiForm, JenisSuratBalasanForm, AgendaForm
-from ..models import SuratMasuk, SuratKeluar, Bidang, Disposisi, User, Agenda
+from .forms import SuratMagangForm, SuratMasukForm, SuratKeluarForm, DisposisiForm, BidangForm, DisposisiKeForm, EditSuratMasukForm, EditSuratKeluarForm, EditBidangForm, EditDisposisiForm, JenisSuratBalasanForm, AgendaForm, InformasiBadanForm
+from ..models import SuratMasuk, SuratKeluar, Bidang, Disposisi, User, Agenda, InformasiBadan
 from . import main
 from .. import db, documents_allowed_extension
 from .. import create_app
@@ -20,11 +20,8 @@ from .utils.peserta_formatting import string_formatter
 
 @main.get('/')
 @main.post('/')
-# @login_required
+@login_required
 def index():
-    if not current_user.is_authenticated:
-        return redirect(url_for('auth.login'))
-
     agenda_form = AgendaForm()
     agenda = Agenda.query.filter(func.date(Agenda.tanggal) == date.today())
 
@@ -39,7 +36,7 @@ def index():
         agenda_baru = Agenda(waktu=waktu, agenda=agenda, tempat=tempat)
         db.session.add(agenda_baru)
         db.session.commit()
-        flash("Agenda Berhasil Ditambahkan", "success")
+        flash("Agenda berhasil ditambahkan.", "success")
 
         return redirect(url_for('main.index'))
 
@@ -53,7 +50,6 @@ def index():
 @main.get('/surat_masuk')
 @main.post('/surat_masuk')
 @login_required
-# @permission_required(Permission.ARSIP)
 def surat_masuk():
     form = SuratMasukForm()
     surat_masuk = SuratMasuk.query.all()
@@ -74,10 +70,11 @@ def surat_masuk():
             db.session.add(surat_masuk)
             db.session.commit()
 
-            flash("Surat masuk baru berhasil di tambahkan", "success")
+            flash("Surat masuk baru berhasil ditambahkan", "success")
             return redirect(request.base_url)
         else:
-            flash('allowed file types are .pdf only', 'error')
+            flash('support hanya file dengan format .pdf', 'error')
+
             return redirect(request.base_url)
 
     return render_template('arsip/surat_masuk.html', form=form, surat_masuk=surat_masuk, title="Surat Masuk", page='surat_masuk')
@@ -86,7 +83,6 @@ def surat_masuk():
 @main.get('/surat_keluar')
 @main.post('/surat_keluar')
 @login_required
-# @permission_required(Permission.ARSIP)
 def surat_keluar():
     form = SuratKeluarForm()
     surat_keluar = SuratKeluar.query.all()
@@ -107,7 +103,7 @@ def surat_keluar():
             flash("Surat keluar baru berhasil ditambahkan", "success")
             return redirect(request.base_url)
         else:
-            flash('allowed file types are .pdf only', 'error')
+            flash('support hanya file dengan format .pdf', 'error')
             return redirect(request.base_url)
 
     return render_template('arsip/surat_keluar.html', form=form, surat_keluar=surat_keluar, title="Surat Keluar", page='surat_keluar')
@@ -116,6 +112,7 @@ def surat_keluar():
 @main.get('/ditindak/')
 @main.post('/ditindak/')
 @login_required
+@permission_required(Permission.FEEDBACK)
 def feedback():
     # surat masuk yang belum ditindaklanjuti
     surat_masuk = SuratMasuk.query.filter(and_(
@@ -136,6 +133,8 @@ def arsip():
 
 
 @main.get('/disposisi_ke')
+@login_required
+@permission_required(Permission.DISPOSISI)
 def disposisi_ke():
     surat_masuk = SuratMasuk.query.filter(
         SuratMasuk.disposisi_ke == None).all()
@@ -146,6 +145,8 @@ def disposisi_ke():
 
 @main.get('/diteruskan/<id>')
 @main.post('/diteruskan/<id>')
+@login_required
+@permission_required(Permission.DISPOSISI)
 def diteruskan(id):
     form = DisposisiKeForm()
     disposisi = SuratMasuk.query.filter_by(id=id).first()
@@ -155,7 +156,7 @@ def diteruskan(id):
         disposisi.dilihat = True
         db.session.commit()
 
-        flash('Disposisi Successfully', 'success')
+        flash('Disposisi berhasil.', 'success')
         return redirect(url_for('main.disposisi_ke'))
 
     return render_template('arsip/disposisi_ke.html', form=form, disposisi=disposisi, title="Pilih Disposisi")
@@ -171,7 +172,7 @@ def disposisi():
         disposisi_baru = Disposisi(alias=form.alias.data, nama=form.nama.data)
         db.session.add(disposisi_baru)
         db.session.commit()
-        flash('Data Berhasil di Tambahkan', 'success')
+        flash('Aksi berhasil dilakukan.', 'success')
         return redirect(url_for('main.disposisi'))
 
     return render_template('arsip/tambah_disposisi.html', form=form, disposisi=disposisi, title="Disposisi Management", page='disposisi_management')
@@ -187,7 +188,7 @@ def bidang():
         bidang_baru = Bidang(kode=form.kode.data, nama=form.nama.data)
         db.session.add(bidang_baru)
         db.session.commit()
-        flash('Data berhasil di Tambahkan', 'success')
+        flash('Data berhasil ditambahkan.', 'success')
         return redirect(url_for('main.bidang'))
 
     return render_template('arsip/tambah_bidang.html', form=form, bidang=bidang, title="Bidang Management", page="bidang")
@@ -202,6 +203,8 @@ def bidang():
 
 @ main.get('/surat_masuk/edit/<id>')
 @ main.post('/surat_masuk/edit/<id>')
+@login_required
+@permission_required(Permission.ARSIP)
 def edit_surat_masuk(id):
     form = EditSuratMasukForm()
     surat_masuk = SuratMasuk.query.filter_by(id=id).first()
@@ -219,7 +222,7 @@ def edit_surat_masuk(id):
         surat_masuk.disposisi_ke = Disposisi.query.get(form.disposisi.data)
 
         db.session.commit()
-        flash("surat masuk update successfully", 'success')
+        flash("Berhasil memperbarui.", 'success')
         return redirect(url_for('main.surat_masuk'))
 
     form.no_surat.data = surat_masuk.nomor
@@ -236,6 +239,8 @@ def edit_surat_masuk(id):
 
 @ main.get('/surat_keluar/<id>/edit')
 @ main.post('/surat_keluar/<id>/edit')
+@login_required
+@permission_required(Permission.ARSIP)
 def edit_surat_keluar(id):
     form = EditSuratKeluarForm()
     surat_keluar = SuratKeluar.query.filter_by(id=id).first()
@@ -251,7 +256,7 @@ def edit_surat_keluar(id):
         surat_keluar.tujuan = form.tujuan.data
 
         db.session.commit()
-        flash('Surat Keluar Update Successfully', "Success")
+        flash('Berhasil memperbarui.', "Success")
         return redirect(url_for('main.surat_keluar'))
 
     form.no_surat.data = surat_keluar.nomor
@@ -265,6 +270,8 @@ def edit_surat_keluar(id):
 
 @ main.get('/bidang/<id>/edit')
 @ main.post('/bidang/<id>/edit')
+@login_required
+@admin_required
 def edit_bidang(id):
     form = EditBidangForm()
     bidang = Bidang.query.filter_by(id=id).first()
@@ -273,7 +280,7 @@ def edit_bidang(id):
         bidang.nama = form.nama.data
 
         db.session.commit()
-        flash('Update Bidang Successfully', 'success')
+        flash('Berhasil memperbarui.', 'success')
         return redirect(url_for('main.bidang'))
 
     form.kode.data = bidang.kode
@@ -283,6 +290,8 @@ def edit_bidang(id):
 
 @ main.get('/disposisi/<id>/edit')
 @ main.post('/disposisi/<id>/edit')
+@login_required
+@permission_required(Permission.DISPOSISI)
 def edit_disposisi(id):
     form = EditDisposisiForm()
     disposisi = Disposisi.query.filter_by(id=id).first()
@@ -291,7 +300,7 @@ def edit_disposisi(id):
         disposisi.nama = form.nama.data
 
         db.session.commit()
-        flash("Update Disposisi Successfully", 'success')
+        flash("Berhasil memperbarui.", 'success')
         return redirect(url_for('main.disposisi'))
 
     form.alias.data = disposisi.alias
@@ -301,6 +310,7 @@ def edit_disposisi(id):
 
 @ main.get('/ditindak/<id>')
 @ main.post('/ditindak/<id>')
+@login_required
 def edit_feedback(id):
     # form = SudahDitindakLanjutForm()
     surat_masuk = SuratMasuk.query.get_or_404(id)
@@ -319,21 +329,25 @@ def edit_feedback(id):
 
 @ main.get('/surat_masuk/<id>/delete')
 @ main.post('/surat_masuk/<id>/delete')
+@login_required
+@permission_required(Permission.ARSIP)
 def delete_surat_masuk(id):
     delete_surat = SuratMasuk.query.filter_by(id=id).first()
     db.session.delete(delete_surat)
     db.session.commit()
-    flash('Delete Surat Successfully', "success")
+    flash('Berhasil menghapus data', "success")
     return redirect(url_for('main.surat_masuk'))
 
 
 @ main.get('/surat_keluar/<id>/delete')
 @ main.post('/surat_keluar/<id>/delete')
+@login_required
+@permission_required(Permission.ARSIP)
 def delete_surat_keluar(id):
     delete_surat = SuratKeluar.query.filter_by(id=id).first()
     db.session.delete(delete_surat)
     db.session.commit()
-    flash('Delete Surat Successfully', "success")
+    flash('Berhasil menghapus data.', "success")
     return redirect(url_for('main.surat_keluar'))
 
 
@@ -344,18 +358,18 @@ def delete_bidang(id):
     delete_bidang = Bidang.query.filter_by(id=id).first()
     db.session.delete(delete_bidang)
     db.session.commit()
-    flash("Delete Bidang Successfully", 'success')
+    flash("Berhasil menghapus data.", 'success')
     return redirect(url_for('main.bidang'))
 
 
-@ main.get('/disposisi/<id>/delete')
-@ main.post('/disposisi/<id>/delete')
-@ admin_required
+@main.get('/disposisi/<id>/delete')
+@main.post('/disposisi/<id>/delete')
+@admin_required
 def delete_disposisi(id):
     delete_disposisi = Disposisi.query.filter_by(id=id).first()
     db.session.delete(delete_disposisi)
     db.session.commit()
-    flash('Delete Bidang Successfully', 'success')
+    flash('Berhasil menghapus data.', 'success')
     return redirect(url_for('main.disposisi'))
 
 
@@ -366,13 +380,15 @@ def delete_disposisi(id):
 '''
 
 
-@ main.get('/surat_masuk/lampiran/<id>/open')
+@main.get('/surat_masuk/lampiran/<id>/open')
+@login_required
 def open_surat_masuk_dokumen(id):
     surat_masuk = SuratMasuk.query.filter_by(id=id).first()
     return send_file(BytesIO(surat_masuk.lampiran), mimetype='application/pdf')
 
 
-@ main.get('/surat_keluar/lampiran/<id>/open')
+@main.get('/surat_keluar/lampiran/<id>/open')
+@login_required
 def open_surat_keluar_dokumen(id):
     surat_keluar = SuratKeluar.query.filter_by(id=id).first()
     return send_file(BytesIO(surat_keluar.lampiran), mimetype='application/pdf')
@@ -385,15 +401,15 @@ def open_surat_keluar_dokumen(id):
 '''
 
 
-@ main.get('/surat_masuk_download/<upload_id>')
-@ login_required
+@main.get('/surat_masuk_download/<upload_id>')
+@login_required
 def download_surat_masuk(upload_id):
     surat_masuk = SuratMasuk.query.filter_by(id=upload_id).first()
     return send_file(BytesIO(surat_masuk.lampiran), download_name=surat_masuk.nama_file, as_attachment=True)
 
 
-@ main.get('/surat_keluar_download/<upload_id>')
-@ login_required
+@main.get('/surat_keluar_download/<upload_id>')
+@login_required
 def download_surat_keluar(upload_id):
     surat_keluar = SuratKeluar.query.filter_by(id=upload_id).first()
     return send_file(BytesIO(surat_keluar.lampiran), download_name=surat_keluar.nama_file, as_attachment=True)
@@ -401,6 +417,8 @@ def download_surat_keluar(upload_id):
 
 @main.get('/surat_balasan/jenis_surat')
 @main.post('/surat_balasan/jenis_surat')
+@login_required
+@permission_required(Permission.FEEDBACK)
 def pilih_jenis_surat():
     form = JenisSuratBalasanForm()
     _id = request.args.get('id')
@@ -415,9 +433,12 @@ def pilih_jenis_surat():
 
 @main.get('/surat_balasan/magang/<int:id>')
 @main.post('/surat_balasan/magang/<int:id>')
+@permission_required(Permission.FEEDBACK)
+@login_required
 def generate_surat(id):
     surat = SuratMasuk.query.filter_by(id=id).first()
     form = SuratMagangForm()
+    badan = InformasiBadan.query.filter_by(id=1).first()
 
     docx_in_memory = BytesIO()
     SRCDIR = os.path.dirname(os.path.abspath(__file__))
@@ -426,6 +447,8 @@ def generate_surat(id):
     if form.validate_on_submit():
         peserta = string_formatter(form.peserta.data)
         context = {
+            "kepala": badan.kepala,
+            "nip_kaban": badan.nip_kaban,
             "penerima": surat.asal,
             "nomor_surat_masuk": surat.nomor,
             "tanggal_diterima": to_localtime(surat.tanggal_diterima),
@@ -449,5 +472,38 @@ def generate_surat(id):
 
 
 @main.get('/settings')
+@login_required
+@admin_required
 def settings():
-    return render_template('settings.html')
+    return render_template('settings.html', page="pengaturan")
+
+
+@main.get('/informasi-badan')
+@main.post('/informasi-badan')
+@admin_required
+@login_required
+def badan_info():
+    form = InformasiBadanForm()
+    badan = InformasiBadan.query.filter_by(id=1).first()
+
+    if form.validate_on_submit():
+        badan.nama = form.nama_badan.data
+        badan.kepala = form.kepala_badan.data
+        badan.nip_kaban = form.nip_kepala.data
+        badan.email = form.email.data
+        badan.alamat = form.alamat.data
+        badan.telpon = form.telpon.data
+
+        db.session.add(badan)
+        db.session.commit()
+        flash('Data berhasil ditambah/diperbarui', 'success')
+        return redirect(url_for('main.badan_info'))
+
+    form.nama_badan.data = badan.nama
+    form.kepala_badan.data = badan.kepala
+    form.nip_kepala.data = badan.nip_kaban
+    form.email.data = badan.email
+    form.alamat.data = badan.alamat
+    form.telpon.data = badan.telpon
+
+    return render_template('badan.html', form=form)
