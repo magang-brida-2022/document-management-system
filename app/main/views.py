@@ -10,7 +10,7 @@ from datetime import date
 from app.decorators import admin_required, permission_required
 from app.models import Permission, Bidang, Disposisi
 from .forms import SuratMagangForm, SuratMasukForm, SuratKeluarForm, DisposisiForm, BidangForm, DisposisiKeForm, EditSuratMasukForm, EditSuratKeluarForm, EditBidangForm, EditDisposisiForm, JenisSuratBalasanForm, AgendaForm, InformasiBadanForm
-from ..models import SuratMasuk, SuratKeluar, Bidang, Disposisi, User, Agenda, InformasiBadan
+from ..models import SuratBalasan, SuratMasuk, SuratKeluar, Bidang, Disposisi, User, Agenda, InformasiBadan
 from . import main
 from .. import db, documents_allowed_extension
 from .. import create_app
@@ -43,8 +43,9 @@ def index():
     total_user = User.query.count()
     total_surat_masuk = SuratMasuk.query.count()
     total_surat_keluar = SuratKeluar.query.count()
+    total_surat_balasan = SuratBalasan.query.count()
 
-    return render_template('index.html', title="Dashboard", total_user=total_user, total_surat_masuk=total_surat_masuk, total_surat_keluar=total_surat_keluar, page='dashboard', agenda_form=agenda_form, agenda=agenda)
+    return render_template('index.html', title="Dashboard", total_user=total_user, total_surat_masuk=total_surat_masuk, total_surat_keluar=total_surat_keluar, page='dashboard', agenda_form=agenda_form, agenda=agenda, total_surat_balasan=total_surat_balasan)
 
 
 @main.get('/surat_masuk')
