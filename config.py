@@ -6,10 +6,9 @@ load_dotenv(os.path.join(basedir, '.env'))
 
 
 class Config(object):
-    SECRET_KEY = os.urandom(24)
-
     SQLALCHEMY_DATABASE_URI = 'postgresql://superiorkid:root@localhost/surat'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    SECRET_KEY = os.urandom(24)
 
     # toastr
     TOASTR_POSITION_CLASS = 'toast-bottom-right'
@@ -19,12 +18,12 @@ class Config(object):
 
 
 # class ProductionConfig(Config):
-#     SQLALCHEMY_DATABASE_URI = 'postgresql://superiorkid:root@localhost/surat'
-#     DEBUG = True
+#     SQLALCHEMY_DATABASE_URI = 'postgresql://superiorkid:root@localhost/eletter'
+#     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 
 # class DevelopmentConfig(Config):
-#     SQLALCHEMY_DATABASE_URI = 'postgresql://superiorkid:root@localhost/surat-dev'
+#     SQLALCHEMY_DATABASE_URI = 'postgresql://superiorkid:root@localhost/eletter-dev'
 #     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 
