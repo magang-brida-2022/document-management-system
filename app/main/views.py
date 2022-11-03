@@ -116,12 +116,10 @@ def surat_keluar():
 @permission_required(Permission.FEEDBACK)
 def feedback():
     # surat masuk yang belum ditindaklanjuti
-    surat_masuk = SuratMasuk.query.filter(and_(
-        SuratMasuk.disposisi_ke == current_user.bidang.nama, SuratMasuk.tindak_lanjut == False)).all()
+    surat_masuk = SuratMasuk.query.filter(and_(SuratMasuk.disposisi_ke == current_user.bidang.nama, SuratMasuk.tindak_lanjut == False)).all()
 
     # surat masuk yang sudah ditindaklanjuti
-    surat_masuk_confirm = SuratMasuk.query.filter(and_(
-        SuratMasuk.disposisi_ke == current_user.bidang.nama, SuratMasuk.tindak_lanjut == True)).all()
+    surat_masuk_confirm = SuratMasuk.query.filter(and_(SuratMasuk.disposisi_ke == current_user.bidang.nama, SuratMasuk.tindak_lanjut == True)).all()
 
     return render_template('arsip/feedback.html', surat_masuk=surat_masuk, page='feedback', surat_masuk_confirm=surat_masuk_confirm)
 
