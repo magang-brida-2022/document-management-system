@@ -39,9 +39,9 @@ Maybe you can mention me or this repo in the acknowledgements too
 </p>
    
 <h4>
-    <a href="https://demogregator.herokuapp.com/">View Demo</a>
+    <a href="#demo">View Demo</a>
   <span> · </span>
-    <a href="https://github.com/superiorkid/content-aggregator/issues/">Report Bug</a>
+    <a href="https://github.com/magang-brida-2022/surat-menyurat/issues/">Report Bug</a>
   </h4>
 </div>
 
@@ -56,9 +56,8 @@ Maybe you can mention me or this repo in the acknowledgements too
   - [Tech Stack](#space_invader-tech-stack)
   - [Features](#dart-features)
   - [Environment Variables](#key-environment-variables)
-  - [Getting Started](#toolbox-getting-started)
+- [Getting Started](#toolbox-getting-started)
   - [Prerequisites](#bangbang-prerequisites)
-  - [Installation](#gear-installation)
   - [Run Locally](#running-run-locally)
   <!-- About the Project -->
 
