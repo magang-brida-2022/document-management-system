@@ -18,30 +18,30 @@ Maybe you can mention me or this repo in the acknowledgements too
   
 <!-- Badges -->
 <p>
-  <a href="https://github.com/superiorkid/content-aggregator/graphs/contributors">
-    <img src="https://img.shields.io/github/contributors/superiorkid/content-aggregator" alt="contributors" />
+  <a href="https://github.com/magang-brida-2022/surat-menyurat/graphs/contributors">
+    <img src="https://img.shields.io/github/contributors/magang-brida-2022/surat-menyurat" alt="contributors" />
   </a>
   <a href="">
-    <img src="https://img.shields.io/github/last-commit/superiorkid/content-aggregator" alt="last update" />
+    <img src="https://img.shields.io/github/last-commit/magang-brida-2022/surat-menyurat" alt="last update" />
   </a>
-  <a href="https://github.com/superiorkid/content-aggregator/network/members">
-    <img src="https://img.shields.io/github/forks/superiorkid/content-aggregator" alt="forks" />
+  <a href="https://github.com/magang-brida-2022/surat-menyurat/network/members">
+    <img src="https://img.shields.io/github/forks/magang-brida-2022/surat-menyurat" alt="forks" />
   </a>
-  <a href="https://github.com/superiorkid/content-aggregator/stargazers">
-    <img src="https://img.shields.io/github/stars/superiorkid/content-aggregator" alt="stars" />
+  <a href="https://github.com/magang-brida-2022/surat-menyurat/stargazers">
+    <img src="https://img.shields.io/github/stars/magang-brida-2022/surat-menyurat" alt="stars" />
   </a>
-  <a href="https://github.com/superiorkid/content-aggregator/issues/">
-    <img src="https://img.shields.io/github/issues/superiorkid/content-aggregator" alt="open issues" />
+  <a href="https://github.com/magang-brida-2022/surat-menyurat/issues/">
+    <img src="https://img.shields.io/github/issues/magang-brida-2022/surat-menyurat" alt="open issues" />
   </a>
-  <a href="https://github.com/superiorkid/content-aggregator/blob/master/LICENSE">
-    <img src="https://img.shields.io/github/license/superiorkid/content-aggregator.svg" alt="license" />
+  <a href="https://github.com/magang-brida-2022/surat-menyurat/blob/master/LICENSE">
+    <img src="https://img.shields.io/github/license/magang-brida-2022/surat-menyurat.svg" alt="license" />
   </a>
 </p>
    
 <h4>
-    <a href="https://demogregator.herokuapp.com/">View Demo</a>
+    <a href="#demo">View Demo</a>
   <span> · </span>
-    <a href="https://github.com/superiorkid/content-aggregator/issues/">Report Bug</a>
+    <a href="https://github.com/magang-brida-2022/surat-menyurat/issues/">Report Bug</a>
   </h4>
 </div>
 
@@ -56,9 +56,8 @@ Maybe you can mention me or this repo in the acknowledgements too
   - [Tech Stack](#space_invader-tech-stack)
   - [Features](#dart-features)
   - [Environment Variables](#key-environment-variables)
-  - [Getting Started](#toolbox-getting-started)
+- [Getting Started](#toolbox-getting-started)
   - [Prerequisites](#bangbang-prerequisites)
-  - [Installation](#gear-installation)
   - [Run Locally](#running-run-locally)
   <!-- About the Project -->
 
