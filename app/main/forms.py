@@ -96,7 +96,7 @@ class EditDisposisiForm(DisposisiForm):
 
 class JenisSuratBalasanForm(FlaskForm):
     jenis = SelectField(u'Jenis Surat', choices=[
-                        ('0', '---'), ('magang', 'Magang'), ('other', 'Other')])
+                        ('0', '---'), ('magang', 'Magang')])
     submit = SubmitField('Pilih')
 
 
