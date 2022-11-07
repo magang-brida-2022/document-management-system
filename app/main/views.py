@@ -121,7 +121,7 @@ def feedback():
     # surat masuk yang sudah ditindaklanjuti
     surat_masuk_confirm = SuratMasuk.query.filter(and_(SuratMasuk.disposisi_ke == current_user.bidang.nama, SuratMasuk.tindak_lanjut == True)).all()
 
-    return render_template('arsip/feedback.html', surat_masuk=surat_masuk, page='feedback', surat_masuk_confirm=surat_masuk_confirm)
+    return render_template('arsip/feedback.html', surat_masuk=surat_masuk, page='feedback', surat_masuk_confirm=surat_masuk_confirm, title="Tindak Lanjut")
 
 
 @main.get('/arsip')
@@ -174,7 +174,7 @@ def disposisi():
         flash('Aksi berhasil dilakukan.', 'success')
         return redirect(url_for('main.disposisi'))
 
-    return render_template('arsip/tambah_disposisi.html', form=form, disposisi=disposisi, title="Disposisi Management", page='disposisi_management')
+    return render_template('arsip/tambah_disposisi.html', form=form, disposisi=disposisi, title="Management Disposisi", page='disposisi_management')
 
 
 @main.get('/bidang')
@@ -190,7 +190,7 @@ def bidang():
         flash('Data berhasil ditambahkan.', 'success')
         return redirect(url_for('main.bidang'))
 
-    return render_template('arsip/tambah_bidang.html', form=form, bidang=bidang, title="Bidang Management", page="bidang")
+    return render_template('arsip/tambah_bidang.html', form=form, bidang=bidang, title="Management Bidang", page="bidang")
 
 
 '''
@@ -427,7 +427,7 @@ def pilih_jenis_surat():
         if jenis == "magang":
             return redirect(url_for('main.generate_surat', id=_id))
 
-    return render_template('arsip/jenis_surat.html', form=form)
+    return render_template('arsip/jenis_surat.html', form=form, title="Jenis Surat")
 
 
 @main.get('/surat_balasan/magang/<int:id>')
@@ -467,14 +467,14 @@ def generate_surat(id):
         docx_in_memory.seek(0)
         return send_file(docx_in_memory, as_attachment=True, download_name='untitled.docx')
 
-    return render_template('arsip/surat_balasan_form/balasan_magang.html', form=form, surat=surat)
+    return render_template('arsip/surat_balasan_form/balasan_magang.html', form=form, surat=surat, title="Cetak Surat")
 
 
 @main.get('/settings')
 @login_required
 @admin_required
 def settings():
-    return render_template('settings.html', page="pengaturan")
+    return render_template('settings.html', page="pengaturan", title="Pengaturan")
 
 
 @main.get('/informasi-badan')
@@ -505,4 +505,4 @@ def badan_info():
     form.alamat.data = badan.alamat
     form.telpon.data = badan.telpon
 
-    return render_template('badan.html', form=form)
+    return render_template('badan.html', form=form, title="Informasi Badan")
