@@ -163,7 +163,7 @@
               </div>
             </div>
           </div>
-          <div class="mt-4">
+          <div class="mt-4 table-responsive">
           <table id="data" class="table table-striped mt-4">
             <thead>
               <tr>
@@ -185,9 +185,41 @@
                 <td>{{ agenda_harian.agenda }}</td>
                 <td>{{ agenda_harian.waktu }}</td>
                 <td>{{ agenda_harian.tempat }}</td>
-                {% if current_user.can(Permission.ARSIP) %}                
-                  <td><a href="{{ url_for('main.delete_agenda', id=agenda_harian.id) }}">Delete</a></td>
+                {% if current_user.can(Permission.ARSIP) %} 
+                <td>
+                 <div class="btn-group mr-2" role="group">
+                    <a href="{{ url_for('main.edit_agenda', id=agenda_harian.id) }}" class="btn-sm btn-primary"><i class="bi bi-pencil-square"></i> Edit</a>
+                  </div>
+                  <div class="btn-group" role="group">
+                    <button type="button" class="btn-sm btn-danger" data-toggle="modal" data-target="#deleteDataModal{{ agenda_harian.id }}">
+                      <i class="bi bi-trash-fill"></i> Delete
+                    </button>
+                  </div>
+                </td>               
                 {% endif %}
+
+
+                  {# modal #}
+                  <div class="modal fade" id="deleteDataModal{{ agenda_harian.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                      <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Menghapus Data</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                          </div>
+                          <div class="modal-body">
+                            Apakah anda yakin untuk menghapus data
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn-sm btn-secondary" data-dismiss="modal">Tidak</button>
+                            <a href="{{ url_for('main.delete_agenda', id=agenda_harian.id) }}" class="btn-sm btn-danger">Iya</a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    {# end modal #}
               </tr>
               {% endfor %}
             </tbody>

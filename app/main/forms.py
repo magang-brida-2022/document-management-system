@@ -121,7 +121,7 @@ class AgendaForm(FlaskForm):
 
 
 class EditAgendaForm(AgendaForm):
-    pass
+    submit = SubmitField('Edit Agenda')
 
 
 class InformasiBadanForm(FlaskForm):
