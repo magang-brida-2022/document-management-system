@@ -9,7 +9,7 @@ from datetime import date
 
 from app.decorators import admin_required, permission_required
 from app.models import Permission, Bidang, Disposisi
-from .forms import SuratMagangForm, SuratMasukForm, SuratKeluarForm, DisposisiForm, BidangForm, DisposisiKeForm, EditSuratMasukForm, EditSuratKeluarForm, EditBidangForm, EditDisposisiForm, JenisSuratBalasanForm, AgendaForm, InformasiBadanForm
+from .forms import SuratMagangForm, SuratMasukForm, SuratKeluarForm, DisposisiForm, BidangForm, DisposisiKeForm, EditSuratMasukForm, EditSuratKeluarForm, EditBidangForm, EditDisposisiForm, JenisSuratBalasanForm, AgendaForm, InformasiBadanForm, EditAgendaForm
 from ..models import SuratBalasan, SuratMasuk, SuratKeluar, Bidang, Disposisi, User, Agenda, InformasiBadan
 from . import main
 from .. import db, documents_allowed_extension
@@ -506,3 +506,45 @@ def badan_info():
     form.telpon.data = badan.telpon
 
     return render_template('badan.html', form=form, title="Informasi Badan")
+
+
+@main.get('/agenda/<id>/edit')
+@main.post('/agenda/<id>/edit')
+@login_required
+@permission_required(Permission.ARSIP)
+def edit_agenda(id):
+    form = EditAgendaForm()
+    agenda = Agenda.query.filter_by(id=id).first()
+    if form.validate_on_submit():
+        agenda.waktu = form.waktu_mulai.data + " - " +  form.waktu_selesai.data
+        agenda.agenda = form.kegiatan.data
+        agenda.tempat = form.tempat.data
+
+        db.session.add(agenda)
+        db.session.commit()
+        flash("Edit Agenda Berhasil", "success")
+        return redirect(url_for('main.index'))
+
+    waktu_split = agenda.waktu.split('-')
+    temp = [waktu.strip() for waktu in waktu_split]
+
+    form.waktu_mulai.data = temp[0]
+    form.waktu_selesai.data = temp[1]
+    form.kegiatan.data = agenda.agenda
+    form.tempat.data = agenda.tempat
+    return render_template('arsip/edit_agenda.html', form=form, title="Edit Agenda")
+
+
+@main.get('/agenda/<id>/delete')
+@login_required
+def delete_agenda(id):
+    agenda = Agenda.query.filter_by(id=id).first()
+
+    if not agenda:
+        abort(404)
+
+    db.session.delete(agenda)
+    db.session.commit()
+
+    flash("Agenda berhasil dihapus", 'success')
+    return redirect(url_for('main.index'))
