@@ -172,6 +172,9 @@
                 <td>Agenda</td>
                 <td>Waktu</td>
                 <td>Tempat</td>
+                {% if current_user.can(Permission.ARSIP) %}                
+                  <td>Aksi</td>
+                {% endif %}
               </tr>
             </thead>
             <tbody>
@@ -182,6 +185,9 @@
                 <td>{{ agenda_harian.agenda }}</td>
                 <td>{{ agenda_harian.waktu }}</td>
                 <td>{{ agenda_harian.tempat }}</td>
+                {% if current_user.can(Permission.ARSIP) %}                
+                  <td><a href="{{ url_for('main.delete_agenda', id=agenda_harian.id) }}">Delete</a></td>
+                {% endif %}
               </tr>
               {% endfor %}
             </tbody>

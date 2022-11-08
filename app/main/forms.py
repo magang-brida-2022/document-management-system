@@ -120,6 +120,10 @@ class AgendaForm(FlaskForm):
     submit = SubmitField("Tambah")
 
 
+class EditAgendaForm(AgendaForm):
+    pass
+
+
 class InformasiBadanForm(FlaskForm):
     nama_badan = StringField('Nama Badan', validators=[DataRequired()])
     kepala_badan = StringField("Kepala Badan", validators=[DataRequired()])
