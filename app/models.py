@@ -275,3 +275,19 @@ class InformasiBadan(db.Model):
 
     def __repr__(self) -> str:
         return f"<Badan {self.nama}"
+
+    @staticmethod
+    def insert_informasi_badan():
+        init_informasi_badan = [
+            ("Nama Badan...", "Nama Kepala Badan...", "NIP Kepala Badan...",
+             "Alamat Badan...", "Email Badan...", "Telpon Badan...")
+        ]
+
+        for i in init_informasi_badan:
+            info = InformasiBadan.query.filter_by(nama=i[1]).first()
+            if not info:
+                insert_info = InformasiBadan(
+                    nama=info[0], kepala=info[1], nip_kaban=info[2], alamat=info[3], email=info[4], telpon=info[5])
+                db.session.add(insert_info)
+
+        db.session.commit()
