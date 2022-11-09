@@ -129,6 +129,25 @@ class Bidang(db.Model):
     def __repr__(self) -> str:
         return '<Bidang {}>'.format(self.nama)
 
+    @staticmethod
+    def insert_bidang():
+        init_bidang = [
+            ("0", "Pimpinan"),
+            ("I", "Sekretariat"),
+            ("II", "Penelitian Pengembangan Inovasi dan Teknologi"),
+            ("III", "Pengembangan Sumber Daya Ilmu Pengetahuan dan Teknologi"),
+            ("IV", "Pemanfaatan Riset dan Inovasi"),
+            ("V", "Kemitraan dan Inkubasi Bisnis")
+        ]
+
+        for b in init_bidang:
+            bidang = Bidang.query.filter_by(nama=b[1]).first()
+            if not bidang:
+                bid = Bidang(kode=b[0], nama=b[1])
+                db.session.add(bid)
+
+        db.session.commit()
+
 
 class Disposisi(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -137,6 +156,23 @@ class Disposisi(db.Model):
 
     def __repr__(self) -> str:
         return '<Disposisi ke {}>'.format(self.nama)
+
+    @staticmethod
+    def insert_disposisi():
+        init_disposisi = [
+            ("PPIT", "Penelitian Pengembangan Inovasi dan Teknologi"),
+            ("PSDIPT", "Pengembangan Sumber Daya Ilmu Pengetahuan dan Teknologi"),
+            ("PRI", "Pemanfaatan Riset dan Inovasi"),
+            ("KIB", "Kemitraan dan Inkubasi Bisnis")
+        ]
+
+        for d in init_disposisi:
+            disposisi = Disposisi.query.filter_by(nama=d[1]).first()
+            if not disposisi:
+                dis = Disposisi(alias=d[0], nama=d[1])
+                db.session.add(dis)
+
+        db.session.commit()
 
 
 class SuratMasuk(db.Model):
