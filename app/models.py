@@ -278,11 +278,13 @@ class InformasiBadan(db.Model):
 
     @staticmethod
     def insert_informasi_badan():
-        init_info = ["Nama Badan...", "Nama Kepala Badan...", "NIP Kepala Badan...","Alamat Badan...", "Email Badan...", "Telpon Badan..."]
+        init_info = ["Nama Badan...", "Nama Kepala Badan...", "NIP Kepala Badan...",
+                     "Alamat Badan...", "Email Badan...", "Telpon Badan..."]
 
         info = InformasiBadan.query.filter_by(nama="").first()
         if info is None:
-            insert_info = InformasiBadan(nama=init_info[0], kepala=init_info[1], nip_kaban=init_info[2], alamat=init_info[3], email=init_info[4], telpon=init_info[5])
+            insert_info = InformasiBadan(
+                nama=init_info[0], kepala=init_info[1], nip_kaban=init_info[2], alamat=init_info[3], email=init_info[4], telpon=init_info[5])
             db.session.add(insert_info)
 
         db.session.commit()
