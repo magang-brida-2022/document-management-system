@@ -43,13 +43,11 @@
             <div class="inner">
               <h3>{{ total_surat_masuk }}</h3>
 
-              <p>Surat Masuk</p>
+              <p> <a href="{{ url_for('main.surat_masuk') }}" class="stretched-link text-white">Surat Masuk</a></p>
             </div>
             <div class="icon">
               <i class="ion ion-email-unread"></i>
             </div>
-            <a href="#" class="small-box-footer"
-            ></a>
           </div>
         </div>
         <!-- ./col -->
@@ -58,14 +56,11 @@
           <div class="small-box bg-success">
             <div class="inner">
               <h3>{{total_surat_keluar}}</h3>
-
-              <p>Surat Keluar</p>
+              <p> <a href="{{ url_for('main.surat_keluar') }}" class="stretched-link text-white">Surat Keluar</a></p>
             </div>
             <div class="icon">
               <i class="ion ion-email"></i>
             </div>
-            <a href="#" class="small-box-footer"
-            ></a>
           </div>
         </div>
         <!-- ./col -->
@@ -80,24 +75,6 @@
             <div class="icon">
               <i class="ion ion-person-add"></i>
             </div>
-            <a href="#" class="small-box-footer"
-            ></a>
-          </div>
-        </div>
-
-        <div class="col-lg-3 col-6">
-          <!-- small box -->
-          <div class="small-box bg-secondary">
-            <div class="inner">
-              <h3>{{ total_surat_balasan }}</h3>
-
-              <p>Surat Balasan</p>
-            </div>
-            <div class="icon">
-              <i class="ion ion-reply-all"></i>
-            </div>
-            <a href="#" class="small-box-footer"
-            ></a>
           </div>
         </div>
 

@@ -4,7 +4,7 @@ from flask import render_template, flash, redirect, request, send_file, url_for,
 from flask_login import login_required, current_user
 from io import BytesIO
 from docxtpl import DocxTemplate
-from sqlalchemy import and_, func
+from sqlalchemy import and_, func, or_
 from datetime import date
 
 from app.decorators import admin_required, permission_required
@@ -116,10 +116,12 @@ def surat_keluar():
 @permission_required(Permission.FEEDBACK)
 def feedback():
     # surat masuk yang belum ditindaklanjuti
-    surat_masuk = SuratMasuk.query.filter(and_(SuratMasuk.disposisi_ke == current_user.bidang.nama, SuratMasuk.tindak_lanjut == False)).all()
+    surat_masuk = SuratMasuk.query.filter(or_(current_user.is_administrator(), and_(
+        SuratMasuk.disposisi_ke == current_user.bidang.nama, SuratMasuk.tindak_lanjut == False))).all()
 
     # surat masuk yang sudah ditindaklanjuti
-    surat_masuk_confirm = SuratMasuk.query.filter(and_(SuratMasuk.disposisi_ke == current_user.bidang.nama, SuratMasuk.tindak_lanjut == True)).all()
+    surat_masuk_confirm = SuratMasuk.query.filter(or_(current_user.is_administrator(), and_(
+        SuratMasuk.disposisi_ke == current_user.bidang.nama, SuratMasuk.tindak_lanjut == True))).all()
 
     return render_template('arsip/feedback.html', surat_masuk=surat_masuk, page='feedback', surat_masuk_confirm=surat_masuk_confirm, title="Tindak Lanjut")
 
@@ -516,7 +518,7 @@ def edit_agenda(id):
     form = EditAgendaForm()
     agenda = Agenda.query.filter_by(id=id).first()
     if form.validate_on_submit():
-        agenda.waktu = form.waktu_mulai.data + " - " +  form.waktu_selesai.data
+        agenda.waktu = form.waktu_mulai.data + " - " + form.waktu_selesai.data
         agenda.agenda = form.kegiatan.data
         agenda.tempat = form.tempat.data
 
