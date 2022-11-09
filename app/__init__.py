@@ -8,7 +8,7 @@ from flask_moment import Moment
 from flask_toastr import Toastr
 
 # import config
-from config import Config
+from config import ProductionConfig
 
 db = SQLAlchemy()
 migrate = Migrate()
@@ -49,7 +49,7 @@ def forbidden(e):
 
 def create_app():
     app = Flask(__name__)
-    app.config.from_object(Config)
+    app.config.from_object(ProductionConfig)
 
     db.init_app(app)
     migrate.init_app(app, db)

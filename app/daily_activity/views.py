@@ -18,8 +18,8 @@ def daily():
     daily_activity = current_user.posts
 
     if form.validate_on_submit():
-        date_parse = datetime.strptime(form.tanggal.data, "%m/%d/%Y")
-        new_activity = DailyActivity(tanggal=date_parse, kegiatan=form.kegiatan.data,
+        # date_parse = datetime.strptime(form.tanggal.data, "%m/%d/%Y")
+        new_activity = DailyActivity(tanggal=form.tanggal.data, kegiatan=form.kegiatan.data,
                                      deskripsi=form.deskripsi.data, output=form.output.data, author=current_user)
         db.session.add(new_activity)
         db.session.commit()

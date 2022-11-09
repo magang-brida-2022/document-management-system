@@ -15,10 +15,14 @@ class DailyActivityForm(FlaskForm):
     submit = SubmitField('Simpan')
 
     def validate_tanggal(self, tanggal):
-        if DailyActivity.query.filter_by(tanggal=tanggal.data).first():
-            flash(
-                f'Tanggal {tanggal.data} sudah diisi, silahkan di edit jika ingin diubah', 'error')
-            raise ValidationError()
+        activity = DailyActivity.query.filter_by(tanggal=tanggal.data).first()
+        if activity:
+            list_activity = current_user.posts
+            for a in list_activity:
+                if activity.tanggal == a.tanggal:
+                    flash(
+                        f'Tanggal {tanggal.data} sudah diisi, silahkan di edit jika ingin diubah', 'error')
+                    raise ValidationError("")
 
 
 class EditDailyActivityForm(FlaskForm):

@@ -26,7 +26,7 @@ class User(UserMixin, db.Model):
     bidang_id = db.Column(db.Integer, db.ForeignKey('bidang.id'))
 
     posts = db.relationship(
-        'DailyActivity', backref="author", lazy=True)
+        'DailyActivity', backref="author", lazy='dynamic')
 
     def __init__(self, **kwargs) -> None:
         super().__init__(**kwargs)
@@ -185,7 +185,7 @@ class SuratMasuk(db.Model):
     tanggal_diterima = db.Column(db.DateTime, default=datetime.utcnow)
     rak = db.Column(db.String, nullable=False)
     lampiran = db.Column(db.LargeBinary, nullable=False)
-    disposisi_ke = db.Column(db.String(50))
+    disposisi_ke = db.Column(db.String(100))
     pesan = db.Column(db.Text)
     dilihat = db.Column(db.Boolean, default=False)
     tindak_lanjut = db.Column(db.Boolean, default=False)
@@ -278,16 +278,11 @@ class InformasiBadan(db.Model):
 
     @staticmethod
     def insert_informasi_badan():
-        init_informasi_badan = [
-            ("Nama Badan...", "Nama Kepala Badan...", "NIP Kepala Badan...",
-             "Alamat Badan...", "Email Badan...", "Telpon Badan...")
-        ]
+        init_info = ["Nama Badan...", "Nama Kepala Badan...", "NIP Kepala Badan...","Alamat Badan...", "Email Badan...", "Telpon Badan..."]
 
-        for i in init_informasi_badan:
-            info = InformasiBadan.query.filter_by(nama=i[1]).first()
-            if not info:
-                insert_info = InformasiBadan(
-                    nama=info[0], kepala=info[1], nip_kaban=info[2], alamat=info[3], email=info[4], telpon=info[5])
-                db.session.add(insert_info)
+        info = InformasiBadan.query.filter_by(nama="").first()
+        if info is None:
+            insert_info = InformasiBadan(nama=init_info[0], kepala=init_info[1], nip_kaban=init_info[2], alamat=init_info[3], email=init_info[4], telpon=init_info[5])
+            db.session.add(insert_info)
 
         db.session.commit()
