@@ -3,8 +3,9 @@ from flask import flash
 from wtforms import StringField, SubmitField, TextAreaField, SelectField
 from wtforms.validators import DataRequired, ValidationError
 from flask_login import current_user
+from sqlalchemy import and_
 
-from ..models import DailyActivity
+from ..models import DailyActivity, User
 
 
 class DailyActivityForm(FlaskForm):
@@ -42,3 +43,14 @@ class RekapBulananForm(FlaskForm):
                                                       for activity in DailyActivity.query.filter_by(author=current_user).all()]))
         self.bulan.choices = [(0, "---")] + list(set([(activity.tanggal.month, activity.tanggal.month)
                                                       for activity in DailyActivity.query.filter_by(author=current_user).all()]))
+
+
+class CariPegawaiForm(FlaskForm):
+    pilih_pegawai = SelectField(
+        'Pilih', coerce=int, validators=[DataRequired()])
+    submit = SubmitField("Cari")
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.pilih_pegawai.choices = [(0, "---")]+[(user.id, user.nama)
+                                                   for user in User.query.filter(and_(User.bidang == current_user.bidang, User.nama != current_user.nama)).all()]
