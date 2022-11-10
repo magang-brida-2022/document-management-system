@@ -170,6 +170,73 @@ url_for('static', filename="plugins/dataTables/datatables.min.css") }}">
         </div>
       </div>
     </div>
+
+    {% if current_user.can(Permission.FEEDBACK) %}
+    <div class="row">
+          <div class="col-md-6">
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">Cari Pegawai</h3>
+              </div>
+
+              <!-- /.card-header -->
+              <div class="card-body">
+                <form method="post">
+                {{cari_pegawai_form.hidden_tag()}}
+                  <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      {{cari_pegawai_form.pilih_pegawai.label(class="input-group-text")}}         
+                    </div>
+                    {{cari_pegawai_form.pilih_pegawai(class="custom-select")}}
+                  </div>
+                  <button class="btn btn-primary">Cari</button>
+                </form>
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+          </div>
+          
+          {% if pegawai_selected %}
+          
+          <!-- /.col -->
+          <div class="col-md-6">
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">Detail</h3>
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body p-0 table-responsive">
+                <table class="table">
+                  <tr>
+                    <th>No</th>
+                    <th>Tanggal</th>
+                    <th>Kegiatan</th>
+                    <th>deskripsi</th>
+                    <th>Lokasi</th>
+                  </tr>
+                    {% for k in pegawai_selected %}
+                  <tr>
+                      <td>{{ loop.index }}</td>
+                      <td>{{ moment(k.tanggal).format('DD/MM/YYYY') }}</td>
+                      <td>{{ k.kegiatan }}</td>
+                      <td>{{ k.deskripsi }}</td>
+                      <td>{{ k.output }}</td>
+                  </tr>
+                    {% endfor %}
+                </table>
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+
+           
+          </div>
+          <!-- /.col -->
+        </div>
+          {% endif %}
+    
+    {% endif %}
   </div>
 </section>
 

@@ -1,6 +1,6 @@
-from flask import Blueprint, abort
-from sqlalchemy import and_, or_
-from flask_login import current_user, login_required
+from flask import Blueprint
+from sqlalchemy import and_
+from flask_login import current_user
 
 from ..models import Permission, SuratMasuk
 
