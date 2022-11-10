@@ -31,8 +31,8 @@ def login():
     return render_template('auth/login.html', form=form, title="Login")
 
 
-@auth.get('/signup')
-@auth.post('/signup')
+@auth.get('/daftar_pengguna')
+@auth.post('/daftar_pengguna')
 @admin_required
 def register():
     all_user = User.query.all()
