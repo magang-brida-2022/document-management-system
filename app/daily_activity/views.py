@@ -1,13 +1,12 @@
-from flask import render_template, flash, redirect, url_for, request, make_response
+from flask import render_template, flash, redirect, url_for, request
 from flask_login import login_required, current_user
 from datetime import datetime
 
-from app.decorators import permission_required
-
 from . import daily_activity
-from .forms import DailyActivityForm, EditDailyActivityForm, RekapBulananForm
-from ..models import DailyActivity, Permission
+from .forms import DailyActivityForm, EditDailyActivityForm, RekapBulananForm, CariPegawaiForm
+from ..models import DailyActivity, Bidang, User
 from .. import db
+from ..main.utils.local_datetime_formatting import to_localtime
 
 
 @daily_activity.get('/')
@@ -15,6 +14,8 @@ from .. import db
 @login_required
 def daily():
     form = DailyActivityForm()
+    cari_pegawai_form = CariPegawaiForm()
+
     daily_activity = current_user.posts
 
     if form.validate_on_submit():
@@ -26,7 +27,13 @@ def daily():
         flash("Aktivitas berhasil ditambahkan.", "success")
         return redirect(request.url)
 
-    return render_template('daily_activity/daily_activity.html', form=form, title="Daily Activity", daily_activity=daily_activity, page='activity')
+    if cari_pegawai_form.validate_on_submit():
+        id = cari_pegawai_form.pilih_pegawai.data
+        pegawai_selected = User.query.filter_by(id=id).first()
+
+        return render_template('daily_activity/daily_activity.html', form=form, title="Daily Activity", daily_activity=daily_activity, page='activity', cari_pegawai_form=cari_pegawai_form, pegawai_selected=pegawai_selected.posts)
+
+    return render_template('daily_activity/daily_activity.html', form=form, title="Daily Activity", daily_activity=daily_activity, page='activity', cari_pegawai_form=cari_pegawai_form)
 
 
 @daily_activity.get('<id>/edit')
@@ -71,7 +78,12 @@ def rekap_bulanan():
     if form.validate_on_submit():
         cetak = DailyActivity.query.filter(
             DailyActivity.filter_by_month == form.bulan.data, DailyActivity.filter_by_year == form.tahun.data).filter_by(author=current_user).all()
+        now = to_localtime(datetime.now())
 
-        return render_template('daily_activity/cetak_daily_activity.html', data=cetak)
+        user_bidang = Bidang.query.filter(
+            Bidang.id == current_user.bidang.id).first()
+        print(user_bidang)
+
+        return render_template('daily_activity/cetak_daily_activity.html', data=cetak, date=now)
 
     return render_template('daily_activity/rekap_bulanan.html', form=form, page='rekap')

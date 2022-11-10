@@ -1,11 +1,10 @@
-from tokenize import String
-from wsgiref.validate import validator
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField
 from wtforms import StringField, DateField,  SubmitField, TextAreaField, SelectField, BooleanField, IntegerField
 from wtforms.validators import DataRequired
+from flask_login import current_user
 
-from ..models import Disposisi
+from ..models import Disposisi, User
 
 
 class SuratMasukForm(FlaskForm):
