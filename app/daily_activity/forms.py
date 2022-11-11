@@ -39,10 +39,10 @@ class RekapBulananForm(FlaskForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.tahun.choices = [(0, "---")] + list(set([(activity.tanggal.year, activity.tanggal.year)
-                                                      for activity in DailyActivity.query.filter_by(author=current_user).all()]))
-        self.bulan.choices = [(0, "---")] + list(set([(activity.tanggal.month, activity.tanggal.month)
-                                                      for activity in DailyActivity.query.filter_by(author=current_user).all()]))
+        self.tahun.choices = [(0, "-- Pilih --")] + list(set([(activity.tanggal.year, activity.tanggal.year)
+                                                              for activity in DailyActivity.query.filter_by(author=current_user).all()]))
+        self.bulan.choices = [(0, "-- Pilih --")] + list(set([(activity.tanggal.month, activity.tanggal.month)
+                                                              for activity in DailyActivity.query.filter_by(author=current_user).all()]))
 
 
 class CariPegawaiForm(FlaskForm):
@@ -52,5 +52,5 @@ class CariPegawaiForm(FlaskForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.pilih_pegawai.choices = [(0, "---")]+[(user.id, user.nama)
-                                                   for user in User.query.filter(and_(User.bidang == current_user.bidang, User.nama != current_user.nama)).all()]
+        self.pilih_pegawai.choices = [(0, "-- Pilih --")]+[(user.id, user.nama)
+                                                           for user in User.query.filter(and_(User.bidang == current_user.bidang, User.nama != current_user.nama)).all()]
