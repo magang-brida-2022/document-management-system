@@ -38,12 +38,21 @@
               {% endfor %}
             </div>
           </div>
-          <div class="form-group">
-            {{form.nama_lengkap.label}}
-            {{form.nama_lengkap(class="form-control")}}
-            {% for error in form.nama_lengkap.errors %}
-              <span style="color: red;">[{{error}}]</span>
-            {% endfor %}
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              {{form.nama_lengkap.label}}
+              {{form.nama_lengkap(class="form-control")}}
+              {% for error in form.nama_lengkap.errors %}
+                <span style="color: red;">[{{error}}]</span>
+              {% endfor %}
+            </div>
+            <div class="form-group col-md-6">
+              {{form.nip.label}}
+              {{form.nip(class="form-control")}}
+              {% for error in form.nip.errors %}
+                <span style="color: red;">[{{error}}]</span>
+              {% endfor %}
+            </div>
           </div>
           <div class="form-group">
             {{form.bidang.label}} {{form.bidang(class="form-control")}}
@@ -71,10 +80,8 @@
               {% endfor %}
             </div>
             <div class="form-group col-md-3">
-              {{form.foto.label}} {{form.foto(class="form-control-files")}}
-              {% for error in form.foto.errors %}
-                <span style="color: red;">[{{error}}]</span>
-              {% endfor %}
+              {{form.foto.label}}
+              {{form.foto(class="form-control-file")}}
             </div>
           </div>
           {{form.submit(class="btn btn-primary")}}

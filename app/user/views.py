@@ -53,6 +53,7 @@ def edit_profile_admin(id):
         user.username = form.username.data
         user.role = Role.query.get(form.role.data)
         user.nama = form.nama_lengkap.data
+        user.nip = form.nip.data
         user.bidang = Bidang.query.get(form.bidang.data)
         user.jabatan = form.jabatan.data
         user.no_telpon = form.no_telpon.data
@@ -68,6 +69,7 @@ def edit_profile_admin(id):
     form.username.data = user.username
     form.role.data = user.role_id
     form.nama_lengkap.data = user.nama
+    form.nip.data = user.nip
     form.jabatan.data = user.jabatan
     form.bidang.data = user.bidang_id
     form.no_telpon.data = user.no_telpon

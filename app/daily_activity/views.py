@@ -76,14 +76,21 @@ def delete_aktivity(id):
 def rekap_bulanan():
     form = RekapBulananForm()
     if form.validate_on_submit():
-        cetak = DailyActivity.query.filter(
+        data = DailyActivity.query.filter(
             DailyActivity.filter_by_month == form.bulan.data, DailyActivity.filter_by_year == form.tahun.data).filter_by(author=current_user).all()
-        now = to_localtime(datetime.now())
 
-        user_bidang = Bidang.query.filter(
-            Bidang.id == current_user.bidang.id).first()
-        print(user_bidang)
+        return render_template('daily_activity/rekap_bulanan.html', form=form, page="rekap", data=data, bulan=form.bulan.data, tahun=form.tahun.data, title="Cetak aktifitas harian")
 
-        return render_template('daily_activity/cetak_daily_activity.html', data=cetak, date=now)
+    return render_template('daily_activity/rekap_bulanan.html', form=form, page='rekap', title="Cetak aktifitas harian")
 
-    return render_template('daily_activity/rekap_bulanan.html', form=form, page='rekap')
+
+@daily_activity.get('/cetak')
+@login_required
+def cetak_rekap_bulanan():
+    bulan = request.args.get("bulan")
+    tahun = request.args.get("tahun")
+
+    data = DailyActivity.query.filter(
+        DailyActivity.filter_by_month == bulan, DailyActivity.filter_by_year == tahun).filter_by(author=current_user).all()
+
+    return render_template('daily_activity/cetak_daily_activity.html', data=data)

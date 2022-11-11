@@ -19,6 +19,7 @@ toastr = Toastr()
 
 login_manager = LoginManager()
 login_manager.session_protection = 'strong'
+login_manager.login_message = "Login terlebih dahulu sebelum menggunakan aplikasi."
 login_manager.login_message_category = 'error'
 login_manager.login_view = 'auth.login'
 

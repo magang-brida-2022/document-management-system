@@ -24,23 +24,25 @@ class RegistrationForm(FlaskForm):
     confirm_password = PasswordField(
         "Confirm Password", validators=[DataRequired()])
     nama_lengkap = StringField('Nama Lengkap', validators=[Length(0, 64)])
+    nip = StringField('NIP', validators=[DataRequired()])
     bidang = SelectField('Bidang', coerce=int)
-    jabatan = StringField('Jabatan', validators=[Length(0, 64)])
+    jabatan = SelectField('Jabatan', choices=[
+                          ("0", "-- Pilih --"), ("kabid", "Kepala Bidang"), ("kasubid", "Kepala Sub-Bidang"), ("pegawai", "Pegawai")])
     no_telpon = StringField('No Telpon')
     foto_profile = FileField("Select Photo Profile")
     submit = SubmitField('Register')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.bidang.choices = [(0, "---")]+[(bidang.id, bidang.nama)
-                                            for bidang in Bidang.query.order_by(Bidang.kode).all()]
+        self.bidang.choices = [(0, "-- Pilih --")]+[(bidang.id, bidang.nama)
+                                                    for bidang in Bidang.query.order_by(Bidang.kode).all()]
 
     def validate_email(self, email):
         if User.query.filter_by(email=email.data).first():
-            flash("Email already registered", "error")
+            flash("Email sudah terdaftar", "error")
             return False
 
     def validate_username(self, username):
         if User.query.filter_by(username=username.data).first():
-            flash("Username already registered", "error")
+            flash("Username sudah terdaftar", "error")
             return False
