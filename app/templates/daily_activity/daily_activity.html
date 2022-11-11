@@ -110,7 +110,7 @@ url_for('static', filename="plugins/dataTables/datatables.min.css") }}">
         </div>
         <!-- End Modal -->
         <div class="mt-4 table-responsive">
-          <table id="data" class="table table-striped mt-4">
+          <table class="table table-striped mt-4 display__datatables">
             <thead>
               <tr>
                 <th>{{form.tanggal.label}}</th>
@@ -172,10 +172,11 @@ url_for('static', filename="plugins/dataTables/datatables.min.css") }}">
     </div>
 
     {% if current_user.can(Permission.FEEDBACK) %}
+    <hr>
     <div class="row">
           <div class="col-md-6">
-            <div class="card">
-              <div class="card-header">
+            <div class="card card-warning">
+              <div class="card-header ">
                 <h3 class="card-title">Cari Pegawai</h3>
               </div>
 
@@ -189,7 +190,7 @@ url_for('static', filename="plugins/dataTables/datatables.min.css") }}">
                     </div>
                     {{cari_pegawai_form.pilih_pegawai(class="custom-select")}}
                   </div>
-                  <button class="btn btn-primary">Cari</button>
+                  <button class="btn btn-primary"><i class="bi bi-search"></i> Cari</button>
                 </form>
               </div>
               <!-- /.card-body -->
@@ -198,31 +199,34 @@ url_for('static', filename="plugins/dataTables/datatables.min.css") }}">
           </div>
           
           {% if pegawai_selected %}
-          
           <!-- /.col -->
           <div class="col-md-6">
-            <div class="card">
+            <div class="card card-success">
               <div class="card-header">
                 <h3 class="card-title">Detail</h3>
               </div>
               <!-- /.card-header -->
-              <div class="card-body p-0 table-responsive">
-                <table class="table">
-                  <tr>
-                    <th>No</th>
-                    <th>Tanggal</th>
-                    <th>Kegiatan</th>
-                    <th>deskripsi</th>
-                    <th>Lokasi</th>
-                  </tr>
+              <div class="card-body table-responsive">
+                <table class="table able-striped mt-4 display__datatables">
+                  <thead>
+                    <tr>
+                      <th>No</th>
+                      <th>Tanggal</th>
+                      <th>Kegiatan</th>
+                      <th>deskripsi</th>
+                      <th>Lokasi</th>
+                    </tr>
+                  </thead>
                     {% for k in pegawai_selected %}
-                  <tr>
-                      <td>{{ loop.index }}</td>
-                      <td>{{ moment(k.tanggal).format('DD/MM/YYYY') }}</td>
-                      <td>{{ k.kegiatan }}</td>
-                      <td>{{ k.deskripsi }}</td>
-                      <td>{{ k.output }}</td>
-                  </tr>
+                  <tbody>
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td>{{ moment(k.tanggal).format('DD/MM/YYYY') }}</td>
+                        <td>{{ k.kegiatan }}</td>
+                        <td>{{ k.deskripsi }}</td>
+                        <td>{{ k.output }}</td>
+                    </tr>
+                  </tbody>
                     {% endfor %}
                 </table>
               </div>
@@ -260,7 +264,7 @@ $(document).ready(function () {
         }
       });
 
-      $("#data").DataTable();
+      $("table.display__datatables").DataTable();
   })
 </script>
 {% endblock scripts %}

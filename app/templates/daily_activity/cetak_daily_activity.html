@@ -27,7 +27,7 @@
                 <tbody>
                         {% for activity in data %}
                         <tr>
-                          <td>{{loop.index}}</td>
+                          <td align="center">{{loop.index}}</td>
                           <td>{{activity.kegiatan}}</td>
                           <td>{{ moment(activity.tanggal).format('MM/DD/YYYY') }}</td>
                           <td>{{activity.deskripsi}}</td>
@@ -39,15 +39,17 @@
         </div>
 
         <br>
+        <br>
+        <br>
 
         <div class="card-footer">
             <table style="height: 100px; margin-right: 10px;" align="right">
                 <tr width="50px">
-                    <td style="text-align: center;">Mataram, {{ date }}</td>
+                    <td style="text-align: center;">Mengetahui atasan</td>
                 </tr>
                  <tr>
                     <td style="text-align: center;">
-                        <br><br>
+                        <br><br><br>
                     </td>
                 </tr>
                  <tr>
