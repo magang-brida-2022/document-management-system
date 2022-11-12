@@ -2,7 +2,7 @@ from wsgiref.util import request_uri
 from flask import render_template, abort, flash, url_for, redirect, request, abort
 from . import users
 
-from app.models import User, Role, Bidang
+from app.models import User, Role, Bidang, SubBidang
 from flask_login import login_required, current_user
 from app.decorators import admin_required, permission_required
 from .forms import EditProfileForm, EditProfileAdminForm
@@ -55,6 +55,7 @@ def edit_profile_admin(id):
         user.nama = form.nama_lengkap.data
         user.nip = form.nip.data
         user.bidang = Bidang.query.get(form.bidang.data)
+        user.subbidang = SubBidang.query.get(form.sub_bidang.data)
         user.jabatan = form.jabatan.data
         user.no_telpon = form.no_telpon.data
 
@@ -72,6 +73,7 @@ def edit_profile_admin(id):
     form.nip.data = user.nip
     form.jabatan.data = user.jabatan
     form.bidang.data = user.bidang_id
+    form.sub_bidang.data = user.subbidang_id
     form.no_telpon.data = user.no_telpon
     return render_template('user/edit_user_admin.html', form=form, user=user, title="Edit Profile [ADMIN]")
 

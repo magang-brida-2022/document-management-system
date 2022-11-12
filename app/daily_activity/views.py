@@ -90,7 +90,18 @@ def cetak_rekap_bulanan():
     bulan = request.args.get("bulan")
     tahun = request.args.get("tahun")
 
+    # user = User.query.filter_by(
+    #     id=int(current_user.subbidang_id.kepala_sub_bidang)).first()
+    # print(user)
+
+    user = User.query.filter_by(
+        id=current_user.subbidang.kepala_sub_bidang).first()
+    kasubid = {
+        "nama": user.nama,
+        "nip": user.nip
+    }
+
     data = DailyActivity.query.filter(
         DailyActivity.filter_by_month == bulan, DailyActivity.filter_by_year == tahun).filter_by(author=current_user).all()
 
-    return render_template('daily_activity/cetak_daily_activity.html', data=data)
+    return render_template('daily_activity/cetak_daily_activity.html', data=data, kasubid=kasubid)

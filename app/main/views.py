@@ -9,8 +9,8 @@ from datetime import date
 
 from app.decorators import admin_required, permission_required
 from app.models import Permission, Bidang, Disposisi
-from .forms import SuratMagangForm, SuratMasukForm, SuratKeluarForm, DisposisiForm, BidangForm, DisposisiKeForm, EditSuratMasukForm, EditSuratKeluarForm, EditBidangForm, EditDisposisiForm, JenisSuratBalasanForm, AgendaForm, InformasiBadanForm, EditAgendaForm
-from ..models import SuratBalasan, SuratMasuk, SuratKeluar, Bidang, Disposisi, User, Agenda, InformasiBadan
+from .forms import SuratMagangForm, SuratMasukForm, SuratKeluarForm, DisposisiForm, BidangForm, DisposisiKeForm, EditSuratMasukForm, EditSuratKeluarForm, EditBidangForm, EditDisposisiForm, JenisSuratBalasanForm, AgendaForm, InformasiBadanForm, EditAgendaForm, SubBidangForm
+from ..models import SuratBalasan, SuratMasuk, SuratKeluar, Bidang, Disposisi, User, Agenda, InformasiBadan, SubBidang
 from . import main
 from .. import db, documents_allowed_extension
 from .. import create_app
@@ -181,10 +181,14 @@ def disposisi():
 
 @main.get('/bidang')
 @main.post('/bidang')
+@login_required
 @admin_required
 def bidang():
     form = BidangForm()
     bidang = Bidang.query.all()
+
+    sub_bidang_form = SubBidangForm()
+    sub_bidang = SubBidang.query.all()
     if form.validate_on_submit():
         bidang_baru = Bidang(kode=form.kode.data, nama=form.nama.data)
         db.session.add(bidang_baru)
@@ -192,7 +196,23 @@ def bidang():
         flash('Data berhasil ditambahkan.', 'success')
         return redirect(url_for('main.bidang'))
 
-    return render_template('arsip/tambah_bidang.html', form=form, bidang=bidang, title="Management Bidang", page="bidang")
+    if sub_bidang_form.validate_on_submit():
+        id = sub_bidang_form.kepala_sub_bidang.data
+        user = User.query.filter_by(id=id).first()
+
+        alias = sub_bidang_form.alias.data
+        nama_sub_bidang = sub_bidang_form.nama_sub_bidang.data
+        kepala_sub_bidang = sub_bidang_form.kepala_sub_bidang.data
+        nip_kepala_sub_bidang = user.nip
+
+        sub_bidang_baru = SubBidang(alias=alias, nama_sub_bidang=nama_sub_bidang,
+                                    kepala_sub_bidang=kepala_sub_bidang, nip_kepala_sub_bidang=nip_kepala_sub_bidang)
+        db.session.add(sub_bidang_baru)
+        db.session.commit()
+        flash("Sub bidang baru berhasil ditambahkan", "success")
+        return redirect(url_for('main.bidang'))
+
+    return render_template('arsip/tambah_bidang.html', form=form, sub_bidang_form=sub_bidang_form, sub_bidang=sub_bidang, bidang=bidang, title="Management Bidang", page="bidang")
 
 
 '''
@@ -550,3 +570,12 @@ def delete_agenda(id):
 
     flash("Agenda berhasil dihapus", 'success')
     return redirect(url_for('main.index'))
+
+
+@main.get('/sub-bidang/<id>/delete')
+def delete_sub_bidang(id):
+    sub_bidang = SubBidang.query.filter_by(id=id).first()
+    db.session.delete(sub_bidang)
+    db.session.commit()
+    flash("Delete sub-bidang berhasil dihapus", "success")
+    return redirect(url_for('main.bidang'))

@@ -53,4 +53,4 @@ class CariPegawaiForm(FlaskForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.pilih_pegawai.choices = [(0, "-- Pilih --")]+[(user.id, user.nama)
-                                                           for user in User.query.filter(and_(User.bidang == current_user.bidang, User.nama != current_user.nama)).all()]
+                                                           for user in User.query.filter(and_(User.bidang == current_user.bidang, User.nama != current_user.nama, User.jabatan == "pegawai")).all()]

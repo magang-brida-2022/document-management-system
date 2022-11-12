@@ -275,13 +275,15 @@
                   <p>Laporan Harian</p>
                 </a>
               </li>
-
+            {% if current_user.can(Permission.LAPORAN_HARIAN) %}
               <li class="nav-item">
                 <a href="{{ url_for('daily_activity.rekap_bulanan') }}" class="nav-link {% if page == 'rekap' %}active{% endif %}">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Rekap Bulanan</p>
                 </a>
               </li>
+            {% endif %}
+
             </ul>
           </li>
           
