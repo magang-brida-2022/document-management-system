@@ -6,7 +6,7 @@ from app.decorators import admin_required
 
 from . import auth
 from .forms import LoginForm, RegistrationForm
-from app.models import User, Bidang, SubBidang
+from app.models import User, Bidang, SubBidang, Role
 from .. import db, images_allowed_extension
 
 
@@ -42,14 +42,14 @@ def register():
     if form.validate_on_submit():
         try:
             if form.foto_profile.data and images_allowed_extension(form.foto_profile.data.filename):
-                user = User(email=form.email.data, username=form.username.data, password=form.password.data, nama=form.nama_lengkap.data, nip=form.nip.data,
+                user = User(email=form.email.data, username=form.username.data, password=form.password.data, role=Role.query.get(form.role.data), nama=form.nama_lengkap.data, nip=form.nip.data,
                             bidang=Bidang.query.get(form.bidang.data), jabatan=form.jabatan.data, no_telpon=form.no_telpon.data, foto=form.foto_profile.data.read())
                 db.session.add(user)
                 db.session.commit()
                 flash('Penguna baru berhasil dibuat.', 'success')
                 return redirect(request.base_url)
             else:
-                flash('support hanya file dengan format .img/.png', 'error')
+                flash('Support hanya file dengan format .img/.png', 'error')
                 return redirect(request.base_url)
         except IntegrityError:
             db.session.rollback()

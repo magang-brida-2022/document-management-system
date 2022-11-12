@@ -251,12 +251,12 @@ href="{{url_for('static', filename="plugins/dataTables/datatables.min.css") }}">
               <tr>
                 <td>{{ b.alias }}</td>
                 <td>{{ b.nama_sub_bidang }}</td>
-                <td>{{ b.kepala_sub_bidang }} [{{ b.nip_kepala_sub_bidang }}]</td>
+                <td>[{{ b.nip_kepala_sub_bidang }}] - {{ b.kepala_sub_bidang }}</td>
                 <td>
                   <div class="btn-toolbar" role="toolbar">
                     <div class="btn-group mr-2" role="group">
                       <a
-                        href="#edit"
+                        href="{{ url_for('main.edit_sub_bidang', id=b.id) }}"
                         class="btn-sm btn-primary"
                         ><i class="bi bi-pencil-square"></i> Edit</a
                       >
