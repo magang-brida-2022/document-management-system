@@ -95,7 +95,7 @@ def cetak_rekap_bulanan():
     # print(user)
 
     user = User.query.filter_by(
-        id=current_user.subbidang.kepala_sub_bidang).first()
+        nama=current_user.subbidang.kepala_sub_bidang).first()
     kasubid = {
         "nama": user.nama,
         "nip": user.nip
