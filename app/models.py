@@ -64,19 +64,6 @@ class User(UserMixin, db.Model):
             return b64encode(self.foto).decode('utf-8')
 
 
-class SubBidang(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    alias = db.Column(db.String(200))
-    nama_sub_bidang = db.Column(db.String(200))
-    kepala_sub_bidang = db.Column(db.String(100))
-    nip_kepala_sub_bidang = db.Column(db.String(50))
-
-    users = db.relationship('User', backref="subbidang", lazy='dynamic')
-
-    def __repr__(self):
-        return f"<Sub-Bidang : {self.nama_sub_bidang}, kasubid : {self.kepala_sub_bidang}>"
-
-
 class AnonymousUser(AnonymousUserMixin):
     def can(self, permissions) -> bool:
         return False
@@ -140,6 +127,7 @@ class Bidang(db.Model):
     nama = db.Column(db.String(100))
 
     users = db.relationship('User', backref="bidang", lazy='dynamic')
+    subbidang = db.relationship("SubBidang", backref="bidang", lazy=True)
 
     def __repr__(self) -> str:
         return '<Bidang {}>'.format(self.nama)
@@ -162,6 +150,21 @@ class Bidang(db.Model):
                 db.session.add(bid)
 
         db.session.commit()
+
+
+class SubBidang(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    alias = db.Column(db.String(200))
+    nama_sub_bidang = db.Column(db.String(200))
+    kepala_sub_bidang = db.Column(db.String(100))
+    nip_kepala_sub_bidang = db.Column(db.String(50))
+    bidang_id = db.Column(db.Integer, db.ForeignKey(
+        'bidang.id'))
+
+    users = db.relationship('User', backref="subbidang", lazy='dynamic')
+
+    def __repr__(self):
+        return f"<Sub-Bidang : {self.nama_sub_bidang}, kasubid : {self.kepala_sub_bidang}>"
 
 
 class Disposisi(db.Model):
