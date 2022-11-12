@@ -272,7 +272,13 @@
             <li class="nav-item">
                 <a href="{{ url_for('daily_activity.daily') }}" class="nav-link {% if page == 'activity'%}active{% endif %}">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Laporan Harian</p>
+                  <p>
+                  {% if current_user.can(Permission.LAPORAN_HARIAN) %}
+                    Laporan Harian 
+                  {% else %}
+                    Monitor Pegawai
+                  {% endif %}
+                  </p>
                 </a>
               </li>
             {% if current_user.can(Permission.LAPORAN_HARIAN) %}
