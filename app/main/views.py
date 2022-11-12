@@ -205,8 +205,19 @@ def bidang():
         kepala_sub_bidang = sub_bidang_form.kepala_sub_bidang.data
         nip_kepala_sub_bidang = user.nip
 
+        if (alias == "penelitian_dan_pengembangan") or (alias == "inovasi_dan_teknologi"):
+            bid = "Penelitian Pengembangan Inovasi dan Teknologi"
+        elif (alias == "desiminasi_hasil_inovasi_riset_dan_teknologi_wisata_keilmuan_dan_teknologi") or (alias == "eduwisata_keilmuan_dan_teknologi"):
+            bid = "Pemanfaatan Riset dan Inovasi"
+        elif (alias == "sertifikasi_dan_standarisasi") or (alias == "peningkatan_kapasitas_sumber_daya_ilmu_pengetahuan_dan_teknologi"):
+            bid = "Pengembangan Sumber Daya Ilmu Pengetahuan dan Teknologi"
+        else:
+            bid = "Kemitraan dan Inkubasi Bisnis"
+
+        bidang = Bidang.query.filter_by(nama=bid).first()
+
         sub_bidang_baru = SubBidang(alias=alias, nama_sub_bidang=nama_sub_bidang,
-                                    kepala_sub_bidang=kepala_sub_bidang, nip_kepala_sub_bidang=nip_kepala_sub_bidang)
+                                    kepala_sub_bidang=kepala_sub_bidang, nip_kepala_sub_bidang=nip_kepala_sub_bidang, bidang_id=bidang.id)
         db.session.add(sub_bidang_baru)
         db.session.commit()
         flash("Sub bidang baru berhasil ditambahkan", "success")
