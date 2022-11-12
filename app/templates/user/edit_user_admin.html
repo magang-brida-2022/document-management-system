@@ -63,7 +63,7 @@
               {% endfor %}
             </div>
             <div class="form-group col-md-6">
-              {{form.sub_bidang.label}} {{form.sub_bidang(class="form-control",disabled="disabled", id="subbidang__toggle")}}
+              {{form.sub_bidang.label}} {{form.sub_bidang(class="form-control")}}
               {% for error in form.sub_bidang.errors %}
                 <span style="color: red;">[{{error}}]</span>
               {% endfor %}
@@ -71,7 +71,7 @@
           </div>
           <div class="form-row">
             <div class="form-group col-md-3">
-              {{form.jabatan.label}} {{form.jabatan(class="form-control", id="jabatan__toggle")}}
+              {{form.jabatan.label}} {{form.jabatan(class="form-control")}}
               {% for error in form.jabatan.errors %}
               <span style="color: red;">[{{error}}]</span>
               {% endfor %}
