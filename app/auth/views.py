@@ -6,7 +6,7 @@ from app.decorators import admin_required
 
 from . import auth
 from .forms import LoginForm, RegistrationForm
-from app.models import User, Bidang
+from app.models import User, Bidang, SubBidang
 from .. import db, images_allowed_extension
 
 

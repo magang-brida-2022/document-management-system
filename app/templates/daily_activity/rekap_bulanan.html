@@ -58,7 +58,11 @@
         <h3 class="card-title">Rekap Bulanan</h3>
       </div>
       <div class="card-body">
-        <a href="{{ url_for('daily_activity.cetak_rekap_bulanan') }}?bulan={{bulan}}&tahun={{tahun}}" class="btn btn-info"><i class="bi bi-printer-fill"></i> Cetak</a>
+      
+        {% if current_user.can(Permission.LAPORAN_HARIAN) %}
+          <a href="{{ url_for('daily_activity.cetak_rekap_bulanan') }}?bulan={{bulan}}&tahun={{tahun}}" class="btn btn-info"><i class="bi bi-printer-fill"></i> Cetak</a>
+        {% endif %}
+
         <div class="mt-4 table-responsive">
           <table id="data" class="table table-striped mt-4">
             <thead>

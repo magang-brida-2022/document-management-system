@@ -25,6 +25,7 @@ class User(UserMixin, db.Model):
 
     role_id = db.Column(db.Integer, db.ForeignKey('role.id'))
     bidang_id = db.Column(db.Integer, db.ForeignKey('bidang.id'))
+    subbidang_id = db.Column(db.Integer, db.ForeignKey('sub_bidang.id'))
 
     posts = db.relationship(
         'DailyActivity', backref="author", lazy='dynamic')
@@ -63,6 +64,19 @@ class User(UserMixin, db.Model):
             return b64encode(self.foto).decode('utf-8')
 
 
+class SubBidang(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    alias = db.Column(db.String(200))
+    nama_sub_bidang = db.Column(db.String(200))
+    kepala_sub_bidang = db.Column(db.String(100))
+    nip_kepala_sub_bidang = db.Column(db.String(50))
+
+    users = db.relationship('User', backref="subbidang", lazy='dynamic')
+
+    def __repr__(self):
+        return f"<Sub-Bidang : {self.nama_sub_bidang}, kasubid : {self.kepala_sub_bidang}>"
+
+
 class AnonymousUser(AnonymousUserMixin):
     def can(self, permissions) -> bool:
         return False
@@ -94,9 +108,9 @@ class Role(db.Model):
     def insert_roles():
         roles = {
             'Pegawai': (Permission.LAPORAN_HARIAN | Permission.PERMOHONAN_SURAT, True),
-            'Tu': (Permission.LAPORAN_HARIAN | Permission.PERMOHONAN_SURAT | Permission.REKAP_BULANAN | Permission.ARSIP, False),
-            'Kasubid': (Permission.LAPORAN_HARIAN | Permission.PERMOHONAN_SURAT | Permission.REKAP_BULANAN | Permission.FEEDBACK, False),
-            "Sekban": (Permission.LAPORAN_HARIAN | Permission.PERMOHONAN_SURAT | Permission.DISPOSISI, False),
+            'Tu': (Permission.PERMOHONAN_SURAT | Permission.REKAP_BULANAN | Permission.ARSIP, False),
+            'Kasubid': (Permission.PERMOHONAN_SURAT | Permission.REKAP_BULANAN | Permission.FEEDBACK, False),
+            "Sekban": (Permission.PERMOHONAN_SURAT | Permission.DISPOSISI, False),
             'Administrator': (0xff, False)
         }
 

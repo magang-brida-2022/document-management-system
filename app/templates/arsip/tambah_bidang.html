@@ -92,7 +92,7 @@ href="{{url_for('static', filename="plugins/dataTables/datatables.min.css") }}">
         <!-- End Modal -->
 
         <div class="mt-4 table-responsive">
-          <table id="data" class="table table-striped mt-4">
+          <table id="data" class="table table-striped mt-4 display__datatable">
             <thead>
               <tr>
                 <th>{{form.kode.label}}</th>
@@ -158,11 +158,159 @@ href="{{url_for('static', filename="plugins/dataTables/datatables.min.css") }}">
   </div>
 </section>
 
+<section class="content">
+  <div class="container-fluid">
+    <div class="card card-warning">
+      <div class="card-header">
+        <h3 class="card-title">Sub Bidang</h3>
+      </div>
+      <div class="card-body">
+        <!-- Button trigger modal -->
+        <button
+          type="button"
+          class="btn btn-info"
+          data-toggle="modal"
+          data-target="#tambahSubBidang"
+        >
+          <i class="bi bi-plus-circle-fill"></i> Tambah Sub Bidang
+        </button>
+        <!-- Modal -->
+        <div
+          class="modal fade"
+          id="tambahSubBidang"
+          tabindex="-1"
+          aria-labelledby="tambahSubBidangModal"
+          aria-hidden="true"
+        >
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <form method="post">
+                {{sub_bidang_form.hidden_tag()}}
+                <div class="modal-header">
+                  <h5 class="modal-title" id="tambahSubBidangModal">
+                    Tambah Sub Bidang
+                  </h5>
+                  <button
+                    type="button"
+                    class="close"
+                    data-dismiss="modal"
+                    aria-label="Close"
+                  >
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <div class="form-group">
+                    {{sub_bidang_form.alias.label}} {{sub_bidang_form.alias(class="form-control")}}
+                    {% for error in sub_bidang_form.alias.errors %}
+                      <span style="color: red;">[{{error}}]</span>
+                    {% endfor %}
+                  </div>
+                  <div class="form-group">
+                    {{sub_bidang_form.nama_sub_bidang.label}} {{sub_bidang_form.nama_sub_bidang(class="form-control")}}
+                    {% for error in sub_bidang_form.nama_sub_bidang.errors %}
+                      <span style="color: red;">[{{error}}]</span>
+                    {% endfor %}
+                  </div>
+                  <div class="form-group">
+                    {{sub_bidang_form.kepala_sub_bidang.label}} {{sub_bidang_form.kepala_sub_bidang(class="form-control")}}
+                    {% for error in sub_bidang_form.kepala_sub_bidang.errors %}
+                      <span style="color: red;">[{{error}}]</span>
+                    {% endfor %}
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-dismiss="modal"
+                  >
+                    Close
+                  </button>
+
+                  {{sub_bidang_form.submit(class="btn btn-primary")}}
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+        <!-- End Modal -->
+
+        <div class="mt-4 table-responsive">
+          <table id="data" class="table table-striped mt-4 display__datatable">
+            <thead>
+              <tr>
+                <th>Alias</th>
+                <th>Nama Sub Bidang</th>
+                <th>Kepala Sub Bidang</th>
+                <th>Aksi</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for b in sub_bidang %}
+              <tr>
+                <td>{{ b.alias }}</td>
+                <td>{{ b.nama_sub_bidang }}</td>
+                <td>{{ b.kepala_sub_bidang }} [{{ b.nip_kepala_sub_bidang }}]</td>
+                <td>
+                  <div class="btn-toolbar" role="toolbar">
+                    <div class="btn-group mr-2" role="group">
+                      <a
+                        href="#edit"
+                        class="btn-sm btn-primary"
+                        ><i class="bi bi-pencil-square"></i> Edit</a
+                      >
+                    </div>
+                    <div class="btn-group mr-2" role="group">
+                      <button type="button" class="btn-sm btn-danger" data-toggle="modal" data-target="#deleteSubBidang{{ b.id }}">
+                        <i class="bi bi-trash-fill"></i> Delete
+                      </button>
+                    </div>
+
+                     {# modal #}
+                  <div class="modal fade" id="deleteSubBidang{{ b.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleDeleteSubBidang" aria-hidden="true">
+                      <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title" id="exampleDeleteSubBidang">Menghapus Data</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                          </div>
+                          <div class="modal-body">
+                            Apakah anda yakin untuk menghapus data
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn-sm btn-secondary" data-dismiss="modal">Tidak</button>
+                            <a
+                              href="{{ url_for('main.delete_sub_bidang', id=b.id) }}"
+                              class="btn-sm btn-danger"
+                              >Delete</a
+                            >
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    {# end modal #}
+
+                  </div>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 {% endblock content %} {% block scripts %}
 <script src="{{ url_for('static', filename="plugins/dataTables/datatables.min.js") }}"></script>
 <script>
   $(document).ready(function () {
-    $("#data").DataTable();
+    $("table.display__datatable").DataTable();
   });
 </script>
 {% endblock scripts %}
+table

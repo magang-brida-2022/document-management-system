@@ -24,7 +24,7 @@ login_manager.login_message_category = 'error'
 login_manager.login_view = 'auth.login'
 
 DOCS = set(['pdf'])
-IMG = set(['png', 'jpg'])
+IMG = set(['png', 'jpg', 'jpeg'])
 
 
 def documents_allowed_extension(filename):
@@ -53,7 +53,7 @@ def create_app():
     app.config.from_object(ProductionConfig)
 
     db.init_app(app)
-    migrate.init_app(app, db)
+    migrate.init_app(app, db, compare_type=True)
     login_manager.init_app(app)
     bootstrap.init_app(app)
     minify.init_app(app=app)

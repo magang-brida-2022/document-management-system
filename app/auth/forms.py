@@ -4,7 +4,7 @@ from flask_wtf.file import FileField
 from wtforms.validators import DataRequired, Length, EqualTo, ValidationError
 from flask import flash
 
-from ..models import User, Bidang
+from ..models import User, Bidang, SubBidang
 
 
 class LoginForm(FlaskForm):
@@ -26,8 +26,9 @@ class RegistrationForm(FlaskForm):
     nama_lengkap = StringField('Nama Lengkap', validators=[Length(0, 64)])
     nip = StringField('NIP', validators=[DataRequired()])
     bidang = SelectField('Bidang', coerce=int)
+    # sub_bidang = SelectField("Sub Bidang", coerce=int)
     jabatan = SelectField('Jabatan', choices=[
-                          ("0", "-- Pilih --"), ("kabid", "Kepala Bidang"), ("kasubid", "Kepala Sub-Bidang"), ("pegawai", "Pegawai")])
+                          ("0", "-- Pilih --"), ("sekban", "Sekretaris Badan"), ("kabid", "Kepala Bidang"), ("kasubid", "Kepala Sub-Bidang"), ("pegawai", "Pegawai")])
     no_telpon = StringField('No Telpon')
     foto_profile = FileField("Select Photo Profile")
     submit = SubmitField('Register')
@@ -36,6 +37,8 @@ class RegistrationForm(FlaskForm):
         super().__init__(*args, **kwargs)
         self.bidang.choices = [(0, "-- Pilih --")]+[(bidang.id, bidang.nama)
                                                     for bidang in Bidang.query.order_by(Bidang.kode).all()]
+        # self.sub_bidang.choices = [(0, "-- Pilih --")] + [(
+        #     subbidang.id, subbidang.nama_sub_bidang) for subbidang in SubBidang.query.order_by(SubBidang.id).all()]
 
     def validate_email(self, email):
         if User.query.filter_by(email=email.data).first():

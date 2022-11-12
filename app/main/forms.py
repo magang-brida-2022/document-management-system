@@ -131,3 +131,15 @@ class InformasiBadanForm(FlaskForm):
     alamat = StringField('Alamat')
     telpon = StringField('Telpon')
     submit = SubmitField('Simpan')
+
+
+class SubBidangForm(FlaskForm):
+    alias = StringField('Alias')
+    nama_sub_bidang = StringField("Nama Sub-Bidang")
+    kepala_sub_bidang = SelectField("Nama Kepala Sub Bidang", coerce=int)
+    submit = SubmitField("Tambah")
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.kepala_sub_bidang.choices = [(0, "-- Pilih --")] + [(
+            user.id, f"[ {user.nip} ] - {user.nama}") for user in User.query.filter(User.jabatan == 'kasubid').order_by(User.id).all()]
