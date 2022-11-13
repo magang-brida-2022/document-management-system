@@ -1,10 +1,11 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField
 from wtforms import StringField, DateField,  SubmitField, TextAreaField, SelectField, BooleanField, IntegerField
-from wtforms.validators import DataRequired
+from wtforms.validators import DataRequired, ValidationError
 from flask_login import current_user
+from flask import flash
 
-from ..models import Disposisi, User
+from ..models import Disposisi, User, SuratMasuk
 
 
 class SuratMasukForm(FlaskForm):
@@ -18,7 +19,6 @@ class SuratMasukForm(FlaskForm):
         "Tanggal Diterima", validators=[DataRequired()])
     lampiran = FileField("Lampiran", validators=[DataRequired()])
     rak = StringField('Rak', validators=[DataRequired()])
-
     submit = SubmitField('Simpan')
 
 
@@ -136,10 +136,14 @@ class InformasiBadanForm(FlaskForm):
 class SubBidangForm(FlaskForm):
     alias = StringField('Alias')
     nama_sub_bidang = StringField("Nama Sub-Bidang")
-    kepala_sub_bidang = SelectField("Nama Kepala Sub Bidang", coerce=int)
+    kepala_sub_bidang = SelectField("Nama Kepala Sub Bidang", coerce=str)
     submit = SubmitField("Tambah")
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.kepala_sub_bidang.choices = [(0, "-- Pilih --")] + [(
-            user.id, f"[ {user.nip} ] - {user.nama}") for user in User.query.filter(User.jabatan == 'kasubid').order_by(User.id).all()]
+        self.kepala_sub_bidang.choices = [("0", "-- Pilih --")] + [(
+            user.nama, user.nama) for user in User.query.filter(User.jabatan == 'kasubid').order_by(User.id).all()]
+
+
+class EditSubBidangForm(SubBidangForm):
+    submit = SubmitField("Simpan")

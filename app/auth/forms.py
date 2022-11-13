@@ -4,7 +4,7 @@ from flask_wtf.file import FileField
 from wtforms.validators import DataRequired, Length, EqualTo, ValidationError
 from flask import flash
 
-from ..models import User, Bidang, SubBidang
+from ..models import User, Bidang, SubBidang, Role
 
 
 class LoginForm(FlaskForm):
@@ -23,6 +23,7 @@ class RegistrationForm(FlaskForm):
                              DataRequired(), EqualTo('confirm_password', 'Password must match')])
     confirm_password = PasswordField(
         "Confirm Password", validators=[DataRequired()])
+    role = SelectField('Role', coerce=int)
     nama_lengkap = StringField('Nama Lengkap', validators=[Length(0, 64)])
     nip = StringField('NIP', validators=[DataRequired()])
     bidang = SelectField('Bidang', coerce=int)
@@ -37,8 +38,8 @@ class RegistrationForm(FlaskForm):
         super().__init__(*args, **kwargs)
         self.bidang.choices = [(0, "-- Pilih --")]+[(bidang.id, bidang.nama)
                                                     for bidang in Bidang.query.order_by(Bidang.kode).all()]
-        # self.sub_bidang.choices = [(0, "-- Pilih --")] + [(
-        #     subbidang.id, subbidang.nama_sub_bidang) for subbidang in SubBidang.query.order_by(SubBidang.id).all()]
+        self.role.choices = [(0, "-- Pilih --")] + [(role.id, role.name)
+                                                    for role in Role.query.order_by(Role.name).all()]
 
     def validate_email(self, email):
         if User.query.filter_by(email=email.data).first():
@@ -49,3 +50,11 @@ class RegistrationForm(FlaskForm):
         if User.query.filter_by(username=username.data).first():
             flash("Username sudah terdaftar", "error")
             return False
+
+
+class ResetPasswordForm(FlaskForm):
+    new_password = PasswordField("New Password", validators=[DataRequired(), EqualTo(
+        'confirm_new_password', message="Password harus sama!!")])
+    confirm_new_password = PasswordField(
+        "Confirm New Password", validators=[DataRequired()])
+    submit = SubmitField("Iya")

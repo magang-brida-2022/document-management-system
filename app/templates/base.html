@@ -149,7 +149,7 @@
       <!-- Sidebar user panel (optional) -->
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
-          <img src="data:;base64,{{ current_user.get_photo() }}" class="img-circle elevation-2" alt="User Image" width="80" height="80"
+          <img src="data:;base64,{{ current_user.get_photo() }}" class="rounded-circle" alt="User Image" style="height: 40px; width:30px;"
           >
         </div>
         <div class="info">
@@ -272,7 +272,13 @@
             <li class="nav-item">
                 <a href="{{ url_for('daily_activity.daily') }}" class="nav-link {% if page == 'activity'%}active{% endif %}">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Laporan Harian</p>
+                  <p>
+                  {% if current_user.can(Permission.LAPORAN_HARIAN) %}
+                    Laporan Harian 
+                  {% else %}
+                    Monitor Pegawai
+                  {% endif %}
+                  </p>
                 </a>
               </li>
             {% if current_user.can(Permission.LAPORAN_HARIAN) %}

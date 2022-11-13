@@ -9,7 +9,7 @@ from datetime import date
 
 from app.decorators import admin_required, permission_required
 from app.models import Permission, Bidang, Disposisi
-from .forms import SuratMagangForm, SuratMasukForm, SuratKeluarForm, DisposisiForm, BidangForm, DisposisiKeForm, EditSuratMasukForm, EditSuratKeluarForm, EditBidangForm, EditDisposisiForm, JenisSuratBalasanForm, AgendaForm, InformasiBadanForm, EditAgendaForm, SubBidangForm
+from .forms import SuratMagangForm, SuratMasukForm, SuratKeluarForm, DisposisiForm, BidangForm, DisposisiKeForm, EditSuratMasukForm, EditSuratKeluarForm, EditBidangForm, EditDisposisiForm, JenisSuratBalasanForm, AgendaForm, InformasiBadanForm, EditAgendaForm, SubBidangForm, EditSubBidangForm
 from ..models import SuratBalasan, SuratMasuk, SuratKeluar, Bidang, Disposisi, User, Agenda, InformasiBadan, SubBidang
 from . import main
 from .. import db, documents_allowed_extension
@@ -197,16 +197,27 @@ def bidang():
         return redirect(url_for('main.bidang'))
 
     if sub_bidang_form.validate_on_submit():
-        id = sub_bidang_form.kepala_sub_bidang.data
-        user = User.query.filter_by(id=id).first()
+        nama = sub_bidang_form.kepala_sub_bidang.data
+        user = User.query.filter_by(nama=nama).first()
 
         alias = sub_bidang_form.alias.data
         nama_sub_bidang = sub_bidang_form.nama_sub_bidang.data
         kepala_sub_bidang = sub_bidang_form.kepala_sub_bidang.data
         nip_kepala_sub_bidang = user.nip
 
+        if (alias == "penelitian_dan_pengembangan") or (alias == "inovasi_dan_teknologi"):
+            bid = "Penelitian Pengembangan Inovasi dan Teknologi"
+        elif (alias == "desiminasi_hasil_inovasi_riset_dan_teknologi_wisata_keilmuan_dan_teknologi") or (alias == "eduwisata_keilmuan_dan_teknologi"):
+            bid = "Pemanfaatan Riset dan Inovasi"
+        elif (alias == "sertifikasi_dan_standarisasi") or (alias == "peningkatan_kapasitas_sumber_daya_ilmu_pengetahuan_dan_teknologi"):
+            bid = "Pengembangan Sumber Daya Ilmu Pengetahuan dan Teknologi"
+        else:
+            bid = "Kemitraan dan Inkubasi Bisnis"
+
+        bidang = Bidang.query.filter_by(nama=bid).first()
+
         sub_bidang_baru = SubBidang(alias=alias, nama_sub_bidang=nama_sub_bidang,
-                                    kepala_sub_bidang=kepala_sub_bidang, nip_kepala_sub_bidang=nip_kepala_sub_bidang)
+                                    kepala_sub_bidang=kepala_sub_bidang, nip_kepala_sub_bidang=nip_kepala_sub_bidang, bidang_id=bidang.id)
         db.session.add(sub_bidang_baru)
         db.session.commit()
         flash("Sub bidang baru berhasil ditambahkan", "success")
@@ -579,3 +590,29 @@ def delete_sub_bidang(id):
     db.session.commit()
     flash("Delete sub-bidang berhasil dihapus", "success")
     return redirect(url_for('main.bidang'))
+
+
+@main.get('/sub-bidang/<id>/edit')
+@main.post('/sub-bidang/<id>/edit')
+@login_required
+def edit_sub_bidang(id):
+    form = EditSubBidangForm()
+    sub_bidang = SubBidang.query.filter_by(id=id).first()
+
+    if form.validate_on_submit():
+        user = User.query.filter_by(nama=form.kepala_sub_bidang.data).first()
+
+        sub_bidang.alias = form.alias.data
+        sub_bidang.nama_sub_bidang = form.nama_sub_bidang.data
+        sub_bidang.kepala_sub_bidang = form.kepala_sub_bidang.data
+        sub_bidang.nip_kepala_sub_bidang = user.nip
+
+        db.session.add(sub_bidang)
+        db.session.commit()
+        flash("Sub-bidang berhasil diperbarui", "success")
+        return redirect(url_for('main.bidang'))
+
+    form.alias.data = sub_bidang.alias
+    form.nama_sub_bidang.data = sub_bidang.nama_sub_bidang
+    form.kepala_sub_bidang.data = sub_bidang.kepala_sub_bidang
+    return render_template('arsip/edit_sub_bidang.html', form=form)

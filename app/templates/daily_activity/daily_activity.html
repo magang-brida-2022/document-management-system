@@ -21,6 +21,7 @@ url_for('static', filename="plugins/dataTables/datatables.min.css") }}">
   </div>
 </section>
 
+{% if current_user.can(Permission.LAPORAN_HARIAN) %}
 <section class="content">
   <div class="container-fluid">
     <div class="card card-primary">
@@ -170,6 +171,7 @@ url_for('static', filename="plugins/dataTables/datatables.min.css") }}">
         </div>
       </div>
     </div>
+{% endif %}
 
     {% if current_user.can(Permission.FEEDBACK) %}
     <hr>

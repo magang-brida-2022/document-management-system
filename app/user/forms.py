@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, SelectField
+from wtforms import StringField, SubmitField, SelectField, PasswordField
 from flask_wtf.file import FileField
 from wtforms.validators import Length, ValidationError
 from sqlalchemy import and_, or_
@@ -18,6 +18,7 @@ class EditProfileForm(FlaskForm):
 class EditProfileAdminForm(FlaskForm):
     email = StringField('Email')
     username = StringField('Username', validators=[Length(1, 64)])
+    password = PasswordField("Password")
     role = SelectField('Role', coerce=int)
     nama_lengkap = StringField('Nama Lengkap', validators=[Length(0, 64)])
     nip = StringField('NIP')
@@ -37,7 +38,7 @@ class EditProfileAdminForm(FlaskForm):
         self.bidang.choices = [(0, "-- Pilih --")] + [(bidang.id, bidang.nama)
                                                       for bidang in Bidang.query.order_by(Bidang.kode).all()]
         self.sub_bidang.choices = [(0, "-- Pilih --")] + [(subbidang.id, subbidang.nama_sub_bidang)
-                                                          for subbidang in SubBidang.query.order_by(SubBidang.alias).all()]
+                                                          for subbidang in SubBidang.query.filter(SubBidang.bidang_id == self.user.bidang_id).all()]
 
     def validate_email(self, email):
         if email.data != self.user.email and User.query.filter_by(email=email.data).first():
