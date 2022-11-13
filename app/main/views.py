@@ -603,11 +603,26 @@ def edit_sub_bidang(id):
 
     if form.validate_on_submit():
         user = User.query.filter_by(nama=form.kepala_sub_bidang.data).first()
+        alias = form.alias.data
 
-        sub_bidang.alias = form.alias.data
+        sub_bidang.alias = alias
         sub_bidang.nama_sub_bidang = form.nama_sub_bidang.data
         sub_bidang.kepala_sub_bidang = form.kepala_sub_bidang.data
         sub_bidang.nip_kepala_sub_bidang = user.nip
+
+        if (alias == "penelitian_dan_pengembangan") or (alias == "inovasi_dan_teknologi"):
+            bid = "Penelitian Pengembangan Inovasi dan Teknologi"
+        if (alias == "desiminasi_hasil_inovasi_riset_dan_teknologi_wisata_keilmuan_dan_teknologi") or (alias == "eduwisata_keilmuan_dan_teknologi"):
+            bid = "Pemanfaatan Riset dan Inovasi"
+        if (alias == "sertifikasi_dan_standarisasi") or (alias == "peningkatan_kapasitas_sumber_daya_ilmu_pengetahuan_dan_teknologi"):
+            bid = "Pengembangan Sumber Daya Ilmu Pengetahuan dan Teknologi"
+        if (alias == "inkubasi_bisnis") or (alias == "kemitraan_dan_bisnis_proses"):
+            bid = "Kemitraan dan Inkubasi Bisnis"
+        if (alias == "sekretariat"):
+            bid = "Sekretariat"
+
+        bidang = Bidang.query.filter_by(nama=bid).first()
+        sub_bidang.bidang_id = bidang.id
 
         db.session.add(sub_bidang)
         db.session.commit()
