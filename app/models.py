@@ -94,7 +94,7 @@ class Role(db.Model):
     def insert_roles():
         roles = {
             'Pegawai': (Permission.LAPORAN_HARIAN | Permission.PERMOHONAN_SURAT, True),
-            'Tu': (Permission.PERMOHONAN_SURAT | Permission.REKAP_BULANAN | Permission.ARSIP, False),
+            'Tu': (Permission.LAPORAN_HARIAN | Permission.PERMOHONAN_SURAT | Permission.REKAP_BULANAN | Permission.ARSIP, False),
             'Kasubid': (Permission.PERMOHONAN_SURAT | Permission.REKAP_BULANAN | Permission.FEEDBACK, False),
             "Sekban": (Permission.PERMOHONAN_SURAT | Permission.DISPOSISI, False),
             'Administrator': (0xff, False)

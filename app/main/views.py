@@ -207,12 +207,14 @@ def bidang():
 
         if (alias == "penelitian_dan_pengembangan") or (alias == "inovasi_dan_teknologi"):
             bid = "Penelitian Pengembangan Inovasi dan Teknologi"
-        elif (alias == "desiminasi_hasil_inovasi_riset_dan_teknologi_wisata_keilmuan_dan_teknologi") or (alias == "eduwisata_keilmuan_dan_teknologi"):
+        if (alias == "desiminasi_hasil_inovasi_riset_dan_teknologi_wisata_keilmuan_dan_teknologi") or (alias == "eduwisata_keilmuan_dan_teknologi"):
             bid = "Pemanfaatan Riset dan Inovasi"
-        elif (alias == "sertifikasi_dan_standarisasi") or (alias == "peningkatan_kapasitas_sumber_daya_ilmu_pengetahuan_dan_teknologi"):
+        if (alias == "sertifikasi_dan_standarisasi") or (alias == "peningkatan_kapasitas_sumber_daya_ilmu_pengetahuan_dan_teknologi"):
             bid = "Pengembangan Sumber Daya Ilmu Pengetahuan dan Teknologi"
-        else:
+        if (alias == "inkubasi_bisnis") or (alias == "kemitraan_dan_bisnis_proses"):
             bid = "Kemitraan dan Inkubasi Bisnis"
+        if (alias == "sekretariat"):
+            bid = "Sekretariat"
 
         bidang = Bidang.query.filter_by(nama=bid).first()
 
