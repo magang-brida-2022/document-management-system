@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, SelectField
+from wtforms import StringField, SubmitField, SelectField, PasswordField
 from flask_wtf.file import FileField
 from wtforms.validators import Length, ValidationError
 from sqlalchemy import and_, or_
@@ -18,6 +18,7 @@ class EditProfileForm(FlaskForm):
 class EditProfileAdminForm(FlaskForm):
     email = StringField('Email')
     username = StringField('Username', validators=[Length(1, 64)])
+    password = PasswordField("Password")
     role = SelectField('Role', coerce=int)
     nama_lengkap = StringField('Nama Lengkap', validators=[Length(0, 64)])
     nip = StringField('NIP')

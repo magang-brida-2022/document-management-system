@@ -5,7 +5,7 @@ from sqlalchemy.exc import IntegrityError
 from app.decorators import admin_required
 
 from . import auth
-from .forms import LoginForm, RegistrationForm
+from .forms import LoginForm, RegistrationForm, ResetPasswordForm
 from app.models import User, Bidang, SubBidang, Role
 from .. import db, images_allowed_extension
 
@@ -63,3 +63,20 @@ def logout():
     logout_user()
     flash('Logout berhasil', "warning")
     return redirect(url_for('auth.login'))
+
+
+@auth.get('/reset-password/<id>')
+@auth.post('/reset-password/<id>')
+@login_required
+def reset_password(id):
+    form = ResetPasswordForm()
+    user = User.query.filter_by(id=id).first()
+
+    if form.validate_on_submit():
+        user.password = form.new_password.data
+        db.session.add(user)
+        db.session.commit()
+        flash("Update Password Berhasil", "success")
+        return redirect(url_for('users.edit_profile_admin', id=user.id))
+
+    return render_template("auth/reset.html", form=form, user=user)

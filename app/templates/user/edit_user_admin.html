@@ -92,8 +92,13 @@
               {{form.foto.label}}
               {{form.foto(class="form-control-file")}}
             </div>
+           
           </div>
           {{form.submit(class="btn btn-primary")}}
+          <hr>
+           <div class="form-group">
+              Lupa password? <a href="{{ url_for('auth.reset_password', id=user.id) }}">Ubah</a>
+            </div>
         </form>
       </div>
     </div>

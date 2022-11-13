@@ -12,7 +12,6 @@ class Config(object):
     TOASTR_POSITION_CLASS = 'toast-bottom-right'
 
 
-
 class ProductionConfig(Config):
     SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URI')
     SQLALCHEMY_TRACK_MODIFICATIONS = False

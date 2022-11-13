@@ -50,3 +50,11 @@ class RegistrationForm(FlaskForm):
         if User.query.filter_by(username=username.data).first():
             flash("Username sudah terdaftar", "error")
             return False
+
+
+class ResetPasswordForm(FlaskForm):
+    new_password = PasswordField("New Password", validators=[DataRequired(), EqualTo(
+        'confirm_new_password', message="Password harus sama!!")])
+    confirm_new_password = PasswordField(
+        "Confirm New Password", validators=[DataRequired()])
+    submit = SubmitField("Iya")

@@ -1,13 +1,12 @@
 from datetime import datetime
-from werkzeug.security import generate_password_hash, check_password_hash
 from typing import Union, NoReturn
 from flask_login import UserMixin, AnonymousUserMixin
+from werkzeug.security import generate_password_hash, check_password_hash
 from flask import current_app
 from datetime import datetime
 from base64 import b64encode
 from sqlalchemy import extract
 from sqlalchemy.ext.hybrid import hybrid_property
-
 
 from . import login_manager, db
 
@@ -16,7 +15,7 @@ class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(100), unique=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
-    password_hash = db.Column(db.String(120))
+    password_hash = db.Column(db.String(200))
     nama = db.Column(db.String(50))
     nip = db.Column(db.String(50))
     jabatan = db.Column(db.String(35))
