@@ -4,6 +4,7 @@ from wtforms import StringField, DateField,  SubmitField, TextAreaField, SelectF
 from wtforms.validators import DataRequired, ValidationError
 from flask_login import current_user
 from flask import flash
+from sqlalchemy import or_
 
 from ..models import Disposisi, User, SuratMasuk
 
@@ -142,7 +143,7 @@ class SubBidangForm(FlaskForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.kepala_sub_bidang.choices = [("0", "-- Pilih --")] + [(
-            user.nama, user.nama) for user in User.query.filter(User.jabatan == 'kasubid').order_by(User.id).all()]
+            user.nama, user.nama) for user in User.query.filter(or_(User.jabatan == 'kasubid', User.jabatan == "sekban")).order_by(User.id).all()]
 
 
 class EditSubBidangForm(SubBidangForm):
