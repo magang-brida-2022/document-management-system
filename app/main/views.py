@@ -5,7 +5,7 @@ from flask_login import login_required, current_user
 from io import BytesIO
 from docxtpl import DocxTemplate
 from sqlalchemy import and_, func, or_
-from datetime import date
+from datetime import date, datetime
 
 from app.decorators import admin_required, permission_required
 from app.models import Permission, Bidang, Disposisi
@@ -24,6 +24,8 @@ from .utils.peserta_formatting import string_formatter
 def index():
     agenda_form = AgendaForm()
     agenda = Agenda.query.filter(func.date(Agenda.tanggal) == date.today())
+
+    print(date.today())
 
     if agenda_form.validate_on_submit():
         if agenda_form.waktu_selesai.data:
@@ -258,6 +260,9 @@ def edit_surat_masuk(id):
         db.session.commit()
         flash("Berhasil memperbarui.", 'success')
         return redirect(url_for('main.surat_masuk'))
+
+    if form.lampiran.data is not None:
+        form.lampiran.data = surat_masuk.lampiran
 
     form.no_surat.data = surat_masuk.nomor
     form.asal.data = surat_masuk.asal
