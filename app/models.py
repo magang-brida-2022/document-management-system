@@ -7,8 +7,18 @@ from datetime import datetime
 from base64 import b64encode
 from sqlalchemy import extract
 from sqlalchemy.ext.hybrid import hybrid_property
+from dateutil import tz
 
 from . import login_manager, db
+
+
+# helpers
+def utc_to_local(utctime):
+    from_zone = tz.gettz("UTC")
+    to_zone = tz.gettz("Asia/Makassar")
+    utc = utctime.replace(tzinfo=from_zone)
+    local = utc.astimezone(to_zone)
+    return local
 
 
 class User(UserMixin, db.Model):
@@ -272,7 +282,7 @@ class DailyActivity(db.Model):
 
 class Agenda(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    tanggal = db.Column(db.DateTime, default=datetime.utcnow)
+    tanggal = db.Column(db.DateTime, default=utc_to_local(datetime.utcnow()))
     waktu = db.Column(db.String(50))
     agenda = db.Column(db.String(225), nullable=False)
     tempat = db.Column(db.String(100))
