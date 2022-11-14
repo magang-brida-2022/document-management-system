@@ -4,15 +4,15 @@ from wtforms import StringField, SubmitField, TextAreaField, SelectField
 from wtforms.validators import DataRequired, ValidationError
 from flask_login import current_user
 from sqlalchemy import and_
+from flask_ckeditor import CKEditorField
 
 from ..models import DailyActivity, User
 
 
 class DailyActivityForm(FlaskForm):
-    kegiatan = StringField('Kegiatan', validators=[DataRequired()])
+    kegiatan = CKEditorField('Uraian Tugas', validators=[DataRequired()])
     tanggal = StringField('Tanggal', validators=[DataRequired()])
-    deskripsi = TextAreaField('Deskripsi')
-    output = StringField('Output')
+    deskripsi = CKEditorField('Klasifikasi Skp')
     submit = SubmitField('Simpan')
 
     def validate_tanggal(self, tanggal):
@@ -27,10 +27,9 @@ class DailyActivityForm(FlaskForm):
 
 
 class EditDailyActivityForm(FlaskForm):
-    kegiatan = StringField('Kegiatan')
+    kegiatan = CKEditorField('Kegiatan')
     tanggal = StringField('Tanggal')
-    deskripsi = TextAreaField('Deskripsi')
-    output = StringField('Output')
+    deskripsi = CKEditorField('Deskripsi')
 
 
 class RekapBulananForm(FlaskForm):

@@ -252,7 +252,7 @@ class SuratKeluar(db.Model):
 
 class DailyActivity(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    kegiatan = db.Column(db.String(64))
+    kegiatan = db.Column(db.Text)
     tanggal = db.Column(db.DateTime)
     deskripsi = db.Column(db.Text)
     output = db.Column(db.String(120))

@@ -87,12 +87,6 @@ url_for('static', filename="plugins/dataTables/datatables.min.css") }}">
                       <span style="color: red;">[{{error}}]</span>
                     {% endfor %}
                   </div>
-                  <div class="form-group">
-                    {{form.output.label}} {{form.output(class="form-control")}}
-                    {% for error in form.output.errors %}
-                      <span style="color: red;">[{{error}}]</span>
-                    {% endfor %}
-                  </div>
                 </div>
                 <div class="modal-footer">
                   <button
@@ -114,10 +108,10 @@ url_for('static', filename="plugins/dataTables/datatables.min.css") }}">
           <table class="table table-striped mt-4 display__datatables">
             <thead>
               <tr>
-                <th>{{form.tanggal.label}}</th>
-                <th>{{form.kegiatan.label}}</th>
-                <th>{{form.deskripsi.label}}</th>
-                <th>{{form.output.label}}</th>
+                <th>Tanggal</th>
+                <th>Uraian Tugas</th>
+                <th>Klasifikasi Skp</th>
+                <th>Output</th>
                 <th>Aksi</th>
               </tr>
             </thead>
@@ -125,8 +119,8 @@ url_for('static', filename="plugins/dataTables/datatables.min.css") }}">
               {% for activity in daily_activity %}
               <tr>
                 <td>{{ moment(activity.tanggal).format('MM/DD/YYYY') }}</td>
-                <td>{{ activity.kegiatan }}</td>
-                <td>{{ activity.deskripsi }}</td>
+                <td>{{ activity.kegiatan|safe }}</td>
+                <td>{{ activity.deskripsi|safe }}</td>
                 <td>{{ activity.output }}</td>
                 <td>
                   <div class="btn-toolbar" role="toolbar">
@@ -171,10 +165,9 @@ url_for('static', filename="plugins/dataTables/datatables.min.css") }}">
         </div>
       </div>
     </div>
-{% endif %}
+    {% endif %}
 
     {% if current_user.can(Permission.FEEDBACK) %}
-    <hr>
     <div class="row">
           <div class="col-md-6">
             <div class="card card-warning">
@@ -214,9 +207,9 @@ url_for('static', filename="plugins/dataTables/datatables.min.css") }}">
                     <tr>
                       <th>No</th>
                       <th>Tanggal</th>
-                      <th>Kegiatan</th>
-                      <th>deskripsi</th>
-                      <th>Lokasi</th>
+                      <th>Uraian Tugas</th>
+                      <th>Klasifikasi Skp</th>
+                      <th>Output</th>
                     </tr>
                   </thead>
                     {% for k in pegawai_selected %}
@@ -224,8 +217,8 @@ url_for('static', filename="plugins/dataTables/datatables.min.css") }}">
                     <tr>
                         <td>{{ loop.index }}</td>
                         <td>{{ moment(k.tanggal).format('DD/MM/YYYY') }}</td>
-                        <td>{{ k.kegiatan }}</td>
-                        <td>{{ k.deskripsi }}</td>
+                        <td>{{ k.kegiatan|safe }}</td>
+                        <td>{{ k.deskripsi|safe }}</td>
                         <td>{{ k.output }}</td>
                     </tr>
                   </tbody>
@@ -245,6 +238,8 @@ url_for('static', filename="plugins/dataTables/datatables.min.css") }}">
     {% endif %}
   </div>
 </section>
+
+{{ckeditor.load()}}
 
 {% endblock content %} {% block scripts %}
 <script src="{{ url_for('static', filename="plugins/dataTables/datatables.min.js") }}"></script>

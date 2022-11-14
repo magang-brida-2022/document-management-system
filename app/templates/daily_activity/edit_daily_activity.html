@@ -1,4 +1,5 @@
-{% extends "base.html" %} {% block content %}
+{% extends "base.html" %} 
+{% block content %}
 <section class="content-header">
   <div class="container-fluid">
     <div class="row">
@@ -24,31 +25,22 @@
       <div class="card-body">
         <form method="post">
           {{form.hidden_tag()}}
-          <div class="form-row">
+          <div class="form-group">
+            {{form.tanggal(autocomplete="off", class="form-control", disabled=True)}}
+            {% for error in form.tanggal.errors %}
+              <span style="color: red;">[{{error}}]</span>
+            {% endfor %}
+          </div>
+          <div class="row">
             <div class="form-group col-md-6">
-              {{form.tanggal.label}} {{form.tanggal(disabled=True,
-              class="form-control")}}
-              {% for error in form.tanggal.errors %}
-                <span style="color: red;">[{{error}}]</span>
-              {% endfor %}
-            </div>
-            <div class="form-group col-md-6">
-              {{form.kegiatan.label}} {{form.kegiatan(class="form-control")}}
+              {{form.kegiatan.label}} {{form.kegiatan(class="form-control")|safe}}
               {% for error in form.kegiatan.errors %}
                 <span style="color: red;">[{{error}}]</span>
               {% endfor %}
             </div>
-          </div>
-          <div class="form-row">
             <div class="form-group col-md-6">
-              {{form.deskripsi.label}} {{form.deskripsi(class="form-control")}}
+              {{form.deskripsi.label}} {{form.deskripsi(class="form-control")|safe}}
               {% for error in form.deskripsi.errors %}
-                <span style="color: red;">[{{error}}]</span>
-              {% endfor %}
-            </div>
-            <div class="form-group col-md-6">
-              {{form.output.label}} {{form.output(class="form-control")}} 
-              {% for error in form.output.errors %}
                 <span style="color: red;">[{{error}}]</span>
               {% endfor %}
             </div>
@@ -59,5 +51,7 @@
     </div>
   </div>
 </section>
+
+{{ckeditor.load()}}
 
 {% endblock content %}
