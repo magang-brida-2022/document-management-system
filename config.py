@@ -7,6 +7,7 @@ load_dotenv(os.path.join(basedir, '.env'))
 
 class Config(object):
     SECRET_KEY = os.urandom(24)
+    CKEDITOR_PKG_TYPE = "basic"
 
     # toastr
     TOASTR_POSITION_CLASS = 'toast-bottom-right'

@@ -28,13 +28,13 @@
             <div class="form-group col-md-6">
               {{form.email.label}} {{form.email(class="form-control")}}
               {% for error in form.email.errors %}
-                <span style="color: red;">[{{error}}]</span>
+              <span style="color: red;">[{{error}}]</span>
               {% endfor %}
             </div>
             <div class="form-group col-md-6">
               {{form.username.label}} {{form.username(class="form-control")}}
               {% for error in form.username.errors %}
-                <span style="color: red;">[{{error}}]</span>
+              <span style="color: red;">[{{error}}]</span>
               {% endfor %}
             </div>
           </div>
@@ -43,29 +43,29 @@
               {{form.nama_lengkap.label}}
               {{form.nama_lengkap(class="form-control")}}
               {% for error in form.nama_lengkap.errors %}
-                <span style="color: red;">[{{error}}]</span>
+              <span style="color: red;">[{{error}}]</span>
               {% endfor %}
             </div>
             <div class="form-group col-md-6">
               {{form.nip.label}}
               {{form.nip(class="form-control")}}
               {% for error in form.nip.errors %}
-                <span style="color: red;">[{{error}}]</span>
+              <span style="color: red;">[{{error}}]</span>
               {% endfor %}
             </div>
           </div>
           <div class="form-row">
-          
+
             <div class="form-group col-md-6">
               {{form.bidang.label}} {{form.bidang(class="form-control", id="bidang__toggle")}}
               {% for error in form.bidang.errors %}
-                <span style="color: red;">[{{error}}]</span>
+              <span style="color: red;">[{{error}}]</span>
               {% endfor %}
             </div>
             <div class="form-group col-md-6">
               {{form.sub_bidang.label}} {{form.sub_bidang(class="form-control", id="subbidang__toggle")}}
               {% for error in form.sub_bidang.errors %}
-                <span style="color: red;">[{{error}}]</span>
+              <span style="color: red;">[{{error}}]</span>
               {% endfor %}
             </div>
           </div>
@@ -79,26 +79,26 @@
             <div class="form-group col-md-4">
               {{form.role.label}} {{form.role(class="form-control")}}
               {% for error in form.role.errors %}
-                <span style="color: red;">[{{error}}]</span>
+              <span style="color: red;">[{{error}}]</span>
               {% endfor %}
             </div>
             <div class="form-group col-md-2">
               {{form.no_telpon.label}} {{form.no_telpon(class="form-control")}}
               {% for error in form.no_telpon.errors %}
-                <span style="color: red;">[{{error}}]</span>
+              <span style="color: red;">[{{error}}]</span>
               {% endfor %}
             </div>
             <div class="form-group col-md-3">
               {{form.foto.label}}
               {{form.foto(class="form-control-file")}}
             </div>
-           
+
           </div>
           {{form.submit(class="btn btn-primary")}}
           <hr>
-           <div class="form-group">
-              Lupa password? <a href="{{ url_for('auth.reset_password', id=user.id) }}">Ubah</a>
-            </div>
+          <div class="form-group">
+            Lupa password? <a href="{{ url_for('auth.reset_password', id=user.id) }}">Ubah</a>
+          </div>
         </form>
       </div>
     </div>
@@ -106,12 +106,3 @@
 </section>
 
 {% endblock content %}
-
-{% block scripts %}
-<script>
-
-  let bidang = document.getElementById("bidang__toggle").value
-  let subbidan = document.getElementById("subbidang__toggle").value
-
-</script>
-{% endblock scripts %}

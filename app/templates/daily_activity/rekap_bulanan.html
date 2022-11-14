@@ -68,9 +68,9 @@
             <thead>
               <tr>
                 <th>No</th>
-                <th>Kegiatan</th>
+                <th>Uraian Tugas</th>
                 <th>Tanggal</th>
-                <th>Deskripsi</th>
+                <th>Klasifikasi Skp</th>
                 <th>Output</th>
               </tr>
             </thead>
@@ -78,9 +78,9 @@
               {% for d in data  %}
               <tr>
                 <td>{{ loop.index }}</td>
-                <td>{{ d.kegiatan }}</td>
+                <td>{{ d.kegiatan|safe }}</td>
                 <td>{{ moment(d.tanggal).format('DD MMMM YYYY') }}</td>
-                <td>{{ d.deskripsi }}</td>
+                <td>{{ d.deskripsi|safe }}</td>
                 <td>{{ d.output }}</td>
               </tr>
               {% endfor %}
