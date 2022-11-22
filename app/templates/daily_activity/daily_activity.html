@@ -21,9 +21,9 @@ url_for('static', filename="plugins/dataTables/datatables.min.css") }}">
   </div>
 </section>
 
-{% if current_user.can(Permission.LAPORAN_HARIAN) %}
 <section class="content">
   <div class="container-fluid">
+{% if current_user.can(Permission.LAPORAN_HARIAN) %}
     <div class="card card-primary">
       <div class="card-header">
         <h3 class="card-title">Aktifitas Harian</h3>
@@ -202,7 +202,7 @@ url_for('static', filename="plugins/dataTables/datatables.min.css") }}">
               </div>
               <!-- /.card-header -->
               <div class="card-body table-responsive">
-                <table class="table able-striped mt-4 display__datatables">
+                <table class="table table-striped mt-4 display_datatables">
                   <thead>
                     <tr>
                       <th>No</th>
@@ -212,8 +212,8 @@ url_for('static', filename="plugins/dataTables/datatables.min.css") }}">
                       <th>Output</th>
                     </tr>
                   </thead>
-                    {% for k in pegawai_selected %}
                   <tbody>
+                    {% for k in pegawai_selected %}
                     <tr>
                         <td>{{ loop.index }}</td>
                         <td>{{ moment(k.tanggal).format('DD/MM/YYYY') }}</td>
@@ -221,8 +221,8 @@ url_for('static', filename="plugins/dataTables/datatables.min.css") }}">
                         <td>{{ k.deskripsi|safe }}</td>
                         <td>{{ k.output }}</td>
                     </tr>
-                  </tbody>
                     {% endfor %}
+                  </tbody>
                 </table>
               </div>
               <!-- /.card-body -->
@@ -260,8 +260,9 @@ $(document).ready(function () {
           this.value = this.value.replace(/[^0-9^-]/g, '');
         }
       });
-
-      $("table.display__datatables").DataTable();
   })
+</script>
+<script>
+      $(".display_datatables").DataTable();
 </script>
 {% endblock scripts %}

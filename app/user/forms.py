@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, SelectField, PasswordField
 from flask_wtf.file import FileField
-from wtforms.validators import Length, ValidationError
+from wtforms.validators import Length, ValidationError, DataRequired, EqualTo
 from sqlalchemy import and_, or_
 
 from ..models import Role, User, Bidang, SubBidang
@@ -9,7 +9,8 @@ from ..models import Role, User, Bidang, SubBidang
 
 class EditProfileForm(FlaskForm):
     nama_lengkap = StringField('Nama Lengkap', validators=[Length(0, 64)])
-    jabatan = StringField('Jabatan', validators=[Length(0, 64)])
+    jabatan = SelectField('Jabatan', choices=[("0", "-- Pilih --"), ("sekban", "Sekretaris Badan"),
+                          ("kabid", "Kepala Bidang"), ("kasubid", "Kepala Sub-Bidang"), ('pegawai', "Pegawai")])
     no_telpon = StringField('No Telpon')
     foto = FileField("Select Photo")
     submit = SubmitField('Simpan')
@@ -47,3 +48,11 @@ class EditProfileAdminForm(FlaskForm):
     def validate_username(self, username):
         if username.data != self.user.username and User.query.filter_by(username=username.data).first():
             raise ValidationError("Username sudah digunakan. Coba yang lain!!")
+
+
+class UpdatePasswordForm(FlaskForm):
+    old_password = PasswordField("Password Lama", validators=[DataRequired()])
+    new_password = PasswordField("Password Baru", validators=[
+                                 DataRequired(), EqualTo("confirm_new_password", "Komfirmasi Password Harus Sama.")])
+    confirm_new_password = PasswordField("Password Password Baru")
+    submit = SubmitField("Simpan")

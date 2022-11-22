@@ -6,7 +6,7 @@ url_for('static', filename="dist/css/user_profile.css") }}"> {% endblock style
   <div class="container-fluid">
     <div class="row">
       <div class="col-sm-6">
-        <h1 class="m-0">Profile</h1>
+        <h1 class="m-0"></h1>
       </div>
       <div class="col-sm-6">
         <ol class="breadcrumb float-sm-right">
@@ -20,6 +20,7 @@ url_for('static', filename="dist/css/user_profile.css") }}"> {% endblock style
 
 <section class="content">
   <div class="container-fluid">
+
     <div class="card">
       <div class="card-body">
         <div class="d-flex flex-column align-items-center text-center">
@@ -37,7 +38,8 @@ url_for('static', filename="dist/css/user_profile.css") }}"> {% endblock style
         </div>
       </div>
     </div>
-  <div class="col-md-6">
+    <div class="row">
+    <div class="col-md-6">
     <div class="card mb-3">
       <div class="card-body">
         <div class="row">
@@ -74,5 +76,43 @@ url_for('static', filename="dist/css/user_profile.css") }}"> {% endblock style
       </div>
     </div>
   </div>
+  <div class="col-md-6">
+    <div class="card mb-3">
+      <div class="card card-primary">
+              <div class="card-header">
+                <h3 class="card-title">Update Password</h3>
+              </div>
+              <div class="card-body">
+               <form method="post">
+                {{form.hidden_tag()}}
+                <div class="form-group">
+                  {{form.old_password.label}}
+                  {{form.old_password(class="form-control")}}
+                  {% for error in form.old_password.errors %}
+                    <span style="color: red;">[{{error}}]</span>
+                  {% endfor %}
+                </div>
+                <div class="form-group">
+                  {{form.new_password.label}}
+                  {{form.new_password(class="form-control")}}
+                  {% for error in form.new_password.errors %}
+                    <span style="color: red;">[{{error}}]</span>
+                  {% endfor %}
+                </div>
+                <div class="form-group">
+                  {{form.confirm_new_password.label}}
+                  {{form.confirm_new_password(class="form-control")}}
+                  {% for error in form.confirm_new_password.errors %}
+                    <span style="color: red;">[{{error}}]</span>
+                  {% endfor %}
+                </div>
+                {{form.submit(class="btn btn-primary")}}
+              </form>
+              <!-- /.card-body -->
+            </div>
+    </div>  
+  </div>
+    </div>
+    {# end col #}
 </section>
 {% endblock content %}
