@@ -1,11 +1,10 @@
-from wsgiref.util import request_uri
 from flask import render_template, abort, flash, url_for, redirect, request, abort
 from . import users
 
 from app.models import User, Role, Bidang, SubBidang
 from flask_login import login_required, current_user
 from app.decorators import admin_required, permission_required
-from .forms import EditProfileForm, EditProfileAdminForm
+from .forms import EditProfileForm, EditProfileAdminForm, UpdatePasswordForm
 from .. import db, images_allowed_extension
 
 
@@ -13,8 +12,19 @@ from .. import db, images_allowed_extension
 @users.post('/profile')
 @login_required
 def profile():
+    form = UpdatePasswordForm()
+
+    if form.validate_on_submit():
+        if current_user.check_password(form.old_password.data):
+            current_user.password = form.new_password.data
+            db.session.commit()
+            flash("Password berhasil diubah", "success")
+            return redirect(url_for("users.profile"))
+
+        flash("Password lama tidak sama", "error")
+
     user = User.query.filter_by(id=current_user.id).first()
-    return render_template('user/profile.html', user=user, title="Profile")
+    return render_template('user/profile.html', user=user, title="Profile", form=form)
 
 
 @users.get('/edit-profile')

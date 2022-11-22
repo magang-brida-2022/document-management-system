@@ -23,9 +23,9 @@ def daily():
         soup = BeautifulSoup(form.kegiatan.data, "html.parser")
         output = soup.find_all("li")
 
-        # date_parse = datetime.strptime(form.tanggal.data, "%m/%d/%Y")
+        output_value = f'{len(output)} Kegiatan' if output else "1 Kegiatan"
         new_activity = DailyActivity(tanggal=form.tanggal.data, kegiatan=form.kegiatan.data,
-                                     deskripsi=form.deskripsi.data, output=f"{len(output)} kegiatan", author=current_user)
+                                     deskripsi=form.deskripsi.data, output=output_value, author=current_user)
 
         db.session.add(new_activity)
         db.session.commit()
@@ -52,17 +52,19 @@ def edit_activity(id):
         soup = BeautifulSoup(form.kegiatan.data, "html.parser")
         li = soup.find_all('li')
 
-        activity.tanggal = form.tanggal.data
         activity.kegiatan = form.kegiatan.data
         activity.deskripsi = form.deskripsi.data
-        activity.output = f"{len(li)} kegiatan"
+        if li:
+            activity.output = f"{len(li)} kegiatan"
+        else:
+            activity.output = "1 Kegiatan"
 
         db.session.commit()
         flash("Edit aktivitas harian sukses", "success")
         return redirect(url_for('daily_activity.daily'))
 
-    form.kegiatan.data = activity.kegiatan
     form.tanggal.data = activity.tanggal
+    form.kegiatan.data = activity.kegiatan
     form.deskripsi.data = activity.deskripsi
     form.tanggal.data = activity.tanggal
 

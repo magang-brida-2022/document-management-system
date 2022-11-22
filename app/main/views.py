@@ -25,13 +25,13 @@ def index():
     agenda_form = AgendaForm()
     agenda = Agenda.query.filter(func.date(Agenda.tanggal) == date.today())
 
-    print(date.today())
-
     if agenda_form.validate_on_submit():
         if agenda_form.waktu_selesai.data:
             waktu = f"{agenda_form.waktu_mulai.data} - {agenda_form.waktu_selesai.data}"
         else:
             waktu = agenda_form.waktu_mulai.data
+
+        # waktu = f"{agenda_form.waktu_mulai.data} - {agenda_form.waktu_selesai.data}"
         agenda = agenda_form.kegiatan.data
         tempat = agenda_form.tempat.data
 
