@@ -26,8 +26,7 @@ class SuratMasukForm(FlaskForm):
 
 
 class DisposisiKeForm(FlaskForm):
-    disposisi = SelectField('Disposisi Ke', coerce=str,
-                            validators=[DataRequired()])
+    disposisi = SelectField('Disposisi Ke', coerce=str)
     pesan = TextAreaField('Pesan')
     submit = SubmitField('Simpan')
 
@@ -82,6 +81,7 @@ class SudahDitindakLanjutForm(FlaskForm):
 
 class EditSuratMasukForm(SuratMasukForm, DisposisiKeForm):
     lampiran = FileField('Lampiran')
+    submit = SubmitField("Simpan")
 
 
 class EditSuratKeluarForm(SuratKeluarForm):

@@ -212,8 +212,8 @@ class SuratMasuk(db.Model):
     tanggal_diterima = db.Column(db.DateTime, default=datetime.utcnow)
     rak = db.Column(db.String, nullable=False)
     lampiran = db.Column(db.LargeBinary, nullable=False)
-    disposisi_ke = db.Column(db.String(100))
-    pesan = db.Column(db.Text)
+    disposisi_ke = db.Column(db.String(100), nullable=True)
+    pesan = db.Column(db.Text, nullable=True)
     dilihat = db.Column(db.Boolean, default=False)
     tindak_lanjut = db.Column(db.Boolean, default=False)
 
