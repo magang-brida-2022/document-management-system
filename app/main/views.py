@@ -247,10 +247,10 @@ def edit_surat_masuk(id):
     if form.validate_on_submit():
         if form.lampiran.data is not None:
             surat_masuk.lampiran = form.lampiran.data.read()
-            surat_masuk.nama_file = form.lampiran.data.filename
 
         surat_masuk.nomor = form.no_surat.data
         surat_masuk.asal = form.asal.data
+        surat_masuk.jenis = form.jenis.data
         surat_masuk.perihal = form.perihal.data
         surat_masuk.rak = form.rak.data
         surat_masuk.tanggal_surat = form.tanggal_surat.data
@@ -261,11 +261,9 @@ def edit_surat_masuk(id):
         flash("Berhasil memperbarui.", 'success')
         return redirect(url_for('main.surat_masuk'))
 
-    if form.lampiran.data is not None:
-        form.lampiran.data = surat_masuk.lampiran
-
     form.no_surat.data = surat_masuk.nomor
     form.asal.data = surat_masuk.asal
+    form.jenis.data = surat_masuk.jenis
     form.perihal.data = surat_masuk.perihal
     form.tanggal_surat.data = surat_masuk.tanggal_surat
     form.tanggal_diterima.data = surat_masuk.tanggal_diterima
@@ -286,7 +284,6 @@ def edit_surat_keluar(id):
     if form.validate_on_submit():
         if form.lampiran.data is not None:
             surat_keluar.lampiran = form.lampiran.data.read()
-            surat_keluar.nama_file = form.lampiran.data.filename
 
         surat_keluar.nomor = form.no_surat.data
         surat_keluar.jenis = form.jenis.data

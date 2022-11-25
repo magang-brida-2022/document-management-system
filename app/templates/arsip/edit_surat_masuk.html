@@ -33,7 +33,7 @@
             </div>
             <div class="form-group col-md-6">
               {{form.asal.label}} {{form.asal(class="form-control")}}
-               {% for error in form.asal.errors %}
+              {% for error in form.asal.errors %}
                 <span style="color: red;">[{{error}}]</span>
               {% endfor %}
             </div>
@@ -46,8 +46,8 @@
               {% endfor %}
             </div>
             <div class="form-group col-md-6">
-              {{form.rak.label}} {{form.rak(class="form-control")}}
-              {% for error in form.rak.errors %}
+              {{form.jenis.label}} {{form.jenis(class="form-control")}}
+              {% for error in form.jenis.errors %}
                 <span style="color: red;">[{{error}}]</span>
               {% endfor %}
             </div>
@@ -76,6 +76,14 @@
                 <span style="color: red;">[{{error}}]</span>
               {% endfor %}
             </div>
+            <div class="form-group col-md-6">
+              {{form.rak.label}} {{form.rak(class="form-control")}}
+              {% for error in form.rak.errors %}
+                <span style="color: red;">[{{error}}]</span>
+              {% endfor %}
+            </div>
+          </div>
+          <div class="form-group">
             <div class="form-group col-md-6">
               {{ form.lampiran.label }}
               {{form.lampiran(class="form-control-file")}}
